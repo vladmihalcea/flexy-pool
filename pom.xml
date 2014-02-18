@@ -1,0 +1,145 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.vladmihalcea</groupId>
+    <artifactId>flexy-pool</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>flexy-pool</name>
+    <description>A flexible pool utility</description>
+    <url>https://github.com/vladmihalcea/flexy-pool</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>author</id>
+            <name>Vlad Mihalcea</name>
+            <email>mih_vlad@yahoo.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git:@github.com:vladmihalcea/flexy-pool.git</connection>
+        <developerConnection>scm:git:git:@github.com:vladmihalcea/flexy-pool.git</developerConnection>
+        <url>git@github.com:vladmihalcea/flexy-pool.git</url>
+    </scm>    
+
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Staging Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+
+        <!-- Required dependencies -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Required dependencies -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${jcl-over-slf4j.version}</version>
+            </dependency>
+
+            <!-- Test dependencies -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>flexy-pool-core</module>
+        <module>flexy-btm</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
+        <logback.version>1.0.13</logback.version>
+        <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
+
+        <aspectj.version>1.6.8</aspectj.version>
+        <spring.version>3.2.2.RELEASE</spring.version>
+        <commons-lang.version>2.5</commons-lang.version>
+        <datasource-proxy.version>1.2</datasource-proxy.version>
+        <hibernate.version>4.2.6.Final</hibernate.version>
+        <btm.version>2.1.1</btm.version>
+
+        <mockito.version>1.8.5</mockito.version>
+        <junit.version>4.8.1</junit.version>
+        <hsqldb.version>2.2.8</hsqldb.version>
+
+    </properties>
+
+</project>
