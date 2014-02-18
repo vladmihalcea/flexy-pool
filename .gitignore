@@ -5,3 +5,4 @@
 *.war
 *.ear
 *.iml
+target/
