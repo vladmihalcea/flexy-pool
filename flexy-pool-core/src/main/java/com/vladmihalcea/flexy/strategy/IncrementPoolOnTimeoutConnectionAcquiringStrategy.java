@@ -1,6 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.ConnectionCredentials;
+import com.vladmihalcea.flexy.ConnectionRequestContext;
+import com.vladmihalcea.flexy.Credentials;
 import com.vladmihalcea.flexy.PoolAdapter;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.slf4j.Logger;
@@ -45,13 +46,13 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      * {@inheritDoc}
      */
     @Override
-    public Connection getConnection(ConnectionCredentials credentials) throws SQLException {
+    public Connection getConnection(ConnectionRequestContext context) throws SQLException {
         try {
-            return getConnectionFactory().getConnection(credentials);
+            return getConnectionFactory().getConnection(context);
         } catch (AcquireTimeoutException e) {
             if(incrementPoolSize()) {
                 LOGGER.info("Can't acquire connection, pool size incremented.");
-                return getConnection(credentials);
+                return getConnection(context);
             }
             throw e;
         }

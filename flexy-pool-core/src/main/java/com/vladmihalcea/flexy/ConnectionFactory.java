@@ -12,9 +12,9 @@ public interface ConnectionFactory {
 
     /**
      * Get connection from the pool.
-     * @param credentials connection credentials
+     * @param context connection request context
      * @return pooled connection
      * @throws SQLException in case of errors
      */
-    Connection getConnection(ConnectionCredentials credentials) throws SQLException;
+    Connection getConnection(ConnectionRequestContext context) throws SQLException;
 }

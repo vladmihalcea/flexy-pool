@@ -1,6 +1,7 @@
 package com.vladmihalcea.flexy.adaptor;
 
-import com.vladmihalcea.flexy.ConnectionCredentials;
+import com.vladmihalcea.flexy.ConnectionRequestContext;
+import com.vladmihalcea.flexy.Credentials;
 import com.vladmihalcea.flexy.PoolAdapter;
 
 import javax.sql.DataSource;
@@ -26,8 +27,9 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
     }
 
     @Override
-    public Connection getConnection(ConnectionCredentials credentials) throws SQLException {
+    public Connection getConnection(ConnectionRequestContext context) throws SQLException {
         try {
+            Credentials credentials = context.getCredentials();
             return (credentials == null) ?
                     dataSource.getConnection() :
                     dataSource.getConnection(credentials.getUsername(), credentials.getPassword());

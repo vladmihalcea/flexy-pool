@@ -29,7 +29,9 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public Connection getConnection() throws SQLException {
-        return connectionAcquiringStrategy.getConnection(null);
+        return connectionAcquiringStrategy.getConnection(
+                new ConnectionRequestContext.Builder()
+                        .build());
     }
 
     /**
@@ -37,7 +39,10 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public Connection getConnection(final String username, final String password) throws SQLException {
-        return connectionAcquiringStrategy.getConnection(new ConnectionCredentials(username, password));
+        return connectionAcquiringStrategy.getConnection(
+                new ConnectionRequestContext.Builder()
+                        .setCredentials(new Credentials(username, password))
+                        .build());
     }
 
     /**
