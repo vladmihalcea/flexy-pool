@@ -8,7 +8,8 @@ package com.vladmihalcea.flexy;
 public class ConnectionRequestContext {
 
     private final Credentials credentials;
-    private int attempts;
+    private int retryAttempts;
+    private int overflowPoolSize;
 
     public ConnectionRequestContext(Credentials credentials) {
         this.credentials = credentials;
@@ -18,12 +19,20 @@ public class ConnectionRequestContext {
         return credentials;
     }
 
-    public int getAttempts() {
-        return attempts;
+    public int getRetryAttempts() {
+        return retryAttempts;
+    }
+
+    public int getOverflowPoolSize() {
+        return overflowPoolSize;
     }
 
     public void incrementAttempts() {
-        this.attempts++;
+        this.retryAttempts++;
+    }
+
+    public void incrementOverflowPoolSize() {
+        this.overflowPoolSize++;
     }
 
     public static class Builder {

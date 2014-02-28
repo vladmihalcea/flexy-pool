@@ -47,30 +47,30 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      */
     @Override
     public Connection getConnection(ConnectionRequestContext context) throws SQLException {
-        try {
-            return getConnectionFactory().getConnection(context);
-        } catch (AcquireTimeoutException e) {
-            if(incrementPoolSize()) {
-                LOGGER.info("Can't acquire connection, pool size incremented.");
-                return getConnection(context);
+        do {
+            try {
+                return getConnectionFactory().getConnection(context);
+            } catch (AcquireTimeoutException e) {
+                if(!incrementPoolSize(context)) {
+                    LOGGER.info("Can't acquire connection, pool size has already overflown to its max size.");
+                    throw e;
+                }
             }
-            throw e;
-        }
+        } while (true);
     }
 
     /**
      * Attempt to increment the pool size
      * @return has pool size changed
      */
-    protected boolean incrementPoolSize() {
+    protected boolean incrementPoolSize(ConnectionRequestContext context) {
         boolean incremented = false;
         try {
             lock.lockInterruptibly();
             int previousMaxSize = getPoolAdapter().getMaxPoolSize();
-            if(previousMaxSize < getMaxOverflowPoolSize()) {
-                int nextMaxSize = previousMaxSize + 1;
-                getPoolAdapter().setMaxPoolSize(nextMaxSize);
-                incremented = true;
+            incremented = previousMaxSize < maxOverflowPoolSize;
+            if(incremented) {
+                getPoolAdapter().setMaxPoolSize(previousMaxSize + 1);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -79,6 +79,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
         }
         if (incremented) {
             LOGGER.info("Pool size changed to {}", getPoolAdapter().getMaxPoolSize());
+            context.incrementOverflowPoolSize();
         }
         return incremented;
     }

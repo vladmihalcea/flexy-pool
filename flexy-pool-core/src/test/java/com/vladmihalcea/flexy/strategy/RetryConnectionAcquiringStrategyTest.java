@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.when;
@@ -40,9 +39,9 @@ public class RetryConnectionAcquiringStrategyTest {
         ConnectionRequestContext context = new ConnectionRequestContext.Builder().build();
         when(poolAdapter.getConnection(same(context))).thenReturn(connection);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(poolAdapter, 5);
-        assertEquals(0, context.getAttempts());
+        assertEquals(0, context.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(context));
-        assertEquals(1, context.getAttempts());
+        assertEquals(1, context.getRetryAttempts());
     }
 
     @Test
@@ -52,9 +51,9 @@ public class RetryConnectionAcquiringStrategyTest {
                 .thenThrow(new AcquireTimeoutException(new Exception()))
                 .thenReturn(connection);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(poolAdapter, 5);
-        assertEquals(0, context.getAttempts());
+        assertEquals(0, context.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(context));
-        assertEquals(2, context.getAttempts());
+        assertEquals(2, context.getRetryAttempts());
     }
 
     @Test
@@ -64,12 +63,12 @@ public class RetryConnectionAcquiringStrategyTest {
         when(poolAdapter.getConnection(same(context)))
                 .thenThrow(new AcquireTimeoutException(rootException));
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(poolAdapter, 2);
-        assertEquals(0, context.getAttempts());
+        assertEquals(0, context.getRetryAttempts());
         try {
             retryConnectionAcquiringStrategy.getConnection(context);
         } catch (AcquireTimeoutException e) {
             assertSame(rootException, e.getCause());
         }
-        assertEquals(3, context.getAttempts());
+        assertEquals(3, context.getRetryAttempts());
     }
 }
