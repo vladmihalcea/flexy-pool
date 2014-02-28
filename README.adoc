@@ -15,8 +15,9 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 * extensive connection pool support(Bitronix TM, C3PO, DBCP)
 * statistics support
-** connection acquiring time histogram
+** source connection acquiring time histogram
+** total connection acquiring time histogram
 ** retries attempts histogram
 ** minimum CP size histogram
 ** maximum CP size histogram
-** average CP size histogram
+** average connection request count histogram
