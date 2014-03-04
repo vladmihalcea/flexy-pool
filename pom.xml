@@ -46,6 +46,21 @@
         </repository>
     </distributionManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>flexy-pool-core</module>
+        <module>flexy-btm</module>
+    </modules>
+
     <dependencies>
 
         <!-- Required dependencies -->
@@ -100,6 +115,12 @@
                 <version>${jcl-over-slf4j.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.codahale.metrics</groupId>
+                <artifactId>metrics-core</artifactId>
+                <version>${codahale.metrics.version}</version>
+            </dependency>
+
             <!-- Test dependencies -->
             <dependency>
                 <groupId>junit</groupId>
@@ -114,27 +135,19 @@
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-        <module>flexy-pool-core</module>
-        <module>flexy-btm</module>
-    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
+
         <jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
         <logback.version>1.0.13</logback.version>
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
-
-        <aspectj.version>1.6.8</aspectj.version>
-        <spring.version>3.2.2.RELEASE</spring.version>
-        <commons-lang.version>2.5</commons-lang.version>
-        <datasource-proxy.version>1.2</datasource-proxy.version>
-        <hibernate.version>4.2.6.Final</hibernate.version>
-        <btm.version>2.1.1</btm.version>
+        <codahale.metrics.version>3.0.2</codahale.metrics.version>
 
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.8.1</junit.version>

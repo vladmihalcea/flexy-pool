@@ -1,7 +1,8 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.ConnectionRequestContext;
-import com.vladmihalcea.flexy.PoolAdapter;
+import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.config.FlexyConfiguration;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -29,14 +31,17 @@ public class RetryConnectionAcquiringStrategyTest {
     @Mock
     private Connection connection;
 
+    private FlexyConfiguration configuration;
+
     @Before
     public void before() {
+        configuration = new FlexyConfiguration(UUID.randomUUID().toString());
         MockitoAnnotations.initMocks(this);
     }
 
     @Test
     public void testConnectionAcquiredInOneAttempt() throws SQLException {
-        ConnectionRequestContext context = new ConnectionRequestContext.Builder().build();
+        ConnectionRequestContext context = new ConnectionRequestContext.Builder(configuration).build();
         when(poolAdapter.getConnection(same(context))).thenReturn(connection);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(poolAdapter, 5);
         assertEquals(0, context.getRetryAttempts());
@@ -46,7 +51,7 @@ public class RetryConnectionAcquiringStrategyTest {
 
     @Test
     public void testConnectionAcquiredInTwoAttempts() throws SQLException {
-        ConnectionRequestContext context = new ConnectionRequestContext.Builder().build();
+        ConnectionRequestContext context = new ConnectionRequestContext.Builder(configuration).build();
         when(poolAdapter.getConnection(same(context)))
                 .thenThrow(new AcquireTimeoutException(new Exception()))
                 .thenReturn(connection);
@@ -58,7 +63,7 @@ public class RetryConnectionAcquiringStrategyTest {
 
     @Test
     public void testConnectionNotAcquiredAfterAllAttempts() throws SQLException {
-        ConnectionRequestContext context = new ConnectionRequestContext.Builder().build();
+        ConnectionRequestContext context = new ConnectionRequestContext.Builder(configuration).build();
         Exception rootException = new Exception();
         when(poolAdapter.getConnection(same(context)))
                 .thenThrow(new AcquireTimeoutException(rootException));

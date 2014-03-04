@@ -1,8 +1,7 @@
 package com.vladmihalcea.flexy.adaptor;
 
-import com.vladmihalcea.flexy.ConnectionRequestContext;
-import com.vladmihalcea.flexy.Credentials;
-import com.vladmihalcea.flexy.PoolAdapter;
+import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.connection.Credentials;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

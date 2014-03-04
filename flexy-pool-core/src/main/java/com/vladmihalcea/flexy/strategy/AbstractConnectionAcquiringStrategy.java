@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.ConnectionFactory;
-import com.vladmihalcea.flexy.PoolAdapter;
+import com.vladmihalcea.flexy.connection.ConnectionFactory;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 
 /**
  * AbstractConnectionAcquiringStrategy - Abstract base class for all connection acquiring strategies

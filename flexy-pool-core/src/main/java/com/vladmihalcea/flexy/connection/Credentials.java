@@ -1,4 +1,4 @@
-package com.vladmihalcea.flexy;
+package com.vladmihalcea.flexy.connection;
 
 /**
  * Credentials - Holds connection credentials

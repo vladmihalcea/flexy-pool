@@ -1,8 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.ConnectionRequestContext;
-import com.vladmihalcea.flexy.Credentials;
-import com.vladmihalcea.flexy.PoolAdapter;
+import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

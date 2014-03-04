@@ -82,4 +82,13 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <aspectj.version>1.6.8</aspectj.version>
+        <spring.version>3.2.2.RELEASE</spring.version>
+        <commons-lang.version>2.5</commons-lang.version>
+        <datasource-proxy.version>1.2</datasource-proxy.version>
+        <hibernate.version>4.2.6.Final</hibernate.version>
+        <btm.version>2.1.1</btm.version>
+    </properties>
+
 </project>

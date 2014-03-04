@@ -14,6 +14,15 @@
     <packaging>jar</packaging>
 
     <name>flexy-pool-core</name>
-    <description>The flexible pool core</description>   
+    <description>The flexible pool core</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

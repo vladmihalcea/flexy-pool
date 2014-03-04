@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.UUID;
+
 /**
- * FlexyDataSourceConfiguration - Configuration for flexy data source
+ * FlexyDataSourceConfiguration - FlexyConfiguration for flexy data source
  *
  * @author Vlad Mihalcea
  */
@@ -27,11 +29,12 @@ public class FlexyDataSourceConfiguration {
 
     @Bean
     public FlexyPoolDataSource dataSource() {
+        FlexyConfiguration configuration = new FlexyConfiguration(UUID.randomUUID().toString());
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy =
                 new IncrementPoolOnTimeoutConnectionAcquiringStrategy(bitronixPoolAdaptor(), 5);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(
                 incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
         );
-        return new FlexyPoolDataSource(retryConnectionAcquiringStrategy);
+        return new FlexyPoolDataSource(configuration, retryConnectionAcquiringStrategy);
     }
 }

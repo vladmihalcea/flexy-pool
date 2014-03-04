@@ -1,6 +1,12 @@
 package com.vladmihalcea.flexy;
 
+import com.vladmihalcea.flexy.metric.CodahaleMetrics;
+import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
+import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.connection.Credentials;
+import com.vladmihalcea.flexy.config.FlexyConfiguration;
+import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -14,12 +20,16 @@ import java.sql.SQLException;
  *
  * @author Vlad Mihalcea
  */
-public class FlexyPoolDataSource implements DataSource {
+public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
 
     private final ConnectionAcquiringStrategy connectionAcquiringStrategy;
     private final DataSource dataSource;
+    private final FlexyConfiguration configuration;
+    private final Metrics metrics;
 
-    public FlexyPoolDataSource(final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
+    public FlexyPoolDataSource(final FlexyConfiguration configuration, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
+        this.configuration = configuration;
+        this.metrics = new CodahaleMetrics(configuration, getClass());
         this.connectionAcquiringStrategy = connectionAcquiringStrategy;
         this.dataSource = connectionAcquiringStrategy.getPoolAdapter().getDataSource();
     }
@@ -30,7 +40,7 @@ public class FlexyPoolDataSource implements DataSource {
     @Override
     public Connection getConnection() throws SQLException {
         return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder()
+                new ConnectionRequestContext.Builder(configuration)
                         .build());
     }
 
@@ -40,7 +50,7 @@ public class FlexyPoolDataSource implements DataSource {
     @Override
     public Connection getConnection(final String username, final String password) throws SQLException {
         return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder()
+                new ConnectionRequestContext.Builder(configuration)
                         .setCredentials(new Credentials(username, password))
                         .build());
     }
@@ -91,5 +101,15 @@ public class FlexyPoolDataSource implements DataSource {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return dataSource.isWrapperFor(iface);
+    }
+
+    @Override
+    public void start() {
+        metrics.start();
+    }
+
+    @Override
+    public void stop() {
+        metrics.stop();
     }
 }

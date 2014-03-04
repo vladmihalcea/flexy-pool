@@ -1,8 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.ConnectionRequestContext;
-import com.vladmihalcea.flexy.Credentials;
-import com.vladmihalcea.flexy.PoolAdapter;
+import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +27,6 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(PoolAdapter poolAdapter, int maxOverflowPoolSize) {
         super(poolAdapter);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
-        if(getMaxOverflowPoolSize() <= poolAdapter.getMaxPoolSize()) {
-            throw new IllegalStateException("The pool has already reached the max pool size!");
-        }
     }
 
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
