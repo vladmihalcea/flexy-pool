@@ -1,9 +1,12 @@
-package com.vladmihalcea.flexy.metric;
+package com.vladmihalcea.flexy.metric.codahale;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.metric.AbstractMetrics;
+import com.vladmihalcea.flexy.metric.Histogram;
+import com.vladmihalcea.flexy.metric.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +44,14 @@ public class CodahaleMetrics extends AbstractMetrics {
         }
     }
 
-    public void updateHistogram(String name, long value) {
-        metricRegistry.histogram(name).update(value);
+    @Override
+    public Histogram histogram(String name) {
+        return new CodahaleHistogram(metricRegistry.histogram(name));
     }
 
-    public void updateTimer(String name, long value, TimeUnit timeUnit) {
-        metricRegistry.timer(name).update(value, timeUnit);
+    @Override
+    public Timer timer(String name) {
+        return new CodahaleTimer(metricRegistry.timer(name));
     }
 
     public void start() {

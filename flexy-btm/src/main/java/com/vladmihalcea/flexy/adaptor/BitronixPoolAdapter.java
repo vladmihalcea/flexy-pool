@@ -2,6 +2,7 @@ package com.vladmihalcea.flexy.adaptor;
 
 import bitronix.tm.internal.BitronixRuntimeException;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
+import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 
 import java.sql.SQLException;
@@ -16,8 +17,8 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "XA pool of resource .*? still empty after .*?s wait time";
 
-    public BitronixPoolAdapter(PoolingDataSource dataSource) {
-        super(dataSource);
+    public BitronixPoolAdapter(Context context, PoolingDataSource dataSource) {
+        super(context, dataSource);
     }
 
     @Override

@@ -2,8 +2,6 @@ package com.vladmihalcea.flexy.metric;
 
 import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Metrics - This interface defines a metrics basic behavior.
  *
@@ -12,18 +10,16 @@ import java.util.concurrent.TimeUnit;
 public interface Metrics extends LifeCycleAware {
 
     /**
-     * Update the given histogram
+     * Get histogram
      *
      * @param name  histogram name
-     * @param value histogram instant value
      */
-    void updateHistogram(String name, long value);
+    Histogram histogram(String name);
 
     /**
-     * Update the given timer
+     * Get timer
      *
      * @param name  timer name
-     * @param value timer instant value
      */
-    void updateTimer(String name, long value, TimeUnit timeUnit);
+    Timer timer(String name);
 }

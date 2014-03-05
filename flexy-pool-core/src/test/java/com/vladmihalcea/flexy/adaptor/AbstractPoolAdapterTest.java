@@ -2,6 +2,7 @@ package com.vladmihalcea.flexy.adaptor;
 
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +26,8 @@ public class AbstractPoolAdapterTest {
 
     public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
 
-        public TestPoolAdaptor(DataSource dataSource) {
-            super(dataSource);
+        public TestPoolAdaptor(Context context, DataSource dataSource) {
+            super(context, dataSource);
         }
 
         @Override
@@ -62,7 +63,9 @@ public class AbstractPoolAdapterTest {
     @Mock
     private Metrics metrics;
 
-    private ConnectionRequestContext context;
+    private Context context;
+
+    private ConnectionRequestContext connectionRequestContext;
 
     private AbstractPoolAdapter<DataSource> abstractPoolAdapter;
 
@@ -70,13 +73,14 @@ public class AbstractPoolAdapterTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        context = new ConnectionRequestContext.Builder().build();
-        abstractPoolAdapter = new TestPoolAdaptor(dataSource);
+        context = new Context(configuration, metrics);
+        connectionRequestContext = new ConnectionRequestContext.Builder().build();
+        abstractPoolAdapter = new TestPoolAdaptor(context, dataSource);
     }
 
     @Test
     public void testGetConnectionWithoutCredentials() throws SQLException {
         when(dataSource.getConnection()).thenReturn(connection);
-        assertSame(connection, abstractPoolAdapter.getConnection(context));
+        assertSame(connection, abstractPoolAdapter.getConnection(connectionRequestContext));
     }
 }

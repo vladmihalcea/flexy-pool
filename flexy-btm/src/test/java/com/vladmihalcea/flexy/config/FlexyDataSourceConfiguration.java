@@ -23,14 +23,19 @@ public class FlexyDataSourceConfiguration {
     private PoolingDataSource poolingDataSource;
 
     @Bean
+    public Context context() {
+        Configuration configuration = new Configuration(UUID.randomUUID().toString());
+        return new Context(configuration);
+    }
+
+    @Bean
     public BitronixPoolAdapter bitronixPoolAdaptor() {
-        return new BitronixPoolAdapter(poolingDataSource);
+        return new BitronixPoolAdapter(context(), poolingDataSource);
     }
 
     @Bean
     public FlexyPoolDataSource dataSource() {
-        Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        Context context = new Context(configuration);
+        Context context = context();
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy =
                 new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, bitronixPoolAdaptor(), 5);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(
