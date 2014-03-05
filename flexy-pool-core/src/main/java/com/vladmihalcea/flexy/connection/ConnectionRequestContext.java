@@ -1,7 +1,5 @@
 package com.vladmihalcea.flexy.connection;
 
-import com.vladmihalcea.flexy.config.FlexyConfiguration;
-
 /**
  * ConnectionRequestContext - Context holder for a connection request
  *
@@ -9,18 +7,12 @@ import com.vladmihalcea.flexy.config.FlexyConfiguration;
  */
 public class ConnectionRequestContext {
 
-    private final FlexyConfiguration configuration;
     private final Credentials credentials;
     private int retryAttempts;
     private int overflowPoolSize;
 
-    private ConnectionRequestContext(FlexyConfiguration configuration, Credentials credentials) {
-        this.configuration = configuration;
+    private ConnectionRequestContext(Credentials credentials) {
         this.credentials = credentials;
-    }
-
-    public FlexyConfiguration getConfiguration() {
-        return configuration;
     }
 
     public Credentials getCredentials() {
@@ -45,12 +37,7 @@ public class ConnectionRequestContext {
 
     public static class Builder {
 
-        private final FlexyConfiguration configuration;
         private Credentials credentials;
-
-        public Builder(FlexyConfiguration configuration) {
-            this.configuration = configuration;
-        }
 
         public Builder setCredentials(Credentials credentials) {
             this.credentials = credentials;
@@ -59,7 +46,6 @@ public class ConnectionRequestContext {
 
         public ConnectionRequestContext build() {
             return new ConnectionRequestContext(
-                configuration,
                 credentials
             );
         }

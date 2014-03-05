@@ -2,6 +2,7 @@ package com.vladmihalcea.flexy.strategy;
 
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
+import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +21,13 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private final int retryAttempts;
 
-    public RetryConnectionAcquiringStrategy(PoolAdapter poolAdapter, int retryAttempts) {
-        super(poolAdapter);
+    public RetryConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int retryAttempts) {
+        super(context, poolAdapter);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
     }
 
-    public RetryConnectionAcquiringStrategy(ConnectionAcquiringStrategy connectionAcquiringStrategy, int retryAttempts) {
-        super(connectionAcquiringStrategy);
+    public RetryConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int retryAttempts) {
+        super(context, connectionAcquiringStrategy);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
     }
 

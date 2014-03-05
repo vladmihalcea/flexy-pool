@@ -2,6 +2,7 @@ package com.vladmihalcea.flexy.adaptor;
 
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
+import com.vladmihalcea.flexy.metric.Metrics;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,8 +17,12 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
 
     private final T dataSource;
 
+    private final Metrics connectionAcquireTimer;
+
     public AbstractPoolAdapter(T dataSource) {
         this.dataSource = dataSource;
+        //TODO add it
+        this.connectionAcquireTimer = null;
     }
 
     @Override

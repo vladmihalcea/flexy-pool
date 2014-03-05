@@ -1,12 +1,9 @@
 package com.vladmihalcea.flexy;
 
-import com.vladmihalcea.flexy.metric.CodahaleMetrics;
-import com.vladmihalcea.flexy.metric.Metrics;
-import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.config.FlexyConfiguration;
-import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
+import com.vladmihalcea.flexy.context.Context;
+import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -20,16 +17,14 @@ import java.sql.SQLException;
  *
  * @author Vlad Mihalcea
  */
-public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
+public class FlexyPoolDataSource implements DataSource {
 
+    private final Context context;
     private final ConnectionAcquiringStrategy connectionAcquiringStrategy;
     private final DataSource dataSource;
-    private final FlexyConfiguration configuration;
-    private final Metrics metrics;
 
-    public FlexyPoolDataSource(final FlexyConfiguration configuration, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
-        this.configuration = configuration;
-        this.metrics = new CodahaleMetrics(configuration, getClass());
+    public FlexyPoolDataSource(final Context context, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
+        this.context = context;
         this.connectionAcquiringStrategy = connectionAcquiringStrategy;
         this.dataSource = connectionAcquiringStrategy.getPoolAdapter().getDataSource();
     }
@@ -40,7 +35,7 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
     @Override
     public Connection getConnection() throws SQLException {
         return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder(configuration)
+                new ConnectionRequestContext.Builder()
                         .build());
     }
 
@@ -50,7 +45,7 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
     @Override
     public Connection getConnection(final String username, final String password) throws SQLException {
         return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder(configuration)
+                new ConnectionRequestContext.Builder()
                         .setCredentials(new Credentials(username, password))
                         .build());
     }
@@ -101,15 +96,5 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return dataSource.isWrapperFor(iface);
-    }
-
-    @Override
-    public void start() {
-        metrics.start();
-    }
-
-    @Override
-    public void stop() {
-        metrics.stop();
     }
 }

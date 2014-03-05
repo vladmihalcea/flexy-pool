@@ -3,7 +3,7 @@ package com.vladmihalcea.flexy.metric;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
-import com.vladmihalcea.flexy.config.FlexyConfiguration;
+import com.vladmihalcea.flexy.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class CodahaleMetrics extends AbstractMetrics {
     private final Slf4jReporter logReporter;
     private final JmxReporter jmxReporter;
 
-    public CodahaleMetrics(FlexyConfiguration configuration, Class<?> clazz) {
+    public CodahaleMetrics(Configuration configuration, Class<?> clazz) {
         super(configuration);
         this.metricRegistry = new MetricRegistry();
         this.logReporter = Slf4jReporter

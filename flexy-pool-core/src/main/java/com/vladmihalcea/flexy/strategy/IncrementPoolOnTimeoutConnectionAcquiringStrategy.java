@@ -2,6 +2,7 @@ package com.vladmihalcea.flexy.strategy;
 
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
+import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +25,13 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
 
     private final int maxOverflowPoolSize;
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(PoolAdapter poolAdapter, int maxOverflowPoolSize) {
-        super(poolAdapter);
+    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int maxOverflowPoolSize) {
+        super(context, poolAdapter);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
     }
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
-        super(connectionAcquiringStrategy);
+    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
+        super(context, connectionAcquiringStrategy);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
     }
 

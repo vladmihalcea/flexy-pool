@@ -3,20 +3,20 @@ package com.vladmihalcea.flexy.config;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexy.FlexyPoolDataSource;
 import com.vladmihalcea.flexy.adaptor.BitronixPoolAdapter;
+import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.UUID;
 
 /**
- * FlexyDataSourceConfiguration - FlexyConfiguration for flexy data source
+ * FlexyDataSourceConfiguration - Configuration for flexy data source
  *
  * @author Vlad Mihalcea
  */
-@Configuration
+@org.springframework.context.annotation.Configuration
 public class FlexyDataSourceConfiguration {
 
     @Autowired
@@ -29,12 +29,13 @@ public class FlexyDataSourceConfiguration {
 
     @Bean
     public FlexyPoolDataSource dataSource() {
-        FlexyConfiguration configuration = new FlexyConfiguration(UUID.randomUUID().toString());
+        Configuration configuration = new Configuration(UUID.randomUUID().toString());
+        Context context = new Context(configuration);
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy =
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy(bitronixPoolAdaptor(), 5);
+                new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, bitronixPoolAdaptor(), 5);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(
-                incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
+                context, incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
         );
-        return new FlexyPoolDataSource(configuration, retryConnectionAcquiringStrategy);
+        return new FlexyPoolDataSource(context, retryConnectionAcquiringStrategy);
     }
 }
