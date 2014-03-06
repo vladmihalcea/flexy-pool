@@ -8,6 +8,7 @@ import com.vladmihalcea.flexy.metric.Timer;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * AbstractPoolAdapter - Abstract class for PoolAdapter instances.
@@ -15,6 +16,8 @@ import java.sql.SQLException;
  * @author Vlad Mihalcea
  */
 public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter {
+
+   public static final String CONNECTION_ACQUIRE_MILLIS = "connectionAcquireMillis";
 
     private final Context context;
 
@@ -25,7 +28,7 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
     public AbstractPoolAdapter(Context context, T dataSource) {
         this.context = context;
         this.dataSource = dataSource;
-        this.connectionAcquireTimer = context.getMetrics().timer("connectionAcquireTimer");
+        this.connectionAcquireTimer = context.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
     }
 
     @Override
@@ -37,9 +40,15 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
     public Connection getConnection(ConnectionRequestContext context) throws SQLException {
         try {
             Credentials credentials = context.getCredentials();
-            return (credentials == null) ?
-                    dataSource.getConnection() :
-                    dataSource.getConnection(credentials.getUsername(), credentials.getPassword());
+            long startNanos = System.nanoTime();
+            try {
+                return (credentials == null) ?
+                        dataSource.getConnection() :
+                        dataSource.getConnection(credentials.getUsername(), credentials.getPassword());
+            } finally {
+                long endNanos = System.nanoTime();
+                connectionAcquireTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
+            }
         } catch (SQLException e) {
             throw launderSQLException(e);
         } catch (RuntimeException e) {

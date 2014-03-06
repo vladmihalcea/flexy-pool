@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CodahaleMetrics extends AbstractMetrics {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
 
     private final MetricRegistry metricRegistry;
     private final Slf4jReporter logReporter;
@@ -55,7 +55,7 @@ public class CodahaleMetrics extends AbstractMetrics {
     }
 
     public void start() {
-        logReporter.start(5, TimeUnit.MINUTES);
+        logReporter.start(getConfiguration().getMetricLogReporterPeriod(), TimeUnit.MINUTES);
         if (jmxReporter != null) {
             jmxReporter.start();
         }

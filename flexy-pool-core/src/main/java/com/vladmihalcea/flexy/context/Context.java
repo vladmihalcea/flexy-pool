@@ -2,8 +2,8 @@ package com.vladmihalcea.flexy.context;
 
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
-import com.vladmihalcea.flexy.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.metric.codahale.CodahaleMetrics;
 
 /**
  * Context - Context

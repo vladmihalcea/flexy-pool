@@ -5,7 +5,7 @@ package com.vladmihalcea.flexy.connection;
  *
  * @author Vlad Mihalcea
  */
-public class ConnectionRequestContext {
+public final class ConnectionRequestContext {
 
     private final Credentials credentials;
     private int retryAttempts;
