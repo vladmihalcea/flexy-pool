@@ -5,6 +5,7 @@ import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
+import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * RetryConnectionAcquiringStrategyTest - RetryConnectionAcquiringStrategy Test
@@ -37,6 +38,9 @@ public class RetryConnectionAcquiringStrategyTest {
     @Mock
     private Metrics metrics;
 
+    @Mock
+    private Histogram histogram;
+
     private Context context;
 
     private ConnectionRequestContext connectionRequestContext;
@@ -46,6 +50,7 @@ public class RetryConnectionAcquiringStrategyTest {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
         context = new Context(configuration, metrics);
+        when(metrics.histogram(RetryConnectionAcquiringStrategy.RETRY_ATTEMPTS_HISTOGRAM)).thenReturn(histogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
     }
 
@@ -67,7 +72,7 @@ public class RetryConnectionAcquiringStrategyTest {
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(context, chainedConnectionAcquiringStrategy, 5);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
-        assertEquals(1, connectionRequestContext.getRetryAttempts());
+        assertEquals(0, connectionRequestContext.getRetryAttempts());
     }
 
     @Test
@@ -76,7 +81,7 @@ public class RetryConnectionAcquiringStrategyTest {
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(context, poolAdapter, 5);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
-        assertEquals(1, connectionRequestContext.getRetryAttempts());
+        assertEquals(0, connectionRequestContext.getRetryAttempts());
     }
 
     @Test
@@ -87,7 +92,8 @@ public class RetryConnectionAcquiringStrategyTest {
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(context, poolAdapter, 5);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
-        assertEquals(2, connectionRequestContext.getRetryAttempts());
+        assertEquals(1, connectionRequestContext.getRetryAttempts());
+        verify(histogram, times(1)).update(1);
     }
 
     @Test
@@ -102,6 +108,7 @@ public class RetryConnectionAcquiringStrategyTest {
         } catch (AcquireTimeoutException e) {
             assertSame(rootException, e.getCause());
         }
-        assertEquals(3, connectionRequestContext.getRetryAttempts());
+        assertEquals(2, connectionRequestContext.getRetryAttempts());
+        verify(histogram, times(1)).update(2);
     }
 }

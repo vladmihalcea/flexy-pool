@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter {
 
-   public static final String CONNECTION_ACQUIRE_MILLIS = "connectionAcquireMillis";
+    public static final String CONNECTION_ACQUIRE_MILLIS = "connectionAcquireMillis";
 
     private final Context context;
 
