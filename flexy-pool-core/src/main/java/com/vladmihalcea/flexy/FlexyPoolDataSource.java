@@ -10,7 +10,9 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 /**
  * FlexyPoolDataSource - Flexible Pooling DataSource.
@@ -112,5 +114,12 @@ public class FlexyPoolDataSource implements DataSource {
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return dataSource.isWrapperFor(iface);
+    }
+
+    /**
+     * JDBC 4.1 method, available to work with both java 1.6 and java 1.7
+     */
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 }

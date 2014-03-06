@@ -43,13 +43,10 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     private Metrics metrics;
 
     @Mock
-    private Histogram minPoolSizeHistogram;
-
-    @Mock
     private Histogram maxPoolSizeHistogram;
 
     @Mock
-    private Histogram overflowPoolSizeHistogram;
+    private Histogram overflowCountHistogram;
 
     private Context context;
 
@@ -60,9 +57,8 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
         context = new Context(configuration, metrics);
-        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.MIN_POOL_SIZE_HISTOGRAM)).thenReturn(minPoolSizeHistogram);
         when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn(maxPoolSizeHistogram);
-        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.OVERFLOW_POOL_SIZE_HISTOGRAM)).thenReturn(overflowPoolSizeHistogram);
+        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.OVERFLOW_COUNT_HISTOGRAM)).thenReturn(overflowCountHistogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
     }
 
@@ -74,10 +70,9 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, chainedConnectionAcquiringStrategy, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
-        assertEquals(0, connectionRequestContext.getOverflowPoolSize());
-        verify(minPoolSizeHistogram, never()).update(anyInt());
+        assertEquals(0, connectionRequestContext.getOverflowCount());
         verify(maxPoolSizeHistogram, never()).update(anyInt());
-        verify(overflowPoolSizeHistogram, never()).update(anyInt());
+        verify(overflowCountHistogram, never()).update(anyInt());
     }
 
     @Test
@@ -86,10 +81,9 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
-        assertEquals(0, connectionRequestContext.getOverflowPoolSize());
-        verify(minPoolSizeHistogram, never()).update(anyInt());
+        assertEquals(0, connectionRequestContext.getOverflowCount());
         verify(maxPoolSizeHistogram, never()).update(anyInt());
-        verify(overflowPoolSizeHistogram, never()).update(anyInt());
+        verify(overflowCountHistogram, never()).update(anyInt());
     }
 
     @Test
@@ -102,11 +96,10 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
-        assertEquals(1, connectionRequestContext.getOverflowPoolSize());
-        verify(minPoolSizeHistogram, times(1)).update(0);
+        assertEquals(1, connectionRequestContext.getOverflowCount());
         verify(maxPoolSizeHistogram, times(1)).update(2);
         verify(maxPoolSizeHistogram, times(1)).update(3);
-        verify(overflowPoolSizeHistogram, times(1)).update(1);
+        verify(overflowCountHistogram, times(1)).update(1);
     }
 
     @Test
@@ -139,14 +132,13 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
         verify(poolAdapter, times(1)).setMaxPoolSize(4);
         verify(poolAdapter, times(1)).setMaxPoolSize(5);
-        assertEquals(3, connectionRequestContext.getOverflowPoolSize());
-        verify(minPoolSizeHistogram, times(3)).update(0);
+        assertEquals(3, connectionRequestContext.getOverflowCount());
         verify(maxPoolSizeHistogram, times(1)).update(2);
-        verify(maxPoolSizeHistogram, times(2)).update(3);
-        verify(maxPoolSizeHistogram, times(2)).update(4);
+        verify(maxPoolSizeHistogram, times(1)).update(3);
+        verify(maxPoolSizeHistogram, times(1)).update(4);
         verify(maxPoolSizeHistogram, times(1)).update(5);
-        verify(overflowPoolSizeHistogram, times(1)).update(1);
-        verify(overflowPoolSizeHistogram, times(1)).update(2);
-        verify(overflowPoolSizeHistogram, times(1)).update(3);
+        verify(overflowCountHistogram, times(1)).update(1);
+        verify(overflowCountHistogram, times(1)).update(2);
+        verify(overflowCountHistogram, times(1)).update(3);
     }
 }

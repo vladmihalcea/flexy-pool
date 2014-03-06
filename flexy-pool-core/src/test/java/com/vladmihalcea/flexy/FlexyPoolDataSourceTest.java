@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
@@ -115,16 +116,21 @@ public class FlexyPoolDataSourceTest {
     }
 
     @Test
-    public void unwrap() throws SQLException {
+    public void testUnwrap() throws SQLException {
         Class<?> clazz = getClass();
         flexyPoolDataSource.unwrap(clazz);
         verify(dataSource, times(1)).unwrap(same(clazz));
     }
 
     @Test
-    public void isWrapperFor() throws SQLException {
+    public void testIsWrapperFor() throws SQLException {
         Class<?> clazz = getClass();
         flexyPoolDataSource.isWrapperFor(clazz);
         verify(dataSource, times(1)).isWrapperFor(same(clazz));
+    }
+
+    @Test
+    public void testGetParentLogger() throws SQLException {
+        assertEquals(Logger.getLogger(Logger.GLOBAL_LOGGER_NAME), flexyPoolDataSource.getParentLogger());
     }
 }
