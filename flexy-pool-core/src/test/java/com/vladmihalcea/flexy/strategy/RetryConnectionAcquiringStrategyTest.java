@@ -73,6 +73,7 @@ public class RetryConnectionAcquiringStrategyTest {
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         assertEquals(0, connectionRequestContext.getRetryAttempts());
+        verify(histogram, never()).update(anyInt());
     }
 
     @Test
@@ -82,6 +83,7 @@ public class RetryConnectionAcquiringStrategyTest {
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         assertEquals(0, connectionRequestContext.getRetryAttempts());
+        verify(histogram, never()).update(anyInt());
     }
 
     @Test

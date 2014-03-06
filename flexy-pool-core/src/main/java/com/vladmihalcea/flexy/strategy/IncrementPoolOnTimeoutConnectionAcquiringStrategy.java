@@ -4,6 +4,7 @@ import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
+import com.vladmihalcea.flexy.metric.Histogram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,20 +20,34 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractConnectionAcquiringStrategy {
 
+    public static final String MIN_POOL_SIZE_HISTOGRAM = "minPoolSizeHistogram";
+    public static final String MAX_POOL_SIZE_HISTOGRAM = "maxPoolSizeHistogram";
+    public static final String OVERFLOW_POOL_SIZE_HISTOGRAM = "overflowPoolSizeHistogram";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
     private final Lock lock = new ReentrantLock();
 
     private final int maxOverflowPoolSize;
 
+    private final Histogram minPoolSizeHistogram;
+    private final Histogram maxPoolSizeHistogram;
+    private final Histogram overflowPoolSizeHistogram;
+
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int maxOverflowPoolSize) {
         super(context, poolAdapter);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
+        this.minPoolSizeHistogram = context.getMetrics().histogram(MIN_POOL_SIZE_HISTOGRAM);
+        this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
+        this.overflowPoolSizeHistogram = context.getMetrics().histogram(OVERFLOW_POOL_SIZE_HISTOGRAM);
     }
 
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
         super(context, connectionAcquiringStrategy);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
+        this.minPoolSizeHistogram = context.getMetrics().histogram(MIN_POOL_SIZE_HISTOGRAM);
+        this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
+        this.overflowPoolSizeHistogram = context.getMetrics().histogram(OVERFLOW_POOL_SIZE_HISTOGRAM);
     }
 
     public int getMaxOverflowPoolSize() {
@@ -62,12 +77,15 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      */
     protected boolean incrementPoolSize(ConnectionRequestContext context) {
         boolean incremented = false;
+        Integer minSize = null;
+        Integer maxSize = null;
         try {
             lock.lockInterruptibly();
-            int previousMaxSize = getPoolAdapter().getMaxPoolSize();
-            incremented = previousMaxSize < maxOverflowPoolSize;
+            minSize = getPoolAdapter().getMinPoolSize();
+            maxSize = getPoolAdapter().getMaxPoolSize();
+            incremented = maxSize < maxOverflowPoolSize;
             if(incremented) {
-                getPoolAdapter().setMaxPoolSize(previousMaxSize + 1);
+                getPoolAdapter().setMaxPoolSize(maxSize + 1);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -75,8 +93,12 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
             lock.unlock();
         }
         if (incremented) {
-            LOGGER.info("Pool size changed to {}", getPoolAdapter().getMaxPoolSize());
+            LOGGER.info("Pool size changed to {}", maxSize);
             context.incrementOverflowPoolSize();
+            minPoolSizeHistogram.update(minSize);
+            maxPoolSizeHistogram.update(maxSize);
+            maxPoolSizeHistogram.update(maxSize + 1);
+            overflowPoolSizeHistogram.update(context.getOverflowPoolSize());
         }
         return incremented;
     }
