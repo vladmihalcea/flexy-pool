@@ -9,14 +9,15 @@ import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.when;
 
@@ -46,6 +47,27 @@ public class RetryConnectionAcquiringStrategyTest {
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
         context = new Context(configuration, metrics);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
+    }
+
+    @Test
+    public void testInvalidRetryAttempts() {
+        try {
+            new RetryConnectionAcquiringStrategy(context, poolAdapter, 0);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("retryAttempts must ge greater than 0!", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectionAcquiredInOneAttemptWithConnectionAcquiringStrategy() throws SQLException {
+        ConnectionAcquiringStrategy chainedConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
+        when(chainedConnectionAcquiringStrategy.getPoolAdapter()).thenReturn(poolAdapter);
+        when(chainedConnectionAcquiringStrategy.getConnection(eq(connectionRequestContext))).thenReturn(connection);
+        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(context, chainedConnectionAcquiringStrategy, 5);
+        assertEquals(0, connectionRequestContext.getRetryAttempts());
+        assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
+        assertEquals(1, connectionRequestContext.getRetryAttempts());
     }
 
     @Test

@@ -31,6 +31,10 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
         this.connectionAcquireTimer = context.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     @Override
     public T getDataSource() {
         return dataSource;

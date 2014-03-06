@@ -70,16 +70,16 @@ public class FlexyPoolDataSource implements DataSource {
      * {@inheritDoc}
      */
     @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
-        dataSource.setLoginTimeout(seconds);
+    public int getLoginTimeout() throws SQLException {
+        return dataSource.getLoginTimeout();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getLoginTimeout() throws SQLException {
-        return dataSource.getLoginTimeout();
+    public void setLoginTimeout(int seconds) throws SQLException {
+        dataSource.setLoginTimeout(seconds);
     }
 
     /**

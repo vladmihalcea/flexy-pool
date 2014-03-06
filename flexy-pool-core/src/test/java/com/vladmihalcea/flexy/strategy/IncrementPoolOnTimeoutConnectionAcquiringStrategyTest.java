@@ -9,6 +9,7 @@ import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -53,8 +54,18 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     }
 
     @Test
-    public void testConnectionAcquiredInOneAttempt() throws SQLException {
+    public void testConnectionAcquiredInOneAttemptWithConnectionAcquiringStrategy() throws SQLException {
+        ConnectionAcquiringStrategy chainedConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
+        when(chainedConnectionAcquiringStrategy.getPoolAdapter()).thenReturn(poolAdapter);
+        when(chainedConnectionAcquiringStrategy.getConnection(eq(connectionRequestContext))).thenReturn(connection);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, chainedConnectionAcquiringStrategy, 5);
+        assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
+        verify(poolAdapter, never()).setMaxPoolSize(anyInt());
+        assertEquals(0, connectionRequestContext.getOverflowPoolSize());
+    }
 
+    @Test
+    public void testConnectionAcquiredInOneAttempt() throws SQLException {
         when(poolAdapter.getConnection(same(connectionRequestContext))).thenReturn(connection);
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
