@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.UUID;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,6 +30,13 @@ public class ContextTest {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
         this.context = new Context(configuration, metrics);
+    }
+
+    @Test
+    public void testInit() throws Exception {
+        Configuration configuration = new Configuration(UUID.randomUUID().toString());
+        this.context = new Context(configuration);
+        assertNotNull(this.context.getMetrics());
     }
 
     @Test

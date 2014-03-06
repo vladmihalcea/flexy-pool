@@ -3,12 +3,14 @@ package com.vladmihalcea.flexy;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
 import com.vladmihalcea.flexy.context.Context;
+import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * FlexyPoolDataSource - Flexible Pooling DataSource.
@@ -19,14 +21,16 @@ import java.sql.SQLException;
  */
 public class FlexyPoolDataSource implements DataSource {
 
-    private final Context context;
+    public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
+
     private final ConnectionAcquiringStrategy connectionAcquiringStrategy;
     private final DataSource dataSource;
+    private final Timer connectionAcquireTotalTimer;
 
     public FlexyPoolDataSource(final Context context, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
-        this.context = context;
         this.connectionAcquiringStrategy = connectionAcquiringStrategy;
         this.dataSource = connectionAcquiringStrategy.getPoolAdapter().getDataSource();
+        this.connectionAcquireTotalTimer = context.getMetrics().timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
     }
 
     /**
@@ -34,9 +38,15 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public Connection getConnection() throws SQLException {
-        return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder()
-                        .build());
+        long startNanos = System.nanoTime();
+        try {
+            return connectionAcquiringStrategy.getConnection(
+                    new ConnectionRequestContext.Builder()
+                            .build());
+        } finally {
+            long endNanos = System.nanoTime();
+            connectionAcquireTotalTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
+        }
     }
 
     /**
@@ -44,10 +54,16 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public Connection getConnection(final String username, final String password) throws SQLException {
-        return connectionAcquiringStrategy.getConnection(
-                new ConnectionRequestContext.Builder()
-                        .setCredentials(new Credentials(username, password))
-                        .build());
+        long startNanos = System.nanoTime();
+        try {
+            return connectionAcquiringStrategy.getConnection(
+                    new ConnectionRequestContext.Builder()
+                            .setCredentials(new Credentials(username, password))
+                            .build());
+        } finally {
+            long endNanos = System.nanoTime();
+            connectionAcquireTotalTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
+        }
     }
 
     /**

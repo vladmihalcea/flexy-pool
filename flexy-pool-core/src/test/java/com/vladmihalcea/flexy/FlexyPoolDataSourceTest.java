@@ -5,6 +5,8 @@ import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
 import com.vladmihalcea.flexy.context.Context;
+import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +20,10 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -28,9 +32,6 @@ import static org.mockito.Mockito.*;
  * @author Vlad Mihalcea
  */
 public class FlexyPoolDataSourceTest {
-
-    @Mock
-    private Context context;
 
     @Mock
     private ConnectionAcquiringStrategy connectionAcquiringStrategy;
@@ -44,13 +45,20 @@ public class FlexyPoolDataSourceTest {
     @Mock
     private Connection connection;
 
+    @Mock
+    private Metrics metrics;
+
+    @Mock
+    private Timer timer;
+
     private FlexyPoolDataSource flexyPoolDataSource;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        this.context = new Context(configuration);
+        Context context = new Context(configuration, metrics);
+        when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
         when(connectionAcquiringStrategy.getPoolAdapter()).thenReturn(poolAdapter);
         when(poolAdapter.getDataSource()).thenReturn(dataSource);
         this.flexyPoolDataSource = new FlexyPoolDataSource(context, connectionAcquiringStrategy);
@@ -64,6 +72,7 @@ public class FlexyPoolDataSourceTest {
                 .thenReturn(connection);
         assertSame(connection, flexyPoolDataSource.getConnection());
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
+        verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 
     @Test
@@ -76,6 +85,7 @@ public class FlexyPoolDataSourceTest {
         Credentials credentials = connectionRequestContextArgumentCaptor.getValue().getCredentials();
         assertEquals("username", credentials.getUsername());
         assertEquals("password", credentials.getPassword());
+        verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 
     @Test
