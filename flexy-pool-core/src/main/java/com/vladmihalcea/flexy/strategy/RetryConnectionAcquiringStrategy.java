@@ -1,6 +1,5 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
@@ -26,8 +25,8 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private final Histogram retryAttemptsHistogram;
 
-    public RetryConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int retryAttempts) {
-        super(context, poolAdapter);
+    public RetryConnectionAcquiringStrategy(Context context, int retryAttempts) {
+        super(context);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
         this.retryAttemptsHistogram = context.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
     }
@@ -49,14 +48,14 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
      * {@inheritDoc}
      */
     @Override
-    public Connection getConnection(ConnectionRequestContext context) throws SQLException {
+    public Connection getConnection(ConnectionRequestContext requestContext) throws SQLException {
         int remainingAttempts = retryAttempts;
         try {
             do {
                 try {
-                    return getConnectionFactory().getConnection(context);
+                    return getConnectionFactory().getConnection(requestContext);
                 } catch (AcquireTimeoutException e) {
-                    context.incrementAttempts();
+                    requestContext.incrementAttempts();
                     remainingAttempts--;
                     LOGGER.info("Can't acquire connection, remaining retry attempts {}", remainingAttempts);
                     if(remainingAttempts <= 0 ) {
@@ -65,7 +64,7 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
                 }
             } while (true);
         } finally {
-            int attemptedRetries = context.getRetryAttempts();
+            int attemptedRetries = requestContext.getRetryAttempts();
             if (attemptedRetries > 0) {
                 retryAttemptsHistogram.update(attemptedRetries);
             }

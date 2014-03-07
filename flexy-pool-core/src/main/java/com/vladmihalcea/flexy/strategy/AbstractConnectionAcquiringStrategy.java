@@ -1,6 +1,5 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.connection.ConnectionFactory;
 import com.vladmihalcea.flexy.context.Context;
 
@@ -12,19 +11,15 @@ import com.vladmihalcea.flexy.context.Context;
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {
 
     private final Context context;
-    private final PoolAdapter poolAdapter;
     private final ConnectionFactory connectionFactory;
-
-    protected AbstractConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter) {
-        this.context = context;
-        this.poolAdapter = poolAdapter;
-        this.connectionFactory = poolAdapter;
-    }
 
     protected AbstractConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy) {
         this.context = context;
-        this.poolAdapter = connectionAcquiringStrategy.getPoolAdapter();
-        this.connectionFactory = connectionAcquiringStrategy;
+        this.connectionFactory = connectionAcquiringStrategy != null ? connectionAcquiringStrategy : context.getPoolAdapter();
+    }
+
+    protected AbstractConnectionAcquiringStrategy(Context context) {
+        this(context, null);
     }
 
     /**
@@ -41,13 +36,5 @@ public abstract class AbstractConnectionAcquiringStrategy implements ConnectionA
      */
     public ConnectionFactory getConnectionFactory() {
         return connectionFactory;
-    }
-
-    /**
-     * Get the pool adaptor.
-     * @return  pool adaptor
-     */
-    public PoolAdapter getPoolAdapter() {
-        return poolAdapter;
     }
 }

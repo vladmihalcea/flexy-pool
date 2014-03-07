@@ -26,12 +26,12 @@ public class FlexyPoolDataSource implements DataSource {
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
 
     private final ConnectionAcquiringStrategy connectionAcquiringStrategy;
-    private final DataSource dataSource;
+    private final DataSource targetDataSource;
     private final Timer connectionAcquireTotalTimer;
 
     public FlexyPoolDataSource(final Context context, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
         this.connectionAcquiringStrategy = connectionAcquiringStrategy;
-        this.dataSource = connectionAcquiringStrategy.getPoolAdapter().getDataSource();
+        this.targetDataSource = context.getPoolAdapter().getTargetDataSource();
         this.connectionAcquireTotalTimer = context.getMetrics().timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
     }
 
@@ -73,7 +73,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public PrintWriter getLogWriter() throws SQLException {
-        return dataSource.getLogWriter();
+        return targetDataSource.getLogWriter();
     }
 
     /**
@@ -81,7 +81,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public void setLogWriter(PrintWriter out) throws SQLException {
-        dataSource.setLogWriter(out);
+        targetDataSource.setLogWriter(out);
     }
 
     /**
@@ -89,7 +89,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public int getLoginTimeout() throws SQLException {
-        return dataSource.getLoginTimeout();
+        return targetDataSource.getLoginTimeout();
     }
 
     /**
@@ -97,7 +97,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public void setLoginTimeout(int seconds) throws SQLException {
-        dataSource.setLoginTimeout(seconds);
+        targetDataSource.setLoginTimeout(seconds);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return dataSource.unwrap(iface);
+        return targetDataSource.unwrap(iface);
     }
 
     /**
@@ -113,7 +113,7 @@ public class FlexyPoolDataSource implements DataSource {
      */
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return dataSource.isWrapperFor(iface);
+        return targetDataSource.isWrapperFor(iface);
     }
 
     /**

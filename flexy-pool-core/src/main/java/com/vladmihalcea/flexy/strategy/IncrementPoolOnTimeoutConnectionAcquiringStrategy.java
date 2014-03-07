@@ -29,19 +29,23 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     private final int maxOverflowPoolSize;
 
     private final Histogram maxPoolSizeHistogram;
+    
+    private final PoolAdapter poolAdapter;
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int maxOverflowPoolSize) {
-        super(context, poolAdapter);
+    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, int maxOverflowPoolSize) {
+        super(context);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        maxPoolSizeHistogram.update(getPoolAdapter().getMaxPoolSize());
+        maxPoolSizeHistogram.update(context.getPoolAdapter().getMaxPoolSize());
+        poolAdapter = context.getPoolAdapter();
     }
 
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
         super(context, connectionAcquiringStrategy);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        maxPoolSizeHistogram.update(getPoolAdapter().getMaxPoolSize());
+        maxPoolSizeHistogram.update(context.getPoolAdapter().getMaxPoolSize());
+        poolAdapter = context.getPoolAdapter();
     }
 
     public int getMaxOverflowPoolSize() {
@@ -52,13 +56,13 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      * {@inheritDoc}
      */
     @Override
-    public Connection getConnection(ConnectionRequestContext context) throws SQLException {
+    public Connection getConnection(ConnectionRequestContext requestContext) throws SQLException {
         do {
-            int expectingMaxSize = getPoolAdapter().getMaxPoolSize();
+            int expectingMaxSize = poolAdapter.getMaxPoolSize();
             try {
-                return getConnectionFactory().getConnection(context);
+                return getConnectionFactory().getConnection(requestContext);
             } catch (AcquireTimeoutException e) {
-                if(!incrementPoolSize(context, expectingMaxSize)) {
+                if(!incrementPoolSize(requestContext, expectingMaxSize)) {
                     LOGGER.info("Can't acquire connection, pool size has already overflown to its max size.");
                     throw e;
                 }
@@ -71,10 +75,11 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      * @return has pool size changed
      */
     protected boolean incrementPoolSize(ConnectionRequestContext context, int expectingMaxSize) {
+        
         Integer maxSize = null;
         try {
             lock.lockInterruptibly();
-            int currentMaxSize = getPoolAdapter().getMaxPoolSize();
+            int currentMaxSize = poolAdapter.getMaxPoolSize();
             boolean incrementMaxPoolSize = currentMaxSize < maxOverflowPoolSize;
             if(currentMaxSize > expectingMaxSize) {
                 LOGGER.info("Pool size changed by other thread, expected {} and actual value {}", expectingMaxSize, currentMaxSize);
@@ -83,7 +88,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
             if(!incrementMaxPoolSize) {
                 return false;
             }
-            getPoolAdapter().setMaxPoolSize(++currentMaxSize);
+            poolAdapter.setMaxPoolSize(++currentMaxSize);
             maxSize = currentMaxSize;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();

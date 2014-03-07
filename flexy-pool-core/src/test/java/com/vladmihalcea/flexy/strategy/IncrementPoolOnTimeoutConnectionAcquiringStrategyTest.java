@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.UUID;
@@ -31,6 +32,9 @@ import static org.mockito.Mockito.*;
  * @author Vlad Mihalcea
  */
 public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
+
+    @Mock
+    private DataSource dataSource;
 
     @Mock
     private PoolAdapter poolAdapter;
@@ -52,15 +56,15 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        context = new Context(configuration, metrics);
+        context = new Context(configuration, metrics, poolAdapter);
         when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn(maxPoolSizeHistogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
+        when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
     }
 
     @Test
     public void testConnectionAcquiredInOneAttemptWithConnectionAcquiringStrategy() throws SQLException {
         ConnectionAcquiringStrategy chainedConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        when(chainedConnectionAcquiringStrategy.getPoolAdapter()).thenReturn(poolAdapter);
         when(chainedConnectionAcquiringStrategy.getConnection(eq(connectionRequestContext))).thenReturn(connection);
         when(poolAdapter.getMaxPoolSize()).thenReturn(1);
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, chainedConnectionAcquiringStrategy, 5);
@@ -73,7 +77,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     public void testConnectionAcquiredInOneAttempt() throws SQLException {
         when(poolAdapter.getConnection(same(connectionRequestContext))).thenReturn(connection);
         when(poolAdapter.getMaxPoolSize()).thenReturn(1);
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(1);
@@ -86,7 +90,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
                 .thenReturn(connection);
         when(poolAdapter.getMinPoolSize()).thenReturn(0);
         when(poolAdapter.getMaxPoolSize()).thenReturn(2);
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
         verify(maxPoolSizeHistogram, times(1)).update(2);
@@ -114,7 +118,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
                 return nextPoolSize;
             }
         }).when(poolAdapter).setMaxPoolSize(anyInt());
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, poolAdapter, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, 5);
         try {
             incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext);
         } catch (SQLException e) {

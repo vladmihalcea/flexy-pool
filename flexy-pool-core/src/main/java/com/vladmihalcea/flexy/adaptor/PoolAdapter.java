@@ -12,10 +12,10 @@ import javax.sql.DataSource;
 public interface PoolAdapter extends ConnectionFactory {
 
     /**
-     * Wrapped connection pool data source
-     * @return connection pool data source
+     * Wrapped connection pool target  data source
+     * @return connection pool target data source
      */
-    DataSource getDataSource();
+    DataSource getTargetDataSource();
 
     /**
      * @return the max amount of pooled connections.

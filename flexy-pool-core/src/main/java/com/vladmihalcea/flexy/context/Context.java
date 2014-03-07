@@ -1,28 +1,29 @@
 package com.vladmihalcea.flexy.context;
 
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
-import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
 import com.vladmihalcea.flexy.metric.Metrics;
-import com.vladmihalcea.flexy.metric.codahale.CodahaleMetrics;
+
+import javax.sql.DataSource;
 
 /**
  * Context - Context
  *
  * @author Vlad Mihalcea
  */
-public class Context implements LifeCycleAware {
+public class Context {
 
     private final Configuration configuration;
     private final Metrics metrics;
+    private final PoolAdapter poolAdapter;
 
-    public Context(Configuration configuration, Metrics metrics) {
+    public Context(
+            Configuration configuration,
+            Metrics metrics,
+            PoolAdapter poolAdapter) {
         this.configuration = configuration;
         this.metrics = metrics;
-    }
-
-    public Context(Configuration configuration) {
-        this.configuration = configuration;
-        this.metrics = new CodahaleMetrics(configuration, Metrics.class);
+        this.poolAdapter = poolAdapter;
     }
 
     public Configuration getConfiguration() {
@@ -33,13 +34,7 @@ public class Context implements LifeCycleAware {
         return metrics;
     }
 
-    @Override
-    public void start() {
-        metrics.start();
-    }
-
-    @Override
-    public void stop() {
-        metrics.stop();
+    public PoolAdapter getPoolAdapter() {
+        return poolAdapter;
     }
 }

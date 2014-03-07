@@ -1,9 +1,7 @@
 package com.vladmihalcea.flexy.adaptor;
 
-import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import org.junit.Before;
@@ -14,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertSame;
@@ -32,8 +29,8 @@ public class AbstractPoolAdapterTest {
 
     public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
 
-        public TestPoolAdaptor(Context context, DataSource dataSource) {
-            super(context, dataSource);
+        public TestPoolAdaptor(Metrics metrics, DataSource dataSource) {
+            super(metrics, dataSource);
         }
 
         @Override
@@ -61,9 +58,6 @@ public class AbstractPoolAdapterTest {
     private DataSource dataSource;
 
     @Mock
-    private PoolAdapter poolAdapter;
-
-    @Mock
     private Connection connection;
 
     @Mock
@@ -77,10 +71,8 @@ public class AbstractPoolAdapterTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        Context context = new Context(configuration, metrics);
         when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
-        abstractPoolAdapter = new TestPoolAdaptor(context, dataSource);
+        abstractPoolAdapter = new TestPoolAdaptor(metrics, dataSource);
     }
 
     @Test

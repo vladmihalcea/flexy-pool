@@ -58,10 +58,9 @@ public class FlexyPoolDataSourceTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        Context context = new Context(configuration, metrics);
+        Context context = new Context(configuration, metrics, poolAdapter);
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
-        when(connectionAcquiringStrategy.getPoolAdapter()).thenReturn(poolAdapter);
-        when(poolAdapter.getDataSource()).thenReturn(dataSource);
+        when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
         this.flexyPoolDataSource = new FlexyPoolDataSource(context, connectionAcquiringStrategy);
     }
 
