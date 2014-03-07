@@ -9,7 +9,6 @@ public final class ConnectionRequestContext {
 
     private final Credentials credentials;
     private int retryAttempts;
-    private int overflowCount;
 
     private ConnectionRequestContext(Credentials credentials) {
         this.credentials = credentials;
@@ -23,16 +22,8 @@ public final class ConnectionRequestContext {
         return retryAttempts;
     }
 
-    public int getOverflowCount() {
-        return overflowCount;
-    }
-
     public void incrementAttempts() {
         this.retryAttempts++;
-    }
-
-    public void incrementOverflowPoolSize() {
-        this.overflowCount++;
     }
 
     public static class Builder {

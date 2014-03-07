@@ -21,7 +21,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractConnectionAcquiringStrategy {
 
     public static final String MAX_POOL_SIZE_HISTOGRAM = "maxPoolSizeHistogram";
-    public static final String OVERFLOW_COUNT_HISTOGRAM = "overflowCountHistogram";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
@@ -30,20 +29,19 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     private final int maxOverflowPoolSize;
 
     private final Histogram maxPoolSizeHistogram;
-    private final Histogram overflowCountHistogram;
 
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, PoolAdapter poolAdapter, int maxOverflowPoolSize) {
         super(context, poolAdapter);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        this.overflowCountHistogram = context.getMetrics().histogram(OVERFLOW_COUNT_HISTOGRAM);
+        maxPoolSizeHistogram.update(getPoolAdapter().getMaxPoolSize());
     }
 
     public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
         super(context, connectionAcquiringStrategy);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        this.overflowCountHistogram = context.getMetrics().histogram(OVERFLOW_COUNT_HISTOGRAM);
+        maxPoolSizeHistogram.update(getPoolAdapter().getMaxPoolSize());
     }
 
     public int getMaxOverflowPoolSize() {
@@ -56,10 +54,11 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     @Override
     public Connection getConnection(ConnectionRequestContext context) throws SQLException {
         do {
+            int expectingMaxSize = getPoolAdapter().getMaxPoolSize();
             try {
                 return getConnectionFactory().getConnection(context);
             } catch (AcquireTimeoutException e) {
-                if(!incrementPoolSize(context)) {
+                if(!incrementPoolSize(context, expectingMaxSize)) {
                     LOGGER.info("Can't acquire connection, pool size has already overflown to its max size.");
                     throw e;
                 }
@@ -71,30 +70,29 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      * Attempt to increment the pool size
      * @return has pool size changed
      */
-    protected boolean incrementPoolSize(ConnectionRequestContext context) {
-        boolean incremented = false;
+    protected boolean incrementPoolSize(ConnectionRequestContext context, int expectingMaxSize) {
         Integer maxSize = null;
         try {
             lock.lockInterruptibly();
-            maxSize = getPoolAdapter().getMaxPoolSize();
-            incremented = maxSize < maxOverflowPoolSize;
-            if(incremented) {
-                getPoolAdapter().setMaxPoolSize(maxSize + 1);
+            int currentMaxSize = getPoolAdapter().getMaxPoolSize();
+            boolean incrementMaxPoolSize = currentMaxSize < maxOverflowPoolSize;
+            if(currentMaxSize > expectingMaxSize) {
+                LOGGER.info("Pool size changed by other thread, expected {} and actual value {}", expectingMaxSize, currentMaxSize);
+                return incrementMaxPoolSize;
             }
+            if(!incrementMaxPoolSize) {
+                return false;
+            }
+            getPoolAdapter().setMaxPoolSize(++currentMaxSize);
+            maxSize = currentMaxSize;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+            return false;
         } finally {
             lock.unlock();
         }
-        if (incremented) {
-            LOGGER.info("Pool size changed to {}", maxSize);
-            if(context.getOverflowCount() == 0) {
-                maxPoolSizeHistogram.update(maxSize);
-            }
-            context.incrementOverflowPoolSize();
-            maxPoolSizeHistogram.update(maxSize + 1);
-            overflowCountHistogram.update(context.getOverflowCount());
-        }
-        return incremented;
+        LOGGER.info("Pool size changed from previous value {} to {}", expectingMaxSize, maxSize);
+        maxPoolSizeHistogram.update(maxSize);
+        return true;
     }
 }
