@@ -91,7 +91,6 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         when(poolAdapter.getConnection(same(connectionRequestContext)))
                 .thenThrow(new AcquireTimeoutException(new Exception()))
                 .thenReturn(connection);
-        when(poolAdapter.getMinPoolSize()).thenReturn(0);
         when(poolAdapter.getMaxPoolSize()).thenReturn(2);
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
@@ -105,7 +104,6 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         Exception rootException = new Exception();
         when(poolAdapter.getConnection(same(connectionRequestContext)))
                 .thenThrow(new AcquireTimeoutException(rootException));
-        when(poolAdapter.getMinPoolSize()).thenReturn(0);
         final AtomicInteger maxPoolSize = new AtomicInteger(2);
         when(poolAdapter.getMaxPoolSize()).thenAnswer(new Answer<Integer>() {
             @Override

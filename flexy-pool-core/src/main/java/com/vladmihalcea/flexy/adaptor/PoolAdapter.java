@@ -5,14 +5,26 @@ import com.vladmihalcea.flexy.connection.ConnectionFactory;
 import javax.sql.DataSource;
 
 /**
- * PoolAdapter - Adaptor for external Connection Pools.
+ * <code>PoolAdapter</code> provides an abstraction layer for external connection pools.
  *
- * @author Vlad Mihalcea
+ * <p>Every supported connection pool must have an associated PoolAdapter defining methods for:
+ *
+ * <ul>
+ * <li>retrieving the pool max size {@link com.vladmihalcea.flexy.adaptor.PoolAdapter#getMaxPoolSize()}
+ *
+ * <li>setting the pool max size {@link com.vladmihalcea.flexy.adaptor.PoolAdapter#setMaxPoolSize(int maxPoolSize)} ()}
+ *
+ * <li>retrieving the pool data source
+ *
+ * @author	Vlad Mihalcea
+ * @version	%I%, %E%
+ * @see com.vladmihalcea.flexy.connection.ConnectionFactory
+ * @since	1.0
  */
 public interface PoolAdapter<T extends DataSource> extends ConnectionFactory {
 
     /**
-     * Wrapped connection pool target  data source
+     * Associated connection pool data source
      * @return connection pool target data source
      */
     T getTargetDataSource();
@@ -27,15 +39,4 @@ public interface PoolAdapter<T extends DataSource> extends ConnectionFactory {
      * @param maxPoolSize the upper amount of pooled connections.
      */
     void setMaxPoolSize(int maxPoolSize);
-
-    /**
-     * @return the min amount of pooled connections.
-     */
-    int getMinPoolSize();
-
-    /**
-     * Define the min amount of pooled connections.
-     * @param minPoolSize the lower amount of pooled connections.
-     */
-    void setMinPoolSize(int minPoolSize);
 }

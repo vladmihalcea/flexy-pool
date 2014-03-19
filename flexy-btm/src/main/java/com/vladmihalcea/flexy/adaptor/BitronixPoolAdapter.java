@@ -39,23 +39,13 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
         getTargetDataSource().setMaxPoolSize(maxPoolSize);
     }
 
-    @Override
-    public int getMinPoolSize() {
-        return getTargetDataSource().getMinPoolSize();
-    }
-
-    @Override
-    public void setMinPoolSize(int minPoolSize) {
-        getTargetDataSource().setMinPoolSize(minPoolSize);
-    }
-
     /**
      * Translate the Bitronix Exception to AcquireTimeoutException.
      * @param e exception
      * @return translated exception
      */
     @Override
-    protected SQLException launderSQLException(SQLException e) {
+    protected SQLException translateException(SQLException e) {
         if(e.getCause() instanceof BitronixRuntimeException) {
             BitronixRuntimeException cause = (BitronixRuntimeException) e.getCause();
             if(cause.getMessage() != null &&

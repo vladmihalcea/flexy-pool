@@ -10,10 +10,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
+
 /**
- * AbstractPoolAdapter - Abstract class for PoolAdapter instances.
+ * <code>AbstractPoolAdapter</code> defines the base behavior for obtaining a target connection.
+ * The connection acquiring timing statistics is stored within the {@link AbstractPoolAdapter#connectionAcquireTimer}
+ * This class is meant to be extended by specific pool adapter providers {DBCP, C3PO, Bitronix Transaction Manager}
  *
- * @author Vlad Mihalcea
+ * <p>Make sure you supply the adapting pool specific exception transaction mechanism {@link AbstractPoolAdapter#translateException}
+ *
+ * @author	Vlad Mihalcea
+ * @version	%I%, %E%
+ * @see com.vladmihalcea.flexy.adaptor.PoolAdapter
+ * @since	1.0
  */
 public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter<T> {
 
@@ -28,11 +36,23 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
         this.connectionAcquireTimer = configuration.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
     }
 
+    /**
+     * Get the target data source. This is the connection pool actual data source.
+     * @return target data source
+     */
     @Override
     public T getTargetDataSource() {
         return targetDataSource;
     }
 
+    /**
+     * Get a connection from the targeted data source using the supplied Credentials.
+     * The acquiring time is stored in the {@link AbstractPoolAdapter#connectionAcquireTimer}.
+     *
+     * @param requestContext connection request context
+     * @return connection
+     * @throws SQLException if a pool or a database error occurs
+     */
     @Override
     public Connection getConnection(ConnectionRequestContext requestContext) throws SQLException {
         try {
@@ -47,17 +67,18 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
                 connectionAcquireTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
             }
         } catch (SQLException e) {
-            throw launderSQLException(e);
+            throw translateException(e);
         } catch (RuntimeException e) {
-            throw launderRuntimeException(e);
+            throw translateException(e);
         }
     }
 
-    protected SQLException launderSQLException(SQLException e) {
-        return e;
-    }
-
-    protected RuntimeException launderRuntimeException(RuntimeException e) {
-        return e;
+    /**
+     * Translate the thrown exception to {@link com.vladmihalcea.flexy.exception.AcquireTimeoutException}.
+     * @param e caught exception
+     * @return translated exception
+     */
+    protected SQLException translateException(Exception e) {
+        return new SQLException(e);
     }
 }
