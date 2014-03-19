@@ -40,14 +40,6 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
         poolAdapter = configuration.getPoolAdapter();
     }
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
-        super(configuration, connectionAcquiringStrategy);
-        this.maxOverflowPoolSize = maxOverflowPoolSize;
-        this.maxPoolSizeHistogram = configuration.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        maxPoolSizeHistogram.update(configuration.getPoolAdapter().getMaxPoolSize());
-        poolAdapter = configuration.getPoolAdapter();
-    }
-
     public int getMaxOverflowPoolSize() {
         return maxOverflowPoolSize;
     }
@@ -62,7 +54,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
             try {
                 return getConnectionFactory().getConnection(requestContext);
             } catch (AcquireTimeoutException e) {
-                if(!incrementPoolSize(requestContext, expectingMaxSize)) {
+                if(!incrementPoolSize(expectingMaxSize)) {
                     LOGGER.info("Can't acquire connection, pool size has already overflown to its max size.");
                     throw e;
                 }
@@ -74,7 +66,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
      * Attempt to increment the pool size
      * @return has pool size changed
      */
-    protected boolean incrementPoolSize(ConnectionRequestContext context, int expectingMaxSize) {
+    protected boolean incrementPoolSize(int expectingMaxSize) {
         
         Integer maxSize = null;
         try {
@@ -99,5 +91,12 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
         LOGGER.info("Pool size changed from previous value {} to {}", expectingMaxSize, maxSize);
         maxPoolSizeHistogram.update(maxSize);
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "IncrementPoolOnTimeoutConnectionAcquiringStrategy{" +
+                "maxOverflowPoolSize=" + maxOverflowPoolSize +
+                '}';
     }
 }

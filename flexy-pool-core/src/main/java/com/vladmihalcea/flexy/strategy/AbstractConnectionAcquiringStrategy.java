@@ -13,13 +13,9 @@ public abstract class AbstractConnectionAcquiringStrategy implements ConnectionA
     private final Configuration configuration;
     private final ConnectionFactory connectionFactory;
 
-    protected AbstractConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy) {
-        this.configuration = configuration;
-        this.connectionFactory = connectionAcquiringStrategy != null ? connectionAcquiringStrategy : configuration.getPoolAdapter();
-    }
-
     protected AbstractConnectionAcquiringStrategy(Configuration configuration) {
-        this(configuration, null);
+        this.configuration = configuration;
+        this.connectionFactory = configuration.getPoolAdapter();
     }
 
     public Configuration getConfiguration() {

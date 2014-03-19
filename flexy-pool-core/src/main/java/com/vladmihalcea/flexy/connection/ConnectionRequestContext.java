@@ -41,4 +41,12 @@ public final class ConnectionRequestContext {
             );
         }
     }
+
+    @Override
+    public String toString() {
+        return "ConnectionRequestContext{" +
+                "credentials=" + credentials +
+                ", retryAttempts=" + retryAttempts +
+                '}';
+    }
 }

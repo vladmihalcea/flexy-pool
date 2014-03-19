@@ -11,7 +11,6 @@ import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import javax.sql.DataSource;
@@ -19,7 +18,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.*;
 
@@ -82,17 +80,6 @@ public class RetryConnectionAcquiringStrategyTest {
         } catch (IllegalArgumentException e) {
             assertEquals("retryAttempts must ge greater than 0!", e.getMessage());
         }
-    }
-
-    @Test
-    public void testConnectionAcquiredInOneAttemptWithConnectionAcquiringStrategy() throws SQLException {
-        ConnectionAcquiringStrategy chainedConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        when(chainedConnectionAcquiringStrategy.getConnection(eq(connectionRequestContext))).thenReturn(connection);
-        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(configuration, chainedConnectionAcquiringStrategy, 5);
-        assertEquals(0, connectionRequestContext.getRetryAttempts());
-        assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
-        assertEquals(0, connectionRequestContext.getRetryAttempts());
-        verify(histogram, never()).update(anyInt());
     }
 
     @Test

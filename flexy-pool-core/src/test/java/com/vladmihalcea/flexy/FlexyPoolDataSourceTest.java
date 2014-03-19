@@ -4,6 +4,8 @@ import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
+import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
+import com.vladmihalcea.flexy.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexy.factory.MetricsFactory;
 import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
 import com.vladmihalcea.flexy.metric.Metrics;
@@ -75,7 +77,7 @@ public class FlexyPoolDataSourceTest {
                     }
                 }
         )
-        .build();
+                .build();
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
         this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, connectionAcquiringStrategy);
@@ -102,6 +104,63 @@ public class FlexyPoolDataSourceTest {
         Credentials credentials = connectionRequestContextArgumentCaptor.getValue().getCredentials();
         assertEquals("username", credentials.getUsername());
         assertEquals("password", credentials.getPassword());
+        verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    public void testGetConnectionFromTheLastStrategy() throws SQLException {
+
+        ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration,
+                connectionAcquiringStrategy, otherConnectionAcquiringStrategy);
+
+        when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class))).thenThrow(new AcquireTimeoutException(new SQLException()));
+        ArgumentCaptor<ConnectionRequestContext> connectionRequestContextArgumentCaptor
+                = ArgumentCaptor.forClass(ConnectionRequestContext.class);
+        when(otherConnectionAcquiringStrategy.getConnection(connectionRequestContextArgumentCaptor.capture()))
+                .thenReturn(connection);
+        assertSame(connection, flexyPoolDataSource.getConnection());
+        assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
+        verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    public void testGetConnectionWhenStrategyThrowsException() throws SQLException {
+
+        ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration,
+                connectionAcquiringStrategy, otherConnectionAcquiringStrategy);
+
+        when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
+                .thenThrow(new AcquireTimeoutException(new SQLException()));
+        when(otherConnectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
+                .thenThrow(new SQLException());
+        try {
+            flexyPoolDataSource.getConnection();
+            fail("Should throw SQLException!");
+        } catch (SQLException expected) {
+
+        }
+        verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    public void testGetConnectionWhenNoStrategyCanAcquireConnection() throws SQLException {
+
+        ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration,
+                connectionAcquiringStrategy, otherConnectionAcquiringStrategy);
+
+        when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
+                .thenThrow(new AcquireTimeoutException(new SQLException()));
+        when(otherConnectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
+                .thenThrow(new AcquireTimeoutException(new SQLException()));
+        try {
+            flexyPoolDataSource.getConnection();
+            fail("Should throw CantAcquireConnectionException!");
+        } catch (CantAcquireConnectionException expected) {
+
+        }
         verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 

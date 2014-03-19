@@ -35,11 +35,9 @@ public class FlexyDataSourceConfiguration {
     @Bean
     public FlexyPoolDataSource dataSource() {
         Configuration configuration = configuration();
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy =
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
-        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(
-                configuration, incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
+        return new FlexyPoolDataSource(configuration,
+            new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5),
+            new RetryConnectionAcquiringStrategy(configuration, 2)
         );
-        return new FlexyPoolDataSource(configuration, retryConnectionAcquiringStrategy);
     }
 }

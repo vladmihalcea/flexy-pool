@@ -11,7 +11,6 @@ import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -75,17 +74,6 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn(maxPoolSizeHistogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
-    }
-
-    @Test
-    public void testConnectionAcquiredInOneAttemptWithConnectionAcquiringStrategy() throws SQLException {
-        ConnectionAcquiringStrategy chainedConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        when(chainedConnectionAcquiringStrategy.getConnection(eq(connectionRequestContext))).thenReturn(connection);
-        when(poolAdapter.getMaxPoolSize()).thenReturn(1);
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, chainedConnectionAcquiringStrategy, 5);
-        assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
-        verify(poolAdapter, never()).setMaxPoolSize(anyInt());
-        verify(maxPoolSizeHistogram, times(1)).update(1);
     }
 
     @Test

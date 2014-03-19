@@ -31,12 +31,6 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
         this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
     }
 
-    public RetryConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy, int retryAttempts) {
-        super(configuration, connectionAcquiringStrategy);
-        this.retryAttempts = validateRetryAttempts(retryAttempts);
-        this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
-    }
-
     private int validateRetryAttempts(int retryAttempts) {
         if(retryAttempts <= 0) {
             throw new IllegalArgumentException("retryAttempts must ge greater than 0!");
@@ -69,5 +63,12 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
                 retryAttemptsHistogram.update(attemptedRetries);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "RetryConnectionAcquiringStrategy{" +
+                "retryAttempts=" + retryAttempts +
+                '}';
     }
 }
