@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
-import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexy.metric.Histogram;
 import org.slf4j.Logger;
@@ -25,16 +25,16 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private final Histogram retryAttemptsHistogram;
 
-    public RetryConnectionAcquiringStrategy(Context context, int retryAttempts) {
-        super(context);
+    public RetryConnectionAcquiringStrategy(Configuration configuration, int retryAttempts) {
+        super(configuration);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
-        this.retryAttemptsHistogram = context.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
+        this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
     }
 
-    public RetryConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int retryAttempts) {
-        super(context, connectionAcquiringStrategy);
+    public RetryConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy, int retryAttempts) {
+        super(configuration, connectionAcquiringStrategy);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
-        this.retryAttemptsHistogram = context.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
+        this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
     }
 
     private int validateRetryAttempts(int retryAttempts) {

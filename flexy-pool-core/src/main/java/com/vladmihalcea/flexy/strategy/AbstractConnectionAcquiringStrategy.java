@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexy.strategy;
 
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionFactory;
-import com.vladmihalcea.flexy.context.Context;
 
 /**
  * AbstractConnectionAcquiringStrategy - Abstract base class for all connection acquiring strategies
@@ -10,24 +10,20 @@ import com.vladmihalcea.flexy.context.Context;
  */
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {
 
-    private final Context context;
+    private final Configuration configuration;
     private final ConnectionFactory connectionFactory;
 
-    protected AbstractConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy) {
-        this.context = context;
-        this.connectionFactory = connectionAcquiringStrategy != null ? connectionAcquiringStrategy : context.getPoolAdapter();
+    protected AbstractConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy) {
+        this.configuration = configuration;
+        this.connectionFactory = connectionAcquiringStrategy != null ? connectionAcquiringStrategy : configuration.getPoolAdapter();
     }
 
-    protected AbstractConnectionAcquiringStrategy(Context context) {
-        this(context, null);
+    protected AbstractConnectionAcquiringStrategy(Configuration configuration) {
+        this(configuration, null);
     }
 
-    /**
-     * Get context
-     * @return context
-     */
-    public Context getContext() {
-        return context;
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     /**

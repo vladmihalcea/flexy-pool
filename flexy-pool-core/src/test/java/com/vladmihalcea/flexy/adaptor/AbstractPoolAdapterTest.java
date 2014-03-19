@@ -1,7 +1,10 @@
 package com.vladmihalcea.flexy.adaptor;
 
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
+import com.vladmihalcea.flexy.factory.MetricsFactory;
+import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import org.junit.Before;
@@ -29,8 +32,8 @@ public class AbstractPoolAdapterTest {
 
     public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
 
-        public TestPoolAdaptor(Metrics metrics, DataSource dataSource) {
-            super(metrics, dataSource);
+        public TestPoolAdaptor(Configuration<DataSource> configuration) {
+            super(configuration);
         }
 
         @Override
@@ -66,20 +69,37 @@ public class AbstractPoolAdapterTest {
     @Mock
     private Timer timer;
 
-    private AbstractPoolAdapter<DataSource> abstractPoolAdapter;
+    private AbstractPoolAdapter<DataSource> poolAdapter;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
         when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
-        abstractPoolAdapter = new TestPoolAdaptor(metrics, dataSource);
+        Configuration<DataSource> configuration = configuration = new Configuration.Builder<DataSource>(
+                getClass().getName(),
+                dataSource,
+                new MetricsFactory() {
+                    @Override
+                    public Metrics newInstance(Configuration configuration) {
+                        return metrics;
+                    }
+                },
+                new PoolAdapterFactory<DataSource>() {
+                    @Override
+                    public PoolAdapter<DataSource> newInstance(Configuration<DataSource> configuration) {
+                        return poolAdapter;
+                    }
+                }
+        )
+        .build();
+        poolAdapter = new TestPoolAdaptor(configuration);
     }
 
     @Test
     public void testGetConnectionWithoutCredentials() throws SQLException {
         ConnectionRequestContext connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(dataSource.getConnection()).thenReturn(connection);
-        assertSame(connection, abstractPoolAdapter.getConnection(connectionRequestContext));
+        assertSame(connection, poolAdapter.getConnection(connectionRequestContext));
         verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 
@@ -88,7 +108,7 @@ public class AbstractPoolAdapterTest {
         ConnectionRequestContext connectionRequestContext = new ConnectionRequestContext.Builder()
                 .setCredentials(new Credentials("username", "password")).build();
         when(dataSource.getConnection(eq("username"), eq("password"))).thenReturn(connection);
-        assertSame(connection, abstractPoolAdapter.getConnection(connectionRequestContext));
+        assertSame(connection, poolAdapter.getConnection(connectionRequestContext));
         verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 
@@ -97,7 +117,7 @@ public class AbstractPoolAdapterTest {
         ConnectionRequestContext connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(dataSource.getConnection()).thenThrow(new SQLException());
         try {
-            abstractPoolAdapter.getConnection(connectionRequestContext);
+            poolAdapter.getConnection(connectionRequestContext);
             fail("Should have thrown SQLException");
         } catch (SQLException e) {
             verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
@@ -109,7 +129,7 @@ public class AbstractPoolAdapterTest {
         ConnectionRequestContext connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(dataSource.getConnection()).thenThrow(new RuntimeException());
         try {
-            abstractPoolAdapter.getConnection(connectionRequestContext);
+            poolAdapter.getConnection(connectionRequestContext);
             fail("Should have thrown SQLException");
         } catch (RuntimeException e) {
             verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));

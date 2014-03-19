@@ -1,8 +1,8 @@
 package com.vladmihalcea.flexy;
 
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 
@@ -29,10 +29,10 @@ public class FlexyPoolDataSource implements DataSource {
     private final DataSource targetDataSource;
     private final Timer connectionAcquireTotalTimer;
 
-    public FlexyPoolDataSource(final Context context, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
+    public FlexyPoolDataSource(final Configuration configuration, final ConnectionAcquiringStrategy connectionAcquiringStrategy) {
         this.connectionAcquiringStrategy = connectionAcquiringStrategy;
-        this.targetDataSource = context.getPoolAdapter().getTargetDataSource();
-        this.connectionAcquireTotalTimer = context.getMetrics().timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
+        this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
+        this.connectionAcquireTotalTimer = configuration.getMetrics().timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
     }
 
     /**

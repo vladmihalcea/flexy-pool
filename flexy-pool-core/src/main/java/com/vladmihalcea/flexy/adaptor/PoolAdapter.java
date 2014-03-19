@@ -9,13 +9,13 @@ import javax.sql.DataSource;
  *
  * @author Vlad Mihalcea
  */
-public interface PoolAdapter extends ConnectionFactory {
+public interface PoolAdapter<T extends DataSource> extends ConnectionFactory {
 
     /**
      * Wrapped connection pool target  data source
      * @return connection pool target data source
      */
-    DataSource getTargetDataSource();
+    T getTargetDataSource();
 
     /**
      * @return the max amount of pooled connections.

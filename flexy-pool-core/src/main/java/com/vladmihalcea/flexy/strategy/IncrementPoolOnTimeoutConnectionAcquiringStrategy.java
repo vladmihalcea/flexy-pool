@@ -1,8 +1,8 @@
 package com.vladmihalcea.flexy.strategy;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
-import com.vladmihalcea.flexy.context.Context;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexy.metric.Histogram;
 import org.slf4j.Logger;
@@ -32,20 +32,20 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     
     private final PoolAdapter poolAdapter;
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, int maxOverflowPoolSize) {
-        super(context);
+    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, int maxOverflowPoolSize) {
+        super(configuration);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
-        this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        maxPoolSizeHistogram.update(context.getPoolAdapter().getMaxPoolSize());
-        poolAdapter = context.getPoolAdapter();
+        this.maxPoolSizeHistogram = configuration.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
+        maxPoolSizeHistogram.update(configuration.getPoolAdapter().getMaxPoolSize());
+        poolAdapter = configuration.getPoolAdapter();
     }
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Context context, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
-        super(context, connectionAcquiringStrategy);
+    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, ConnectionAcquiringStrategy connectionAcquiringStrategy, int maxOverflowPoolSize) {
+        super(configuration, connectionAcquiringStrategy);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
-        this.maxPoolSizeHistogram = context.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
-        maxPoolSizeHistogram.update(context.getPoolAdapter().getMaxPoolSize());
-        poolAdapter = context.getPoolAdapter();
+        this.maxPoolSizeHistogram = configuration.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
+        maxPoolSizeHistogram.update(configuration.getPoolAdapter().getMaxPoolSize());
+        poolAdapter = configuration.getPoolAdapter();
     }
 
     public int getMaxOverflowPoolSize() {

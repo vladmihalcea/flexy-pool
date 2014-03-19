@@ -4,8 +4,10 @@ import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.factory.MetricsFactory;
 import com.vladmihalcea.flexy.metric.AbstractMetrics;
 import com.vladmihalcea.flexy.metric.Histogram;
+import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +25,18 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
 
+    public static final MetricsFactory FACTORY = new MetricsFactory() {
+        @Override
+        public Metrics newInstance(Configuration configuration) {
+            return new CodahaleMetrics(configuration);
+        }
+    };
+
     private final MetricRegistry metricRegistry;
     private final Slf4jReporter logReporter;
     private final JmxReporter jmxReporter;
 
-    public CodahaleMetrics(Configuration configuration, Class<?> clazz) {
+    public CodahaleMetrics(Configuration configuration) {
         super(configuration);
         this.metricRegistry = new MetricRegistry();
         this.logReporter = Slf4jReporter
@@ -37,7 +46,7 @@ public class CodahaleMetrics extends AbstractMetrics {
         if (configuration.isJmxEnabled()) {
             jmxReporter = JmxReporter
                     .forRegistry(metricRegistry)
-                    .inDomain(MetricRegistry.name(clazz, configuration.getUniqueName()))
+                    .inDomain(MetricRegistry.name(getClass(), configuration.getUniqueName()))
                     .build();
         } else {
             jmxReporter = null;

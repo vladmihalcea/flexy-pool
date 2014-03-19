@@ -4,7 +4,8 @@ import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.context.Context;
+import com.vladmihalcea.flexy.factory.MetricsFactory;
+import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
@@ -19,7 +20,6 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -38,7 +38,7 @@ public class FlexyPoolDataSourceTest {
     private ConnectionAcquiringStrategy connectionAcquiringStrategy;
 
     @Mock
-    private PoolAdapter poolAdapter;
+    private PoolAdapter<DataSource> poolAdapter;
 
     @Mock
     private DataSource dataSource;
@@ -52,16 +52,33 @@ public class FlexyPoolDataSourceTest {
     @Mock
     private Timer timer;
 
+    private Configuration<DataSource> configuration;
+
     private FlexyPoolDataSource flexyPoolDataSource;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        Configuration configuration = new Configuration(UUID.randomUUID().toString());
-        Context context = new Context(configuration, metrics, poolAdapter);
+        configuration = new Configuration.Builder<DataSource>(
+                getClass().getName(),
+                dataSource,
+                new MetricsFactory() {
+                    @Override
+                    public Metrics newInstance(Configuration configuration) {
+                        return metrics;
+                    }
+                },
+                new PoolAdapterFactory<DataSource>() {
+                    @Override
+                    public PoolAdapter<DataSource> newInstance(Configuration<DataSource> configuration) {
+                        return poolAdapter;
+                    }
+                }
+        )
+        .build();
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
-        this.flexyPoolDataSource = new FlexyPoolDataSource(context, connectionAcquiringStrategy);
+        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, connectionAcquiringStrategy);
     }
 
     @Test

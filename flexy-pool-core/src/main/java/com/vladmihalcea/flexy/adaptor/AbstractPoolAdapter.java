@@ -1,8 +1,8 @@
 package com.vladmihalcea.flexy.adaptor;
 
+import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 
 import javax.sql.DataSource;
@@ -15,33 +15,22 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Vlad Mihalcea
  */
-public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter {
+public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter<T> {
 
     public static final String CONNECTION_ACQUIRE_MILLIS = "connectionAcquireMillis";
 
-    private final T poolingDataSource;
-
-    private final DataSource targetDataSource;
+    private final T targetDataSource;
 
     private final Timer connectionAcquireTimer;
 
-    public AbstractPoolAdapter(Metrics metrics, T poolingDataSource, DataSource targetDataSource) {
-        this.poolingDataSource = poolingDataSource;
-        this.targetDataSource = targetDataSource;
-        this.connectionAcquireTimer = metrics.timer(CONNECTION_ACQUIRE_MILLIS);
-    }
-
-    public AbstractPoolAdapter(Metrics metrics, T poolingDataSource) {
-        this(metrics, poolingDataSource, poolingDataSource);
+    public AbstractPoolAdapter(Configuration<T> configuration) {
+        this.targetDataSource = configuration.getTargetDataSource();
+        this.connectionAcquireTimer = configuration.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
     }
 
     @Override
-    public DataSource getTargetDataSource() {
+    public T getTargetDataSource() {
         return targetDataSource;
-    }
-
-    protected T getPoolingDataSource() {
-        return poolingDataSource;
     }
 
     @Override

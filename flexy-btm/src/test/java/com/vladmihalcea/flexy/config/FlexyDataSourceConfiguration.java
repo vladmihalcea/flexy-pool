@@ -3,8 +3,6 @@ package com.vladmihalcea.flexy.config;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexy.FlexyPoolDataSource;
 import com.vladmihalcea.flexy.adaptor.BitronixPoolAdapter;
-import com.vladmihalcea.flexy.context.Context;
-import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexy.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy;
@@ -26,32 +24,22 @@ public class FlexyDataSourceConfiguration {
 
     @Bean
     public Configuration configuration() {
-        return new Configuration(UUID.randomUUID().toString());
-    }
-
-    @Bean
-    public Metrics metrics() {
-        return new CodahaleMetrics(configuration(), Metrics.class);
-    }
-
-    @Bean
-    public BitronixPoolAdapter bitronixPoolAdaptor() {
-        return new BitronixPoolAdapter(metrics(), poolingDataSource);
-    }
-
-    @Bean
-    public Context context() {
-        return new Context(configuration(), metrics(), bitronixPoolAdaptor());
+        return new Configuration.Builder<PoolingDataSource>(
+                UUID.randomUUID().toString(),
+                poolingDataSource,
+                CodahaleMetrics.FACTORY,
+                BitronixPoolAdapter.FACTORY
+        ).build();
     }
 
     @Bean
     public FlexyPoolDataSource dataSource() {
-        Context context = context();
+        Configuration configuration = configuration();
         IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy =
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy(context, 5);
+                new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
         RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy(
-                context, incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
+                configuration, incrementPoolOnTimeoutConnectionAcquiringStrategy, 2
         );
-        return new FlexyPoolDataSource(context, retryConnectionAcquiringStrategy);
+        return new FlexyPoolDataSource(configuration, retryConnectionAcquiringStrategy);
     }
 }
