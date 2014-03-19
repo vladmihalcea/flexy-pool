@@ -1,8 +1,8 @@
 package com.vladmihalcea.flexy.config;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
-import com.vladmihalcea.flexy.factory.MetricsFactory;
-import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
+import com.vladmihalcea.flexy.builder.MetricsBuilder;
+import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
 
 import javax.sql.DataSource;
@@ -27,8 +27,8 @@ public class Configuration<T extends DataSource> {
     public static class Builder<T extends DataSource> {
         private final String uniqueName;
         private final T targetDataSource;
-        private final PoolAdapterFactory<T> poolAdapterFactory;
-        private final MetricsFactory metricsFactory;
+        private final PoolAdapterBuilder<T> poolAdapterBuilder;
+        private final MetricsBuilder metricsBuilder;
         private boolean jmxEnabled = true;
         private long metricLogReporterPeriod = DEFAULT_METRIC_LOG_REPORTER_PERIOD;
 
@@ -36,14 +36,14 @@ public class Configuration<T extends DataSource> {
          * Construct the builder with the mandatory associations.
          * @param uniqueName the configuration unique name (required if you have multiple flexy pools running)
          * @param targetDataSource target data source
-         * @param metricsFactory metrics factory
-         * @param poolAdapterFactory pool adaptor factory
+         * @param metricsBuilder metrics builder
+         * @param poolAdapterBuilder pool adaptor builder
          */
-        public Builder(String uniqueName, T targetDataSource, MetricsFactory metricsFactory, PoolAdapterFactory<T> poolAdapterFactory) {
+        public Builder(String uniqueName, T targetDataSource, MetricsBuilder metricsBuilder, PoolAdapterBuilder<T> poolAdapterBuilder) {
             this.uniqueName = uniqueName;
             this.targetDataSource = targetDataSource;
-            this.metricsFactory = metricsFactory;
-            this.poolAdapterFactory = poolAdapterFactory;
+            this.metricsBuilder = metricsBuilder;
+            this.poolAdapterBuilder = poolAdapterBuilder;
         }
 
         /**
@@ -74,8 +74,8 @@ public class Configuration<T extends DataSource> {
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
             configuration.jmxEnabled = jmxEnabled;
             configuration.metricLogReporterPeriod = metricLogReporterPeriod;
-            configuration.metrics = metricsFactory.newInstance(configuration);
-            configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
+            configuration.metrics = metricsBuilder.build(configuration);
+            configuration.poolAdapter = poolAdapterBuilder.build(configuration);
             return configuration;
         }
     }

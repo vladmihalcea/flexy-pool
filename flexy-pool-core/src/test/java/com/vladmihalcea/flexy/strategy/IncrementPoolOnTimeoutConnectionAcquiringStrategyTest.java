@@ -4,8 +4,8 @@ import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.factory.MetricsFactory;
-import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
+import com.vladmihalcea.flexy.builder.MetricsBuilder;
+import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
@@ -57,15 +57,15 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsFactory() {
+                new MetricsBuilder() {
                     @Override
-                    public Metrics newInstance(Configuration configuration) {
+                    public Metrics build(Configuration configuration) {
                         return metrics;
                     }
                 },
-                new PoolAdapterFactory<DataSource>() {
+                new PoolAdapterBuilder<DataSource>() {
                     @Override
-                    public PoolAdapter<DataSource> newInstance(Configuration<DataSource> configuration) {
+                    public PoolAdapter<DataSource> build(Configuration<DataSource> configuration) {
                         return poolAdapter;
                     }
                 }
@@ -80,7 +80,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     public void testConnectionAcquiredInOneAttempt() throws SQLException {
         when(poolAdapter.getConnection(same(connectionRequestContext))).thenReturn(connection);
         when(poolAdapter.getMaxPoolSize()).thenReturn(1);
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5).build(configuration);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(1);
@@ -92,7 +92,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
                 .thenThrow(new AcquireTimeoutException(new Exception()))
                 .thenReturn(connection);
         when(poolAdapter.getMaxPoolSize()).thenReturn(2);
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5).build(configuration);
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
         verify(maxPoolSizeHistogram, times(1)).update(2);
@@ -119,7 +119,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
                 return nextPoolSize;
             }
         }).when(poolAdapter).setMaxPoolSize(anyInt());
-        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5).build(configuration);
         try {
             incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext);
         } catch (SQLException e) {

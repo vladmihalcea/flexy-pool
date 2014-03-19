@@ -23,8 +23,8 @@ public abstract class AbstractConnectionAcquiringStrategy implements ConnectionA
     }
 
     /**
-     * Get the connection factory.
-     * @return connection factory
+     * Get the connection builder.
+     * @return connection builder
      */
     public ConnectionFactory getConnectionFactory() {
         return connectionFactory;

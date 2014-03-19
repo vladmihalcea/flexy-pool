@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexy;
 
+import com.vladmihalcea.flexy.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
@@ -16,8 +17,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -36,17 +37,20 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
     private final DataSource targetDataSource;
     private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
-    private final Collection<? extends ConnectionAcquiringStrategy> connectionAcquiringStrategies;
+    private final Collection<ConnectionAcquiringStrategy> connectionAcquiringStrategies =
+            new LinkedHashSet<ConnectionAcquiringStrategy>();
 
     public FlexyPoolDataSource(final Configuration configuration,
-                               ConnectionAcquiringStrategy... connectionAcquiringStrategies) {
+                               ConnectionAcquiringStrategyBuilder... strategyBuilders) {
         this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
-        if(connectionAcquiringStrategies.length == 0) {
+        if(strategyBuilders.length == 0) {
             throw new IllegalArgumentException("The flexy pool must use at least one strategy!");
         }
-        this.connectionAcquiringStrategies = Arrays.asList(connectionAcquiringStrategies);
+        for(ConnectionAcquiringStrategyBuilder strategyBuilder : strategyBuilders) {
+            connectionAcquiringStrategies.add(strategyBuilder.build(configuration));
+        }
     }
 
     /**

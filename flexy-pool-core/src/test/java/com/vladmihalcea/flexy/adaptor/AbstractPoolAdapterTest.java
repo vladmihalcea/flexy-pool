@@ -3,8 +3,8 @@ package com.vladmihalcea.flexy.adaptor;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.factory.MetricsFactory;
-import com.vladmihalcea.flexy.factory.PoolAdapterFactory;
+import com.vladmihalcea.flexy.builder.MetricsBuilder;
+import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import org.junit.Before;
@@ -45,16 +45,6 @@ public class AbstractPoolAdapterTest {
         public void setMaxPoolSize(int maxPoolSize) {
 
         }
-
-        @Override
-        public int getMinPoolSize() {
-            return 5;
-        }
-
-        @Override
-        public void setMinPoolSize(int minPoolSize) {
-
-        }
     }
 
     @Mock
@@ -78,15 +68,15 @@ public class AbstractPoolAdapterTest {
         Configuration<DataSource> configuration = configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsFactory() {
+                new MetricsBuilder() {
                     @Override
-                    public Metrics newInstance(Configuration configuration) {
+                    public Metrics build(Configuration configuration) {
                         return metrics;
                     }
                 },
-                new PoolAdapterFactory<DataSource>() {
+                new PoolAdapterBuilder<DataSource>() {
                     @Override
-                    public PoolAdapter<DataSource> newInstance(Configuration<DataSource> configuration) {
+                    public PoolAdapter<DataSource> build(Configuration<DataSource> configuration) {
                         return poolAdapter;
                     }
                 }
@@ -131,7 +121,7 @@ public class AbstractPoolAdapterTest {
         try {
             poolAdapter.getConnection(connectionRequestContext);
             fail("Should have thrown SQLException");
-        } catch (RuntimeException e) {
+        } catch (SQLException e) {
             verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
         }
     }

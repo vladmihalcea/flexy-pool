@@ -4,6 +4,7 @@ import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
+import com.vladmihalcea.flexy.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,20 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
+    public static class Builder implements ConnectionAcquiringStrategyBuilder<IncrementPoolOnTimeoutConnectionAcquiringStrategy> {
+        private final int maxOverflowPoolSize;
+
+        public Builder(int maxOverflowPoolSize) {
+            this.maxOverflowPoolSize = maxOverflowPoolSize;
+        }
+
+        public IncrementPoolOnTimeoutConnectionAcquiringStrategy build(Configuration configuration) {
+            return new IncrementPoolOnTimeoutConnectionAcquiringStrategy(
+                configuration, maxOverflowPoolSize
+            );
+        }
+    }
+
     private final Lock lock = new ReentrantLock();
 
     private final int maxOverflowPoolSize;
@@ -32,7 +47,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     
     private final PoolAdapter poolAdapter;
 
-    public IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, int maxOverflowPoolSize) {
+    private IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, int maxOverflowPoolSize) {
         super(configuration);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = configuration.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);

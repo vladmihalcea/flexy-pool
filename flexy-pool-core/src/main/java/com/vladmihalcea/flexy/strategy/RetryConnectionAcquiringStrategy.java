@@ -3,6 +3,7 @@ package com.vladmihalcea.flexy.strategy;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
+import com.vladmihalcea.flexy.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,25 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetryConnectionAcquiringStrategy.class);
 
+    public static class Builder implements ConnectionAcquiringStrategyBuilder<RetryConnectionAcquiringStrategy> {
+        private final int retryAttempts;
+
+        public Builder(int retryAttempts) {
+            this.retryAttempts = retryAttempts;
+        }
+
+        public RetryConnectionAcquiringStrategy build(Configuration configuration) {
+            return new RetryConnectionAcquiringStrategy(
+                    configuration, retryAttempts
+            );
+        }
+    }
+
     private final int retryAttempts;
 
     private final Histogram retryAttemptsHistogram;
 
-    public RetryConnectionAcquiringStrategy(Configuration configuration, int retryAttempts) {
+    private RetryConnectionAcquiringStrategy(Configuration configuration, int retryAttempts) {
         super(configuration);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
         this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);

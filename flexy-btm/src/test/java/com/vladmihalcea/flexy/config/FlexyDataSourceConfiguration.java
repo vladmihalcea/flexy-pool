@@ -27,8 +27,8 @@ public class FlexyDataSourceConfiguration {
         return new Configuration.Builder<PoolingDataSource>(
                 UUID.randomUUID().toString(),
                 poolingDataSource,
-                CodahaleMetrics.FACTORY,
-                BitronixPoolAdapter.FACTORY
+                CodahaleMetrics.BUILDER,
+                BitronixPoolAdapter.BUILDER
         ).build();
     }
 
@@ -36,8 +36,8 @@ public class FlexyDataSourceConfiguration {
     public FlexyPoolDataSource dataSource() {
         Configuration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
-            new IncrementPoolOnTimeoutConnectionAcquiringStrategy(configuration, 5),
-            new RetryConnectionAcquiringStrategy(configuration, 2)
+            new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5),
+            new RetryConnectionAcquiringStrategy.Builder(2)
         );
     }
 }

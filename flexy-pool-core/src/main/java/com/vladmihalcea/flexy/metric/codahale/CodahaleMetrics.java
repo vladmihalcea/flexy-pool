@@ -4,7 +4,7 @@ import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.vladmihalcea.flexy.config.Configuration;
-import com.vladmihalcea.flexy.factory.MetricsFactory;
+import com.vladmihalcea.flexy.builder.MetricsBuilder;
 import com.vladmihalcea.flexy.metric.AbstractMetrics;
 import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Metrics;
@@ -25,9 +25,9 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
 
-    public static final MetricsFactory FACTORY = new MetricsFactory() {
+    public static final MetricsBuilder BUILDER = new MetricsBuilder() {
         @Override
-        public Metrics newInstance(Configuration configuration) {
+        public Metrics build(Configuration configuration) {
             return new CodahaleMetrics(configuration);
         }
     };
