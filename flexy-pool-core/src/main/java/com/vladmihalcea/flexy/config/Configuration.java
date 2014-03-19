@@ -43,20 +43,20 @@ public class Configuration<T extends DataSource> {
 
         public Configuration<T> build() {
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
-            configuration.metrics = metricsFactory.newInstance(configuration);
-            configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             configuration.jmxEnabled = jmxEnabled;
             configuration.metricLogReporterPeriod = metricLogReporterPeriod;
+            configuration.metrics = metricsFactory.newInstance(configuration);
+            configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             return configuration;
         }
     }
 
     private final String uniqueName;
     private final T targetDataSource;
-    private PoolAdapter poolAdapter;
-    private Metrics metrics;
     private boolean jmxEnabled;
     private long metricLogReporterPeriod;
+    private Metrics metrics;
+    private PoolAdapter poolAdapter;
 
     private Configuration(String uniqueName, T targetDataSource) {
         this.uniqueName = uniqueName;
@@ -71,19 +71,19 @@ public class Configuration<T extends DataSource> {
         return targetDataSource;
     }
 
-    public PoolAdapter getPoolAdapter() {
-        return poolAdapter;
-    }
-
-    public Metrics getMetrics() {
-        return metrics;
-    }
-
     public boolean isJmxEnabled() {
         return jmxEnabled;
     }
 
     public long getMetricLogReporterPeriod() {
         return metricLogReporterPeriod;
+    }
+
+    public Metrics getMetrics() {
+        return metrics;
+    }
+
+    public PoolAdapter getPoolAdapter() {
+        return poolAdapter;
     }
 }
