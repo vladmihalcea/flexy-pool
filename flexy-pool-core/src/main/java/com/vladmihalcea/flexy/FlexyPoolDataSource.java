@@ -5,6 +5,8 @@ import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexy.exception.CantAcquireConnectionException;
+import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
+import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
 import org.slf4j.LoggerFactory;
@@ -26,19 +28,21 @@ import java.util.logging.Logger;
  *
  * @author Vlad Mihalcea
  */
-public class FlexyPoolDataSource implements DataSource {
+public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
 
     private final DataSource targetDataSource;
+    private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
     private final Collection<? extends ConnectionAcquiringStrategy> connectionAcquiringStrategies;
 
     public FlexyPoolDataSource(final Configuration configuration,
                                ConnectionAcquiringStrategy... connectionAcquiringStrategies) {
         this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
-        this.connectionAcquireTotalTimer = configuration.getMetrics().timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
+        this.metrics = configuration.getMetrics();
+        this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
         if(connectionAcquiringStrategies.length == 0) {
             throw new IllegalArgumentException("The flexy pool must use at least one strategy!");
         }
@@ -146,5 +150,15 @@ public class FlexyPoolDataSource implements DataSource {
      */
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    }
+
+    @Override
+    public void start() {
+        metrics.start();
+    }
+
+    @Override
+    public void stop() {
+        metrics.stop();
     }
 }
