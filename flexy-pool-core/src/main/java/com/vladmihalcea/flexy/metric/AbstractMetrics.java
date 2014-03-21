@@ -3,9 +3,12 @@ package com.vladmihalcea.flexy.metric;
 import com.vladmihalcea.flexy.config.Configuration;
 
 /**
- * AbstractMetrics - Base Metrics
+ * <code>AbstractMetrics</code> implements the {@link com.vladmihalcea.flexy.metric.Metrics} interface and
+ * adds the Configuration property.
  *
- * @author Vlad Mihalcea
+ * @author	Vlad Mihalcea
+ * @version	%I%, %E%
+ * @since	1.0
  */
 public abstract class AbstractMetrics implements Metrics {
 

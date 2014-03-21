@@ -10,9 +10,12 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
- * BitronixPoolAdapter - Bitronix Transaction Manager Pool Adaptor
+ * <code>BitronixPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
+ * communicate with the bitronix {@link PoolingDataSource}
  *
  * @author Vlad Mihalcea
+ * @version %I%, %E%
+ * @since 1.0
  */
 public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> {
 
@@ -41,18 +44,19 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
 
     /**
      * Translate the Bitronix Exception to AcquireTimeoutException.
+     *
      * @param e exception
      * @return translated exception
      */
     @Override
     protected SQLException translateException(Exception e) {
-        if(e.getCause() instanceof BitronixRuntimeException) {
+        if (e.getCause() instanceof BitronixRuntimeException) {
             BitronixRuntimeException cause = (BitronixRuntimeException) e.getCause();
-            if(cause.getMessage() != null &&
+            if (cause.getMessage() != null &&
                     Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, cause.getMessage())) {
                 return new AcquireTimeoutException(e);
             }
-        } else if(e instanceof SQLException) {
+        } else if (e instanceof SQLException) {
             return (SQLException) e;
         }
         return new SQLException(e);

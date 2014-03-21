@@ -15,11 +15,16 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * CodahaleMetrics - com.codahale.metrics based Metrics implementation.
- * <p/>
- * It may report the cumulated metrics to both the current LOGGER or platform JMX server.
+ * <code>CodahaleMetrics</code> extends the {@link AbstractMetrics} class and configures the Codahale
+ * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
+ * If the Jmx is enabled, a {@link JmxReporter} will also be added.
  *
- * @author Vlad Mihalcea
+ * This class implements the {@link com.vladmihalcea.flexy.lifecycle.LifeCycleAware} interface so it can
+ * start/stop the metrics reports.
+ *
+ * @author	Vlad Mihalcea
+ * @version	%I%, %E%
+ * @since	1.0
  */
 public class CodahaleMetrics extends AbstractMetrics {
 
@@ -53,16 +58,25 @@ public class CodahaleMetrics extends AbstractMetrics {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Histogram histogram(String name) {
         return new CodahaleHistogram(metricRegistry.histogram(name));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Timer timer(String name) {
         return new CodahaleTimer(metricRegistry.timer(name));
     }
 
+    /**
+     * Start metrics reports.
+     */
     public void start() {
         logReporter.start(getConfiguration().getMetricLogReporterPeriod(), TimeUnit.MINUTES);
         if (jmxReporter != null) {
@@ -70,6 +84,9 @@ public class CodahaleMetrics extends AbstractMetrics {
         }
     }
 
+    /**
+     * Stop metrics reports.
+     */
     public void stop() {
         logReporter.stop();
         if (jmxReporter != null) {

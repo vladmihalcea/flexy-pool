@@ -3,9 +3,12 @@ package com.vladmihalcea.flexy.strategy;
 import com.vladmihalcea.flexy.connection.ConnectionFactory;
 
 /**
- * ConnectionAcquiringStrategy - Base interface for all connection acquiring strategies.
+ * <code>ConnectionAcquiringStrategy</code> is at its core a {@link com.vladmihalcea.flexy.connection.ConnectionFactory}
+ * working as a connection acquiring interceptor.
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public interface ConnectionAcquiringStrategy extends ConnectionFactory {
 

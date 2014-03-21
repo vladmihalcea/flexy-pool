@@ -23,11 +23,35 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * FlexyPoolDataSource - Flexible Pooling DataSource.
+ * <code>FlexyPoolDataSource</code> is a {@link DataSource} wrapper that allows multiple
+ * {@link ConnectionAcquiringStrategy} to be applied when trying to acquire a database {@link java.sql.Connection}.
+ * This is how you'd configure it suing Spring JavaConfig:
+ * <p/>
+ * <pre>
  *
- * It uses chaining strategies for acquiring connections.
+ * {@code @Autowired} private PoolingDataSource poolingDataSource;
+ *
+ * {@code @Bean} public Configuration configuration() {
+ * return new Configuration.Builder<PoolingDataSource>(
+ * UUID.randomUUID().toString(),
+ * poolingDataSource,
+ * CodahaleMetrics.BUILDER,
+ * BitronixPoolAdapter.BUILDER
+ * ).build();
+ * }
+ *
+ * {@code @Bean} public FlexyPoolDataSource dataSource() {
+ * Configuration configuration = configuration();
+ * return new FlexyPoolDataSource(configuration,
+ * new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5),
+ * new RetryConnectionAcquiringStrategy.Builder(2)
+ * );
+ * }
+ * </pre>
  *
  * @author Vlad Mihalcea
+ * @version %I%, %E%
+ * @since 1.0
  */
 public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
 
@@ -45,10 +69,10 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
         this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
-        if(strategyBuilders.length == 0) {
+        if (strategyBuilders.length == 0) {
             throw new IllegalArgumentException("The flexy pool must use at least one strategy!");
         }
-        for(ConnectionAcquiringStrategyBuilder strategyBuilder : strategyBuilders) {
+        for (ConnectionAcquiringStrategyBuilder strategyBuilder : strategyBuilders) {
             connectionAcquiringStrategies.add(strategyBuilder.build(configuration));
         }
     }
@@ -74,6 +98,7 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
 
     /**
      * Try to obtain a connection by going through all available strategies
+     *
      * @param context context
      * @return connection
      * @throws SQLException
@@ -156,11 +181,17 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
         return Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() {
         metrics.start();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stop() {
         metrics.stop();

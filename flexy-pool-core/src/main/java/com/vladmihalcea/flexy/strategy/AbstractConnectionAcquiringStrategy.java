@@ -4,27 +4,36 @@ import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionFactory;
 
 /**
- * AbstractConnectionAcquiringStrategy - Abstract base class for all connection acquiring strategies
+ * <code>AbstractConnectionAcquiringStrategy</code> implements the {@link ConnectionAcquiringStrategy} adding
+ * the configuration and connectionFactory properties.
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {
 
     private final Configuration configuration;
     private final ConnectionFactory connectionFactory;
 
+    /**
+     * Creates a strategy using the given {@link com.vladmihalcea.flexy.config.Configuration}
+     * @param configuration configuration
+     */
     protected AbstractConnectionAcquiringStrategy(Configuration configuration) {
         this.configuration = configuration;
         this.connectionFactory = configuration.getPoolAdapter();
     }
 
+    /**
+     * @return configuration
+     */
     public Configuration getConfiguration() {
         return configuration;
     }
 
     /**
-     * Get the connection builder.
-     * @return connection builder
+     * @return connectionFactory
      */
     public ConnectionFactory getConnectionFactory() {
         return connectionFactory;

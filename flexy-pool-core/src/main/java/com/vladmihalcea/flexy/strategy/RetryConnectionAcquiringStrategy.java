@@ -12,9 +12,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * RetryConnectionAcquiringStrategy - Retry pool strategy.
+ * <code>RetryConnectionAcquiringStrategy</code> extends the {@link AbstractConnectionAcquiringStrategy}
+ * and it allows multiple acquiring attempts before giving up by rethrowing the {@link AcquireTimeoutException}
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquiringStrategy {
 
@@ -22,6 +25,10 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RetryConnectionAcquiringStrategy.class);
 
+    /**
+     * The {@link com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy.Builder} class allows
+     * creating this strategy for a given {@link com.vladmihalcea.flexy.config.Configuration}
+     */
     public static class Builder implements ConnectionAcquiringStrategyBuilder<RetryConnectionAcquiringStrategy> {
         private final int retryAttempts;
 
@@ -29,6 +36,12 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
             this.retryAttempts = retryAttempts;
         }
 
+        /**
+         * Build a {@link com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy} for a given
+         * {@link com.vladmihalcea.flexy.config.Configuration}
+         * @param configuration configuration
+         * @return strategy
+         */
         public RetryConnectionAcquiringStrategy build(Configuration configuration) {
             return new RetryConnectionAcquiringStrategy(
                     configuration, retryAttempts
@@ -40,6 +53,11 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     private final Histogram retryAttemptsHistogram;
 
+    /**
+     * Create the strategy for the given configuration and the retryAttempts.
+     * @param configuration configuration
+     * @param retryAttempts maximum retry attempts
+     */
     private RetryConnectionAcquiringStrategy(Configuration configuration, int retryAttempts) {
         super(configuration);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
@@ -80,6 +98,9 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "RetryConnectionAcquiringStrategy{" +

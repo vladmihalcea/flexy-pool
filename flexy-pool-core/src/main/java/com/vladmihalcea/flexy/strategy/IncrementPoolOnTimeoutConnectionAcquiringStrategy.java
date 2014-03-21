@@ -15,9 +15,15 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * IncrementPoolOnTimeoutConnectionAcquiringStrategy - Pool size increment on timeout strategy.
+ * <code>IncrementPoolOnTimeoutConnectionAcquiringStrategy</code> extends the {@link AbstractConnectionAcquiringStrategy}
+ * and it allows the pool size to grow beyond its {@link com.vladmihalcea.flexy.adaptor.PoolAdapter#getMaxPoolSize()}
+ * up to reaching the {@link IncrementPoolOnTimeoutConnectionAcquiringStrategy#maxOverflowPoolSize} limit.
+ *
+ * Use this strategy to dynamically adjust the pool size based on the connection acquiring demand.
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractConnectionAcquiringStrategy {
 
@@ -25,6 +31,10 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
+    /**
+     * The {@link com.vladmihalcea.flexy.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder} class allows
+     * creating this strategy for a given {@link com.vladmihalcea.flexy.config.Configuration}
+     */
     public static class Builder implements ConnectionAcquiringStrategyBuilder<IncrementPoolOnTimeoutConnectionAcquiringStrategy> {
         private final int maxOverflowPoolSize;
 
@@ -32,6 +42,12 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
             this.maxOverflowPoolSize = maxOverflowPoolSize;
         }
 
+        /**
+         * Build a {@link com.vladmihalcea.flexy.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy} for a given
+         * {@link com.vladmihalcea.flexy.config.Configuration}
+         * @param configuration configuration
+         * @return strategy
+         */
         public IncrementPoolOnTimeoutConnectionAcquiringStrategy build(Configuration configuration) {
             return new IncrementPoolOnTimeoutConnectionAcquiringStrategy(
                 configuration, maxOverflowPoolSize
@@ -47,16 +63,17 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     
     private final PoolAdapter poolAdapter;
 
+    /**
+     * Create the strategy for the given configuration and the maxOverflowPoolSize.
+     * @param configuration configuration
+     * @param maxOverflowPoolSize maximum overflowing pool sizing
+     */
     private IncrementPoolOnTimeoutConnectionAcquiringStrategy(Configuration configuration, int maxOverflowPoolSize) {
         super(configuration);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = configuration.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
         maxPoolSizeHistogram.update(configuration.getPoolAdapter().getMaxPoolSize());
         poolAdapter = configuration.getPoolAdapter();
-    }
-
-    public int getMaxOverflowPoolSize() {
-        return maxOverflowPoolSize;
     }
 
     /**
@@ -78,8 +95,8 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
     }
 
     /**
-     * Attempt to increment the pool size
-     * @return has pool size changed
+     * Attempt to increment the pool size. If the maxSize changes, it skips the incrementing process.
+     * @return if it succeeded changing the pool size
      */
     protected boolean incrementPoolSize(int expectingMaxSize) {
         
@@ -108,6 +125,9 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategy extends AbstractC
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "IncrementPoolOnTimeoutConnectionAcquiringStrategy{" +
