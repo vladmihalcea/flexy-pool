@@ -13,7 +13,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 == Features (Goals)
 
-* extensive connection pool support(Bitronix TM, C3PO, DBCP)
+* extensive connection pool support(Bitronix TM, C3PO, DBCP 1, DBCP 2, BoneCP, HikariCP)
 * statistics support
 ** source connection acquiring time histogram
 ** total connection acquiring time histogram
