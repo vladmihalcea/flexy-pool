@@ -4,6 +4,7 @@ import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -15,13 +16,13 @@ import java.util.concurrent.TimeUnit;
  * <code>AbstractPoolAdapter</code> defines the base behavior for obtaining a target connection.
  * The connection acquiring timing statistics is stored within the {@link AbstractPoolAdapter#connectionAcquireTimer}
  * This class is meant to be extended by specific pool adapter providers {DBCP, C3PO, Bitronix Transaction Manager}
- *
+ * <p/>
  * <p>Make sure you supply the adapting pool specific exception transaction mechanism {@link AbstractPoolAdapter#translateException}
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  * @see com.vladmihalcea.flexy.adaptor.PoolAdapter
- * @since	1.0
  */
 public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter<T> {
 
@@ -31,13 +32,14 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
 
     private final Timer connectionAcquireTimer;
 
-    public AbstractPoolAdapter(T targetDataSource, Metrics metrics) {
-        this.targetDataSource = targetDataSource;
-        this.connectionAcquireTimer = metrics.timer(CONNECTION_ACQUIRE_MILLIS);
+    public AbstractPoolAdapter(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
+        this.targetDataSource = configurationProperties.getTargetDataSource();
+        this.connectionAcquireTimer = configurationProperties.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
     }
 
     /**
      * Get the target data source. This is the connection pool actual data source.
+     *
      * @return target data source
      */
     @Override
@@ -75,6 +77,7 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
 
     /**
      * Translate the thrown exception to {@link com.vladmihalcea.flexy.exception.AcquireTimeoutException}.
+     *
      * @param e caught exception
      * @return translated exception
      */

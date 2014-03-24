@@ -2,10 +2,9 @@ package com.vladmihalcea.flexy.adaptor;
 
 import bitronix.tm.internal.BitronixRuntimeException;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
-import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 
 import java.sql.SQLException;
 import java.util.regex.Pattern;
@@ -23,14 +22,16 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "XA pool of resource .*? still empty after .*?s wait time";
 
     public static final PoolAdapterBuilder<PoolingDataSource> BUILDER = new PoolAdapterBuilder<PoolingDataSource>() {
+
         @Override
-        public PoolAdapter<PoolingDataSource> build(Configuration<PoolingDataSource> configuration) {
-            return new BitronixPoolAdapter(configuration.getTargetDataSource(), configuration.getMetrics());
+        public PoolAdapter<PoolingDataSource> build(
+                ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
+            return new BitronixPoolAdapter(configurationProperties);
         }
     };
 
-    public BitronixPoolAdapter(PoolingDataSource targetDataSource, Metrics metrics) {
-        super(targetDataSource, metrics);
+    public BitronixPoolAdapter(ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
+        super(configurationProperties);
     }
 
     @Override

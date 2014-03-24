@@ -6,9 +6,9 @@ import com.vladmihalcea.flexy.util.ConfigurationProperties;
  * <code>AbstractMetrics</code> implements the {@link com.vladmihalcea.flexy.metric.Metrics} interface and
  * adds the Configuration property.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public abstract class AbstractMetrics implements Metrics {
 

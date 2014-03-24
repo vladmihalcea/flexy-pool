@@ -3,9 +3,9 @@ package com.vladmihalcea.flexy.lifecycle;
 /**
  * <code>LifeCycleAware</code> defines lifecycle listening hooks.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public interface LifeCycleAware {
 

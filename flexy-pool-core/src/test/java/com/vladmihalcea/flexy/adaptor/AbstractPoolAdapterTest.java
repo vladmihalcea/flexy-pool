@@ -1,13 +1,12 @@
 package com.vladmihalcea.flexy.adaptor;
 
 import com.vladmihalcea.flexy.config.Configuration;
-import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.metric.MetricsBuilder;
-import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
 import com.vladmihalcea.flexy.metric.Timer;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,8 +32,8 @@ public class AbstractPoolAdapterTest {
 
     public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
 
-        public TestPoolAdaptor(Configuration<DataSource> configuration) {
-            super(configuration.getTargetDataSource(), configuration.getMetrics());
+        public TestPoolAdaptor(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
+            super(configurationProperties);
         }
 
         @Override
@@ -77,12 +76,12 @@ public class AbstractPoolAdapterTest {
                 },
                 new PoolAdapterBuilder<DataSource>() {
                     @Override
-                    public PoolAdapter<DataSource> build(Configuration<DataSource> configuration) {
+                    public PoolAdapter<DataSource> build(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
                         return poolAdapter;
                     }
                 }
         )
-        .build();
+                .build();
         poolAdapter = new TestPoolAdaptor(configuration);
     }
 

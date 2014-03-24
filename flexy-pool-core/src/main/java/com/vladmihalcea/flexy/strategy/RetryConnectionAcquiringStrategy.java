@@ -1,13 +1,15 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.config.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
+import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -16,10 +18,10 @@ import java.sql.SQLException;
  * and it allows multiple acquiring attempts before giving up by rethrowing the {@link AcquireTimeoutException}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
+ * @version %I%, %E%
  * @since 1.0
  */
-public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquiringStrategy {
+public final class RetryConnectionAcquiringStrategy<T extends DataSource> extends AbstractConnectionAcquiringStrategy {
 
     public static final String RETRY_ATTEMPTS_HISTOGRAM = "retryAttemptsHistogram";
 
@@ -27,9 +29,9 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
     /**
      * The {@link com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy.Builder} class allows
-     * creating this strategy for a given {@link com.vladmihalcea.flexy.config.Configuration}
+     * creating this strategy for a given {@link com.vladmihalcea.flexy.util.ConfigurationProperties}
      */
-    public static class Builder implements ConnectionAcquiringStrategyBuilder<RetryConnectionAcquiringStrategy> {
+    public static class Builder<T extends DataSource> implements ConnectionAcquiringStrategyBuilder<RetryConnectionAcquiringStrategy, T> {
         private final int retryAttempts;
 
         public Builder(int retryAttempts) {
@@ -38,13 +40,14 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
 
         /**
          * Build a {@link com.vladmihalcea.flexy.strategy.RetryConnectionAcquiringStrategy} for a given
-         * {@link com.vladmihalcea.flexy.config.Configuration}
-         * @param configuration configuration
+         * {@link com.vladmihalcea.flexy.util.ConfigurationProperties}
+         *
+         * @param configurationProperties configurationProperties
          * @return strategy
          */
-        public RetryConnectionAcquiringStrategy build(Configuration configuration) {
+        public RetryConnectionAcquiringStrategy build(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
             return new RetryConnectionAcquiringStrategy(
-                    configuration, retryAttempts
+                    configurationProperties, retryAttempts
             );
         }
     }
@@ -54,18 +57,19 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
     private final Histogram retryAttemptsHistogram;
 
     /**
-     * Create the strategy for the given configuration and the retryAttempts.
-     * @param configuration configuration
-     * @param retryAttempts maximum retry attempts
+     * Create the strategy for the given configurationProperties and the retryAttempts.
+     *
+     * @param configurationProperties configurationProperties
+     * @param retryAttempts           maximum retry attempts
      */
-    private RetryConnectionAcquiringStrategy(Configuration configuration, int retryAttempts) {
-        super(configuration);
+    private RetryConnectionAcquiringStrategy(ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties, int retryAttempts) {
+        super(configurationProperties);
         this.retryAttempts = validateRetryAttempts(retryAttempts);
-        this.retryAttemptsHistogram = configuration.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
+        this.retryAttemptsHistogram = configurationProperties.getMetrics().histogram(RETRY_ATTEMPTS_HISTOGRAM);
     }
 
     private int validateRetryAttempts(int retryAttempts) {
-        if(retryAttempts <= 0) {
+        if (retryAttempts <= 0) {
             throw new IllegalArgumentException("retryAttempts must ge greater than 0!");
         }
         return retryAttempts;
@@ -85,7 +89,7 @@ public class RetryConnectionAcquiringStrategy extends AbstractConnectionAcquirin
                     requestContext.incrementAttempts();
                     remainingAttempts--;
                     LOGGER.info("Can't acquire connection, remaining retry attempts {}", remainingAttempts);
-                    if(remainingAttempts <= 0 ) {
+                    if (remainingAttempts <= 0) {
                         throw e;
                     }
                 }

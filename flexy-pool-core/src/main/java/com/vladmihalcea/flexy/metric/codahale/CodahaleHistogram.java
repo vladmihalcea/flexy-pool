@@ -6,9 +6,9 @@ import com.vladmihalcea.flexy.metric.Histogram;
  * <code>CodahaleHistogram</code> implements the {@link com.vladmihalcea.flexy.metric.Histogram} interface by
  * delegating calls to {@link com.codahale.metrics.Histogram}
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class CodahaleHistogram implements Histogram {
 
@@ -16,6 +16,7 @@ public class CodahaleHistogram implements Histogram {
 
     /**
      * Create a {@link com.codahale.metrics.Histogram} wrapper
+     *
      * @param histogram actual histogram
      */
     public CodahaleHistogram(com.codahale.metrics.Histogram histogram) {

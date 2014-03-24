@@ -3,8 +3,8 @@ package com.vladmihalcea.flexy.metric.codahale;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
-import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import com.vladmihalcea.flexy.metric.*;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +14,13 @@ import java.util.concurrent.TimeUnit;
  * <code>CodahaleMetrics</code> extends the {@link AbstractMetrics} class and configures the Codahale
  * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
  * If the Jmx is enabled, a {@link JmxReporter} will also be added.
- *
+ * <p/>
  * This class implements the {@link com.vladmihalcea.flexy.lifecycle.LifeCycleAware} interface so it can
  * start/stop the metrics reports.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class CodahaleMetrics extends AbstractMetrics {
 

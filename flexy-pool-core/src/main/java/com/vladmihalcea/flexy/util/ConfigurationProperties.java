@@ -1,13 +1,15 @@
 package com.vladmihalcea.flexy.util;
 
+import javax.sql.DataSource;
+
 /**
  * <code>Configuration</code> defines basic properties for a given Flexy Pool instance.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
-public class ConfigurationProperties {
+public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private final String uniqueName;
     private boolean jmxEnabled;
@@ -19,6 +21,7 @@ public class ConfigurationProperties {
 
     /**
      * Get the the configuration unique name (required if you have multiple flexy pools running)
+     *
      * @return unique name
      */
     public String getUniqueName() {
@@ -27,6 +30,7 @@ public class ConfigurationProperties {
 
     /**
      * Jmx availability
+     *
      * @return jmx availability
      */
     public boolean isJmxEnabled() {
@@ -35,6 +39,7 @@ public class ConfigurationProperties {
 
     /**
      * Set jmx availability.
+     *
      * @param jmxEnabled jmx availability
      */
     protected void setJmxEnabled(boolean jmxEnabled) {
@@ -43,6 +48,7 @@ public class ConfigurationProperties {
 
     /**
      * Get the metric log report period
+     *
      * @return the period between two consecutive log reports
      */
     public long getMetricLogReporterPeriod() {
@@ -51,9 +57,31 @@ public class ConfigurationProperties {
 
     /**
      * Set metric log report period
+     *
      * @param metricLogReporterPeriod the period between two consecutive log reports
      */
     protected void setMetricLogReporterPeriod(long metricLogReporterPeriod) {
         this.metricLogReporterPeriod = metricLogReporterPeriod;
     }
+
+    /**
+     * Get the target data source
+     *
+     * @return target data source
+     */
+    public abstract T getTargetDataSource();
+
+    /**
+     * Get the associated metrics
+     *
+     * @return metrics
+     */
+    public abstract M getMetrics();
+
+    /**
+     * Get the associated pool adapter
+     *
+     * @return pool adapter
+     */
+    public abstract P getPoolAdapter();
 }

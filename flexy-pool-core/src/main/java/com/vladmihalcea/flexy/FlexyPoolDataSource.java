@@ -1,6 +1,5 @@
 package com.vladmihalcea.flexy;
 
-import com.vladmihalcea.flexy.config.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
@@ -10,6 +9,7 @@ import com.vladmihalcea.flexy.lifecycle.LifeCycleAware;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategy;
+import com.vladmihalcea.flexy.strategy.ConnectionAcquiringStrategyBuilder;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;

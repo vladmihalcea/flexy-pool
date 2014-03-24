@@ -36,8 +36,8 @@ public class FlexyDataSourceConfiguration {
     public FlexyPoolDataSource dataSource() {
         Configuration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
-            new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5),
-            new RetryConnectionAcquiringStrategy.Builder(2)
+                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5),
+                new RetryConnectionAcquiringStrategy.Builder(2)
         );
     }
 }

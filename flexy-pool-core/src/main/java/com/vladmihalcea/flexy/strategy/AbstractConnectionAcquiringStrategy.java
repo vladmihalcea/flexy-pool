@@ -1,35 +1,40 @@
 package com.vladmihalcea.flexy.strategy;
 
-import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.connection.ConnectionFactory;
+import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
+
+import javax.sql.DataSource;
 
 /**
  * <code>AbstractConnectionAcquiringStrategy</code> implements the {@link ConnectionAcquiringStrategy} adding
  * the configuration and connectionFactory properties.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
+ * @version %I%, %E%
  * @since 1.0
  */
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {
 
-    private final Configuration configuration;
+    private final ConfigurationProperties configurationProperties;
     private final ConnectionFactory connectionFactory;
 
     /**
-     * Creates a strategy using the given {@link com.vladmihalcea.flexy.config.Configuration}
-     * @param configuration configuration
+     * Creates a strategy using the given {@link com.vladmihalcea.flexy.util.ConfigurationProperties}
+     *
+     * @param configurationProperties configurationProperties
      */
-    protected AbstractConnectionAcquiringStrategy(Configuration configuration) {
-        this.configuration = configuration;
-        this.connectionFactory = configuration.getPoolAdapter();
+    protected AbstractConnectionAcquiringStrategy(ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties) {
+        this.configurationProperties = configurationProperties;
+        this.connectionFactory = configurationProperties.getPoolAdapter();
     }
 
     /**
-     * @return configuration
+     * @return configurationProperties
      */
-    public Configuration getConfiguration() {
-        return configuration;
+    public ConfigurationProperties getConfigurationProperties() {
+        return configurationProperties;
     }
 
     /**

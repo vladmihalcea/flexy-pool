@@ -3,9 +3,9 @@ package com.vladmihalcea.flexy.connection;
 /**
  * <code>Credentials</code> stores the connection authentication info.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class Credentials {
 
@@ -14,6 +14,7 @@ public class Credentials {
 
     /**
      * Set both username and password
+     *
      * @param username username
      * @param password password
      */

@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
  * <code>CodahaleTimer</code> implements the {@link com.vladmihalcea.flexy.metric.Timer} interface by
  * delegating calls to {@link com.codahale.metrics.Timer}
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public class CodahaleTimer implements Timer {
 
@@ -18,6 +18,7 @@ public class CodahaleTimer implements Timer {
 
     /**
      * Create a {@link com.codahale.metrics.Timer} wrapper
+     *
      * @param timer actual timer
      */
     public CodahaleTimer(com.codahale.metrics.Timer timer) {

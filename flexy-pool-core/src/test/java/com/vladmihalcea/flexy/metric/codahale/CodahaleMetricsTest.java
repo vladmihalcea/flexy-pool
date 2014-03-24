@@ -1,8 +1,8 @@
 package com.vladmihalcea.flexy.metric.codahale;
 
-import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Timer;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class CodahaleMetricsTest {
 
     @Mock
-    private Configuration configuration;
+    private ConfigurationProperties configurationProperties;
 
     @Before
     public void before() {
@@ -28,33 +28,33 @@ public class CodahaleMetricsTest {
 
     @Test
     public void testHistogram() {
-        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configuration);
+        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties);
         Histogram histogram = codahaleMetrics.histogram("histo");
         assertNotNull(histogram);
     }
 
     @Test
     public void testTimer() {
-        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configuration);
+        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties);
         Timer timer = codahaleMetrics.timer("timer");
         assertNotNull(timer);
     }
 
     @Test
     public void testStartStopUsingDefaultConfiguration() {
-        when(configuration.isJmxEnabled()).thenReturn(true);
-        when(configuration.getMetricLogReporterPeriod()).thenReturn(5L);
-        testStartStop(configuration);
+        when(configurationProperties.isJmxEnabled()).thenReturn(true);
+        when(configurationProperties.getMetricLogReporterPeriod()).thenReturn(5L);
+        testStartStop(configurationProperties);
     }
 
     @Test
     public void testStartStopUsingNoJmx() {
-        when(configuration.isJmxEnabled()).thenReturn(false);
-        when(configuration.getMetricLogReporterPeriod()).thenReturn(5L);
-        testStartStop(configuration);
+        when(configurationProperties.isJmxEnabled()).thenReturn(false);
+        when(configurationProperties.getMetricLogReporterPeriod()).thenReturn(5L);
+        testStartStop(configurationProperties);
     }
 
-    public void testStartStop(Configuration currentConfiguration) {
+    public void testStartStop(ConfigurationProperties currentConfiguration) {
         CodahaleMetrics codahaleMetrics = new CodahaleMetrics(currentConfiguration);
         codahaleMetrics.histogram("histo");
         codahaleMetrics.timer("timer");

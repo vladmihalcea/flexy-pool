@@ -4,9 +4,9 @@ package com.vladmihalcea.flexy.connection;
  * <code>ConnectionRequestContext</code> stores all info required for retrieving one connection and data
  * generated during any attempt for getting such connection.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public final class ConnectionRequestContext {
 
@@ -38,6 +38,7 @@ public final class ConnectionRequestContext {
 
     /**
      * Get current connection credentials
+     *
      * @return connection credentials
      */
     public Credentials getCredentials() {
@@ -46,6 +47,7 @@ public final class ConnectionRequestContext {
 
     /**
      * Get current connection retry attempts
+     *
      * @return current connection retry attempts
      */
     public int getRetryAttempts() {

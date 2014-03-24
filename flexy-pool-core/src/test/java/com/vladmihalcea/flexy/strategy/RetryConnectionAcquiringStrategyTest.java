@@ -1,14 +1,14 @@
 package com.vladmihalcea.flexy.strategy;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
+import com.vladmihalcea.flexy.adaptor.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.config.Configuration;
-import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.metric.MetricsBuilder;
-import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -62,12 +62,12 @@ public class RetryConnectionAcquiringStrategyTest {
                 },
                 new PoolAdapterBuilder<DataSource>() {
                     @Override
-                    public PoolAdapter<DataSource> build(Configuration<DataSource> configuration) {
+                    public PoolAdapter<DataSource> build(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
                         return poolAdapter;
                     }
                 }
         )
-        .build();
+                .build();
         when(metrics.histogram(RetryConnectionAcquiringStrategy.RETRY_ATTEMPTS_HISTOGRAM)).thenReturn(histogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
@@ -76,7 +76,7 @@ public class RetryConnectionAcquiringStrategyTest {
     @Test
     public void testInvalidRetryAttempts() {
         try {
-            new RetryConnectionAcquiringStrategy.Builder(0).build(configuration);
+            new RetryConnectionAcquiringStrategy.Builder<DataSource>(0).build(configuration);
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("retryAttempts must ge greater than 0!", e.getMessage());
@@ -86,7 +86,7 @@ public class RetryConnectionAcquiringStrategyTest {
     @Test
     public void testConnectionAcquiredInOneAttempt() throws SQLException {
         when(poolAdapter.getConnection(same(connectionRequestContext))).thenReturn(connection);
-        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder(5).build(configuration);
+        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder<DataSource>(5).build(configuration);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         assertEquals(0, connectionRequestContext.getRetryAttempts());
@@ -98,7 +98,7 @@ public class RetryConnectionAcquiringStrategyTest {
         when(poolAdapter.getConnection(same(connectionRequestContext)))
                 .thenThrow(new AcquireTimeoutException(new Exception()))
                 .thenReturn(connection);
-        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder(5).build(configuration);
+        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder<DataSource>(5).build(configuration);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         assertSame(connection, retryConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         assertEquals(1, connectionRequestContext.getRetryAttempts());
@@ -110,7 +110,7 @@ public class RetryConnectionAcquiringStrategyTest {
         Exception rootException = new Exception();
         when(poolAdapter.getConnection(same(connectionRequestContext)))
                 .thenThrow(new AcquireTimeoutException(rootException));
-        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder(2).build(configuration);
+        RetryConnectionAcquiringStrategy retryConnectionAcquiringStrategy = new RetryConnectionAcquiringStrategy.Builder<DataSource>(2).build(configuration);
         assertEquals(0, connectionRequestContext.getRetryAttempts());
         try {
             retryConnectionAcquiringStrategy.getConnection(connectionRequestContext);

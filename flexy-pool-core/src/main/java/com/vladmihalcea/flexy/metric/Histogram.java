@@ -4,7 +4,7 @@ package com.vladmihalcea.flexy.metric;
  * <code>Histogram</code> defines the basic Histogram behavior..
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
+ * @version %I%, %E%
  * @since 1.0
  */
 public interface Histogram {

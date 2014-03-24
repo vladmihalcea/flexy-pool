@@ -1,9 +1,9 @@
 package com.vladmihalcea.flexy.config;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
-import com.vladmihalcea.flexy.metric.MetricsBuilder;
-import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.adaptor.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
 import com.vladmihalcea.flexy.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
@@ -13,16 +13,17 @@ import javax.sql.DataSource;
  * An instance is retrieved through the {@link com.vladmihalcea.flexy.config.Configuration.Builder} which takes care
  * of the actual order of setting required dependencies.
  *
- * @author	Vlad Mihalcea
- * @version	%I%, %E%
- * @since	1.0
+ * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
-public class Configuration<T extends DataSource> extends ConfigurationProperties {
+public final class Configuration<T extends DataSource> extends ConfigurationProperties<T, Metrics, PoolAdapter<T>> {
 
     public static final long DEFAULT_METRIC_LOG_REPORTER_PERIOD = 5;
 
     /**
      * A Builder for configuration data.
+     *
      * @param <T> the data source type
      */
     public static class Builder<T extends DataSource> {
@@ -35,9 +36,10 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
         /**
          * Construct the builder with the mandatory associations.
-         * @param uniqueName the configuration unique name (required if you have multiple flexy pools running)
-         * @param targetDataSource target data source
-         * @param metricsBuilder metrics builder
+         *
+         * @param uniqueName         the configuration unique name (required if you have multiple flexy pools running)
+         * @param targetDataSource   target data source
+         * @param metricsBuilder     metrics builder
          * @param poolAdapterBuilder pool adaptor builder
          */
         public Builder(String uniqueName, T targetDataSource, MetricsBuilder metricsBuilder, PoolAdapterBuilder<T> poolAdapterBuilder) {
@@ -49,6 +51,7 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
         /**
          * Enable/Disable jmx
+         *
          * @param enableJmx jmx enabling
          * @return this {@link com.vladmihalcea.flexy.config.Configuration.Builder}
          */
@@ -59,6 +62,7 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
         /**
          * Set metric log report period
+         *
          * @param metricLogReporterPeriod the period between two consecutive log reports
          * @return this {@link com.vladmihalcea.flexy.config.Configuration.Builder}
          */
@@ -69,6 +73,7 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
         /**
          * Build the configuration object.
+         *
          * @return configuration
          */
         public Configuration<T> build() {
@@ -91,7 +96,8 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
     }
 
     /**
-     *  Get the target data source
+     * Get the target data source
+     *
      * @return target data source
      */
     public T getTargetDataSource() {
@@ -100,6 +106,7 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
     /**
      * Get the associated {@link com.vladmihalcea.flexy.metric.Metrics}
+     *
      * @return {@link com.vladmihalcea.flexy.metric.Metrics}
      */
     public Metrics getMetrics() {
@@ -108,9 +115,10 @@ public class Configuration<T extends DataSource> extends ConfigurationProperties
 
     /**
      * Get the associated {@link com.vladmihalcea.flexy.adaptor.PoolAdapter}
+     *
      * @return {@link com.vladmihalcea.flexy.adaptor.PoolAdapter}
      */
-    public PoolAdapter getPoolAdapter() {
+    public PoolAdapter<T> getPoolAdapter() {
         return poolAdapter;
     }
 }
