@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexy;
 
-import com.vladmihalcea.flexy.builder.ConnectionAcquiringStrategyBuilder;
+import com.vladmihalcea.flexy.config.builder.ConnectionAcquiringStrategyBuilder;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;

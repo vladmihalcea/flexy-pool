@@ -1,9 +1,10 @@
 package com.vladmihalcea.flexy.config;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
-import com.vladmihalcea.flexy.builder.MetricsBuilder;
-import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
+import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
 
@@ -16,7 +17,7 @@ import javax.sql.DataSource;
  * @version	%I%, %E%
  * @since	1.0
  */
-public class Configuration<T extends DataSource> {
+public class Configuration<T extends DataSource> extends ConfigurationProperties {
 
     public static final long DEFAULT_METRIC_LOG_REPORTER_PERIOD = 5;
 
@@ -72,32 +73,21 @@ public class Configuration<T extends DataSource> {
          */
         public Configuration<T> build() {
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
-            configuration.jmxEnabled = jmxEnabled;
-            configuration.metricLogReporterPeriod = metricLogReporterPeriod;
+            configuration.setJmxEnabled(jmxEnabled);
+            configuration.setMetricLogReporterPeriod(metricLogReporterPeriod);
             configuration.metrics = metricsBuilder.build(configuration);
             configuration.poolAdapter = poolAdapterBuilder.build(configuration);
             return configuration;
         }
     }
 
-    private final String uniqueName;
     private final T targetDataSource;
-    private boolean jmxEnabled;
-    private long metricLogReporterPeriod;
     private Metrics metrics;
     private PoolAdapter poolAdapter;
 
     private Configuration(String uniqueName, T targetDataSource) {
-        this.uniqueName = uniqueName;
+        super(uniqueName);
         this.targetDataSource = targetDataSource;
-    }
-
-    /**
-     * Get the the configuration unique name (required if you have multiple flexy pools running)
-     * @return unique name
-     */
-    public String getUniqueName() {
-        return uniqueName;
     }
 
     /**
@@ -106,22 +96,6 @@ public class Configuration<T extends DataSource> {
      */
     public T getTargetDataSource() {
         return targetDataSource;
-    }
-
-    /**
-     * Jmx availability
-     * @return jmx availability
-     */
-    public boolean isJmxEnabled() {
-        return jmxEnabled;
-    }
-
-    /**
-     * Get the metric log report period
-     * @return the period between two consecutive log reports
-     */
-    public long getMetricLogReporterPeriod() {
-        return metricLogReporterPeriod;
     }
 
     /**

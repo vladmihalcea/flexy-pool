@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexy.metric;
 
-import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 
 /**
  * <code>AbstractMetrics</code> implements the {@link com.vladmihalcea.flexy.metric.Metrics} interface and
@@ -12,13 +12,13 @@ import com.vladmihalcea.flexy.config.Configuration;
  */
 public abstract class AbstractMetrics implements Metrics {
 
-    private final Configuration configuration;
+    private final ConfigurationProperties configurationProperties;
 
-    protected AbstractMetrics(Configuration configuration) {
-        this.configuration = configuration;
+    protected AbstractMetrics(ConfigurationProperties configurationProperties) {
+        this.configurationProperties = configurationProperties;
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
+    public ConfigurationProperties getConfigurationProperties() {
+        return configurationProperties;
     }
 }

@@ -3,12 +3,8 @@ package com.vladmihalcea.flexy.metric.codahale;
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
-import com.vladmihalcea.flexy.config.Configuration;
-import com.vladmihalcea.flexy.builder.MetricsBuilder;
-import com.vladmihalcea.flexy.metric.AbstractMetrics;
-import com.vladmihalcea.flexy.metric.Histogram;
-import com.vladmihalcea.flexy.metric.Metrics;
-import com.vladmihalcea.flexy.metric.Timer;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
+import com.vladmihalcea.flexy.metric.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +28,8 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     public static final MetricsBuilder BUILDER = new MetricsBuilder() {
         @Override
-        public Metrics build(Configuration configuration) {
-            return new CodahaleMetrics(configuration);
+        public Metrics build(ConfigurationProperties configurationProperties) {
+            return new CodahaleMetrics(configurationProperties);
         }
     };
 
@@ -41,17 +37,17 @@ public class CodahaleMetrics extends AbstractMetrics {
     private final Slf4jReporter logReporter;
     private final JmxReporter jmxReporter;
 
-    public CodahaleMetrics(Configuration configuration) {
-        super(configuration);
+    public CodahaleMetrics(ConfigurationProperties configurationProperties) {
+        super(configurationProperties);
         this.metricRegistry = new MetricRegistry();
         this.logReporter = Slf4jReporter
                 .forRegistry(metricRegistry)
                 .outputTo(LOGGER)
                 .build();
-        if (configuration.isJmxEnabled()) {
+        if (configurationProperties.isJmxEnabled()) {
             jmxReporter = JmxReporter
                     .forRegistry(metricRegistry)
-                    .inDomain(MetricRegistry.name(getClass(), configuration.getUniqueName()))
+                    .inDomain(MetricRegistry.name(getClass(), configurationProperties.getUniqueName()))
                     .build();
         } else {
             jmxReporter = null;
@@ -78,7 +74,7 @@ public class CodahaleMetrics extends AbstractMetrics {
      * Start metrics reports.
      */
     public void start() {
-        logReporter.start(getConfiguration().getMetricLogReporterPeriod(), TimeUnit.MINUTES);
+        logReporter.start(getConfigurationProperties().getMetricLogReporterPeriod(), TimeUnit.MINUTES);
         if (jmxReporter != null) {
             jmxReporter.start();
         }

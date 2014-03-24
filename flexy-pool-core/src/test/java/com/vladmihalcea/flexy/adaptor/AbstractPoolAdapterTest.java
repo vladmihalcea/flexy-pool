@@ -1,10 +1,11 @@
 package com.vladmihalcea.flexy.adaptor;
 
 import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.connection.Credentials;
-import com.vladmihalcea.flexy.builder.MetricsBuilder;
-import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
+import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Metrics;
 import com.vladmihalcea.flexy.metric.Timer;
 import org.junit.Before;
@@ -33,7 +34,7 @@ public class AbstractPoolAdapterTest {
     public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
 
         public TestPoolAdaptor(Configuration<DataSource> configuration) {
-            super(configuration);
+            super(configuration.getTargetDataSource(), configuration.getMetrics());
         }
 
         @Override
@@ -70,7 +71,7 @@ public class AbstractPoolAdapterTest {
                 dataSource,
                 new MetricsBuilder() {
                     @Override
-                    public Metrics build(Configuration configuration) {
+                    public Metrics build(ConfigurationProperties configurationProperties) {
                         return metrics;
                     }
                 },

@@ -2,10 +2,11 @@ package com.vladmihalcea.flexy.strategy;
 
 import com.vladmihalcea.flexy.adaptor.PoolAdapter;
 import com.vladmihalcea.flexy.config.Configuration;
+import com.vladmihalcea.flexy.util.ConfigurationProperties;
 import com.vladmihalcea.flexy.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.builder.MetricsBuilder;
-import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.metric.MetricsBuilder;
+import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
 import com.vladmihalcea.flexy.metric.Histogram;
 import com.vladmihalcea.flexy.metric.Metrics;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class RetryConnectionAcquiringStrategyTest {
                 dataSource,
                 new MetricsBuilder() {
                     @Override
-                    public Metrics build(Configuration configuration) {
+                    public Metrics build(ConfigurationProperties configurationProperties) {
                         return metrics;
                     }
                 },

@@ -4,7 +4,8 @@ import bitronix.tm.internal.BitronixRuntimeException;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexy.config.Configuration;
 import com.vladmihalcea.flexy.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexy.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.config.builder.PoolAdapterBuilder;
+import com.vladmihalcea.flexy.metric.Metrics;
 
 import java.sql.SQLException;
 import java.util.regex.Pattern;
@@ -24,12 +25,12 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
     public static final PoolAdapterBuilder<PoolingDataSource> BUILDER = new PoolAdapterBuilder<PoolingDataSource>() {
         @Override
         public PoolAdapter<PoolingDataSource> build(Configuration<PoolingDataSource> configuration) {
-            return new BitronixPoolAdapter(configuration);
+            return new BitronixPoolAdapter(configuration.getTargetDataSource(), configuration.getMetrics());
         }
     };
 
-    public BitronixPoolAdapter(Configuration<PoolingDataSource> configuration) {
-        super(configuration);
+    public BitronixPoolAdapter(PoolingDataSource targetDataSource, Metrics metrics) {
+        super(targetDataSource, metrics);
     }
 
     @Override
