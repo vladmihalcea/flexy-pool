@@ -9,7 +9,8 @@
         ">
 
     <import resource="classpath:spring/applicationContext-base.xml"/>
+    <import resource="classpath:spring/applicationContext-btm.xml"/>
 
-    <context:component-scan base-package="com.vladmihalcea.flexypool.config"/>
+    <!--<context:component-scan base-package="com.vladmihalcea.flexypool.config"/>-->
 
 </beans>

@@ -32,7 +32,7 @@ public class FlexyDataSourceConfiguration {
         ).build();
     }
 
-    @Bean
+    @Bean(initMethod = "start", destroyMethod = "stop")
     public FlexyPoolDataSource dataSource() {
         Configuration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
