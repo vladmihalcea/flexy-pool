@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexypool;
 
+import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * BitronixIntegrationTest - Bitronix Integration Test
@@ -36,7 +38,12 @@ public class BitronixIntegrationTest {
         getConnection(index++);
         getConnection(index++);
         getConnection(index++);
-        //getConnection(index++);
+        try {
+            getConnection(index++);
+            fail();
+        } catch (CantAcquireConnectionException expected) {
+
+        }
     }
 
     private Connection getConnection(int index) throws SQLException {

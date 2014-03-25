@@ -41,6 +41,7 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-btm</module>
+        <module>flexy-dbcp</module>
     </modules>
 
     <dependencies>
