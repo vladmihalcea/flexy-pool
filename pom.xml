@@ -40,26 +40,24 @@
 
     <modules>
         <module>flexy-pool-core</module>
-        <module>flexy-btm</module>
+        <module>flexy-common-adapter</module>
         <module>flexy-dbcp</module>
+        <module>flexy-btm</module>
     </modules>
 
     <dependencies>
 
         <!-- Required dependencies -->
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->
@@ -81,21 +79,15 @@
         <dependencies>
             <!-- Required dependencies -->
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${jcl-over-slf4j.version}</version>
             </dependency>
 
             <dependency>
@@ -196,9 +188,8 @@
 
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
 
-        <jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
-        <logback.version>1.0.13</logback.version>
-        <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
+        <slf4j.version>1.7.6</slf4j.version>
+        <logback.version>1.1.1</logback.version>
         <codahale.metrics.version>3.0.2</codahale.metrics.version>
 
         <mockito.version>1.8.5</mockito.version>
