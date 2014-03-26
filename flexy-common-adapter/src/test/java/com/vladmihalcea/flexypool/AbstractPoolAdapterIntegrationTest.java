@@ -9,9 +9,12 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 /**
  * AbstractPoolAdapterIntegrationTest - Abstract Pool Adapter Integration Test
@@ -28,16 +31,15 @@ public abstract class AbstractPoolAdapterIntegrationTest {
     @Test
     public void test() throws SQLException {
         int index = 0;
-        getConnection(index++);
-        getConnection(index++);
-        getConnection(index++);
-        getConnection(index++);
-        getConnection(index++);
-        try {
-            getConnection(index++);
-            fail();
-        } catch (CantAcquireConnectionException expected) {
+        List<Connection> leasedConnections = new ArrayList<Connection>();
 
+        try {
+            for(;;++index) {
+                leasedConnections.add(getConnection(index));
+            }
+        } catch (SQLException e) {
+            assertTrue(e instanceof CantAcquireConnectionException);
+            verifyLeasedConnections(leasedConnections);
         }
     }
 
@@ -47,5 +49,9 @@ public abstract class AbstractPoolAdapterIntegrationTest {
         assertNotNull(connection);
         LOGGER.info("Got connection {}", connection);
         return connection;
+    }
+
+    protected void verifyLeasedConnections(List<Connection> leasedConnections) {
+        assertEquals(5, leasedConnections.size());
     }
 }

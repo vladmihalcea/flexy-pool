@@ -44,6 +44,7 @@
         <module>flexy-btm</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
+        <module>flexy-c3p0</module>
     </modules>
 
     <dependencies>

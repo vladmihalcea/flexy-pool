@@ -6,7 +6,6 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 
 /**
  * <code>BasicDataSourcePoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
@@ -52,7 +51,7 @@ public class BasicDataSourcePoolAdapter extends AbstractPoolAdapter<BasicDataSou
     @Override
     protected SQLException translateException(Exception e) {
         if (e.getMessage() != null &&
-                Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage())) {
+                ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage())) {
             return new AcquireTimeoutException(e);
         }
         return new SQLException(e);
