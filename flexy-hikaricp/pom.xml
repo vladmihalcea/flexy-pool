@@ -9,11 +9,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-hikari</artifactId>
+    <artifactId>flexy-hikaricp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-hikari</name>
+    <name>flexy-hikaricp</name>
     <description>The flexible pool HikariCP adapter</description>
 
     <dependencies>
