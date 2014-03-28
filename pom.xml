@@ -41,10 +41,11 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-common-adapter</module>
+        <module>flexy-bonecp</module>
         <module>flexy-btm</module>
+        <module>flexy-c3p0</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
-        <module>flexy-c3p0</module>
         <module>flexy-hikaricp</module>
     </modules>
 

@@ -10,18 +10,14 @@
 
     <import resource="classpath:spring/applicationContext-local-resource.xml"/>
 
-    <bean id="poolingDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-        <property name="dataSourceClassName" value="${jdbc.dataSourceClassName}" />
-        <property name="dataSourceProperties">
-            <props>
-                <prop key="url">${jdbc.url}</prop>
-                <prop key="user">${jdbc.username}</prop>
-                <prop key="password">${jdbc.password}</prop>
-            </props>
-        </property>
-        <property name="minimumPoolSize" value="1"/>
-        <property name="maximumPoolSize" value="3"/>
-        <property name="connectionTimeout" value="100"/>
+    <bean id="poolingDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxConnectionsPerPartition" value="3"/>
+        <property name="partitionCount" value="1"/>
+        <property name="connectionTimeoutInMs" value="500"/>
     </bean>
 
 </beans>
