@@ -11,7 +11,7 @@ v1.0.0, 2014-02-25
 The flexy-pool library brings adaptability to a given Connection Pool, allowing it to resize on demand.
 This is very handy since most connection pools offer a limited set of dynamic configuration strategies.
 
-== Features (Goals)
+== Features 
 
 * extensive connection pool support(Bitronix TM, C3PO, DBCP 1, DBCP 2, BoneCP, HikariCP)
 * statistics support
@@ -19,5 +19,9 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ** total connection acquiring time histogram
 ** retries attempts histogram
 ** maximum CP size histogram
+
+== (Goals)
+
+* statistics support
 ** connection request count histogram
 ** connection lease time histogram
