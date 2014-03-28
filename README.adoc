@@ -20,7 +20,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ** retries attempts histogram
 ** maximum CP size histogram
 
-== (Goals)
+== In progress
 
 * statistics support
 ** connection request count histogram
