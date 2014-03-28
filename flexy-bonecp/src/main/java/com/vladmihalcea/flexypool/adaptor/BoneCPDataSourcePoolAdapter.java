@@ -1,11 +1,12 @@
 package com.vladmihalcea.flexypool.adaptor;
 
+import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPDataSource;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 
 /**
@@ -42,15 +43,9 @@ public class BoneCPDataSourcePoolAdapter extends AbstractPoolAdapter<BoneCPDataS
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxConnectionsPerPartition(maxPoolSize);
         //BoneCP doesn't reinitialize itself on pool size change
-        try {
-            Field pool = getTargetDataSource().getClass().getDeclaredField("pool");
-            pool.setAccessible(true);
-            pool.set(getTargetDataSource(), null);
-        } catch (NoSuchFieldException e) {
-            throw new IllegalArgumentException(e);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException(e);
-        }
+        BoneCP boneCP = ReflectionUtils.invoke(getTargetDataSource(), "getPool");
+        boneCP.close();
+        ReflectionUtils.setFieldValue(getTargetDataSource(), "pool", null);
     }
 
     /**
