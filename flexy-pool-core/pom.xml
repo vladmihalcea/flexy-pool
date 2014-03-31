@@ -21,7 +21,6 @@
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>

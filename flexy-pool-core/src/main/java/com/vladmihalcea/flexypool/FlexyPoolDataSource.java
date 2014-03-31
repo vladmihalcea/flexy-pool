@@ -1,11 +1,14 @@
 package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.connection.ConnectionCallback;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
+import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
@@ -20,6 +23,7 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 /**
@@ -53,24 +57,34 @@ import java.util.logging.Logger;
  * @version %I%, %E%
  * @since 1.0
  */
-public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
+public class FlexyPoolDataSource implements DataSource, LifeCycleAware, ConnectionCallback {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
+    public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCountHistogram";
+    public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
     private final DataSource targetDataSource;
     private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
+    private final Histogram concurrentConnectionCountHistogram;
+    private final Timer connectionLeaseTimer;
+    private final ConnectionProxyBuilder connectionProxyBuilder;
     private final Collection<ConnectionAcquiringStrategy> connectionAcquiringStrategies =
             new LinkedHashSet<ConnectionAcquiringStrategy>();
+
+    private AtomicLong concurrentConnectionCount = new AtomicLong();
 
     public FlexyPoolDataSource(final Configuration configuration,
                                ConnectionAcquiringStrategyBuilder... strategyBuilders) {
         this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
+        this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT);
+        this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
+        this.connectionProxyBuilder = configuration.getConnectionProxyBuilder();
         if (strategyBuilders.length == 0) {
-            throw new IllegalArgumentException("The flexypool pool must use at least one strategy!");
+            throw new IllegalArgumentException("The flexy pool pool must use at least one strategy!");
         }
         for (ConnectionAcquiringStrategyBuilder strategyBuilder : strategyBuilders) {
             connectionAcquiringStrategies.add(strategyBuilder.build(configuration));
@@ -124,6 +138,23 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware {
             long endNanos = System.nanoTime();
             connectionAcquireTotalTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void acquire(Connection connection) {
+        concurrentConnectionCountHistogram.update(concurrentConnectionCount.incrementAndGet());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void release(Connection connection, long durationNanos) {
+        concurrentConnectionCountHistogram.update(concurrentConnectionCount.decrementAndGet());
+        connectionLeaseTimer.update(durationNanos, TimeUnit.NANOSECONDS);
     }
 
     /**

@@ -9,12 +9,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-common-adapter</artifactId>
+    <artifactId>flexy-common-adapter-test</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-common-adapter</name>
-    <description>The flexible pool common adapter</description>
+    <name>flexy-common-adapter-test</name>
+    <description>The flexible pool common adapter test</description>
 
     <dependencies>
 
@@ -22,11 +22,6 @@
             <groupId>com.vladmihalcea</groupId>
             <artifactId>flexy-pool-core</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
         </dependency>
 
         <dependency>
@@ -64,24 +59,8 @@
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
         </dependency>
-    </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+    </dependencies>
 
     <properties>
         <spring.version>3.2.2.RELEASE</spring.version>

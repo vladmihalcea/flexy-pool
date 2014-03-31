@@ -1,5 +1,7 @@
 package com.vladmihalcea.flexypool.util;
 
+import com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder;
+
 import javax.sql.DataSource;
 
 /**
@@ -84,4 +86,10 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      * @return pool adapter
      */
     public abstract P getPoolAdapter();
+
+    /**
+     * Get connection proxy builder.
+     * @return connection proxy builder
+     */
+    public abstract ConnectionProxyBuilder getConnectionProxyBuilder();
 }
