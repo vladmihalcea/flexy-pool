@@ -7,6 +7,7 @@ import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 /**
@@ -43,7 +44,7 @@ public class BoneCPDataSourcePoolAdapter extends AbstractPoolAdapter<BoneCPDataS
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxConnectionsPerPartition(maxPoolSize);
         //BoneCP doesn't reinitialize itself on pool size change
-        BoneCP boneCP = ReflectionUtils.invoke(getTargetDataSource(), "getPool");
+        BoneCP boneCP = ReflectionUtils.invoke(getTargetDataSource(), ReflectionUtils.getMethod(getTargetDataSource(), "getPool"));
         boneCP.close();
         ReflectionUtils.setFieldValue(getTargetDataSource(), "pool", null);
     }

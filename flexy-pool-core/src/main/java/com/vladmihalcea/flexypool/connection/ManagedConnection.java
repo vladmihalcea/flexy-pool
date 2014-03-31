@@ -225,26 +225,35 @@ public class ManagedConnection implements Connection {
     }
 
     public void setSchema(String schema) throws SQLException {
-        ReflectionUtils.invoke(targetConnection, "setSchema",
-                new ReflectionUtils.TypedObject(String.class, schema));
+        ReflectionUtils.invoke(
+                targetConnection,
+                ReflectionUtils.getMethod(targetConnection, "setSchema", String.class),
+                schema);
     }
 
     public String getSchema() throws SQLException {
-        return ReflectionUtils.invoke(targetConnection, "getSchema");
+        return ReflectionUtils.invoke(
+                targetConnection,
+                ReflectionUtils.getMethod(targetConnection, "getSchema"));
     }
 
     public void abort(Executor executor) throws SQLException {
-        ReflectionUtils.invoke(targetConnection, "abort",
-                new ReflectionUtils.TypedObject(Executor.class, executor));
+        ReflectionUtils.invoke(
+                targetConnection,
+                ReflectionUtils.getMethod(targetConnection, "abort", Executor.class),
+                executor);
     }
 
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-        ReflectionUtils.invoke(targetConnection, "setNetworkTimeout",
-                new ReflectionUtils.TypedObject(Executor.class, executor),
-                new ReflectionUtils.TypedObject(Integer.TYPE, milliseconds));
+        ReflectionUtils.invoke(
+                targetConnection,
+                ReflectionUtils.getMethod(targetConnection, "setNetworkTimeout", Executor.class, int.class),
+                executor, milliseconds);
     }
 
     public int getNetworkTimeout() throws SQLException {
-        return (Integer) ReflectionUtils.invoke(targetConnection, "getNetworkTimeout");
+        return (Integer) ReflectionUtils.invoke(
+                targetConnection,
+                ReflectionUtils.getMethod(targetConnection, "getNetworkTimeout"));
     }
 }

@@ -6,9 +6,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,20 +43,18 @@ public class ManagedConnectionTest {
         managedConnection = new ManagedConnection(targetConnection);
         for(Method method : Connection.class.getMethods()) {
             Class<?>[] parameterTypes = method.getParameterTypes();
-            List<ReflectionUtils.TypedObject> typedObjects = new ArrayList<ReflectionUtils.TypedObject>();
-            for(Class<?> parameterType : parameterTypes) {
+            Object[] parameters = new Object[parameterTypes.length];
+
+            for (int i = 0; i < parameterTypes.length; i++) {
+                Class<?> parameterType = parameterTypes[i];
                 if (!parameterType.isPrimitive()) {
                     Object finalObject = classToFinalObjects.get(parameterType);
-                    typedObjects.add(new ReflectionUtils.TypedObject(
-                            parameterType, finalObject != null ? finalObject : Mockito.mock(parameterType)
-                    ));
+                    parameters[i] = finalObject != null ? finalObject : Mockito.mock(parameterType);
                 } else {
-                    typedObjects.add(new ReflectionUtils.TypedObject(
-                            parameterType, classToPrimitives.get(parameterType)
-                    ));
+                    parameters[i] = classToPrimitives.get(parameterType);
                 }
             }
-            ReflectionUtils.invoke(managedConnection, method.getName(), typedObjects.toArray(new ReflectionUtils.TypedObject[]{}));
+            ReflectionUtils.invoke(managedConnection, ReflectionUtils.getMethod(managedConnection, method.getName(), parameterTypes), parameters);
         }
     }
 }

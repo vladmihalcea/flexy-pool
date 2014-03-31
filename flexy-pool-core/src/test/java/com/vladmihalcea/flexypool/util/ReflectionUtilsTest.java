@@ -43,9 +43,9 @@ public class ReflectionUtilsTest {
     @Test
     public void testInvoke() {
         TestObject testObject = new TestObject();
-        assertEquals("testObject", ReflectionUtils.invoke(testObject, "getName"));
+        assertEquals("testObject", ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "getName")));
         ReflectionUtils.setFieldValue(testObject, "name", "testObjectNameChanged");
-        assertEquals("testObjectNameChanged", ReflectionUtils.invoke(testObject, "getName"));
-        assertNull(ReflectionUtils.invoke(testObject, "start"));
+        assertEquals("testObjectNameChanged", ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "getName")));
+        assertNull(ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "start")));
     }
 }

@@ -15,24 +15,6 @@ import java.lang.reflect.Method;
  */
 public final class ReflectionUtils {
 
-    public static class TypedObject {
-        private Class<?> type;
-        private Object object;
-
-        public TypedObject(Class<?> type, Object object) {
-            this.type = type;
-            this.object = object;
-        }
-
-        public Class<?> getType() {
-            return type;
-        }
-
-        public Object getObject() {
-            return object;
-        }
-    }
-
     private ReflectionUtils() {
         throw new UnsupportedOperationException("ReflectionUtils is not instantiable!");
     }
@@ -77,27 +59,31 @@ public final class ReflectionUtils {
     }
 
     /**
-     * Invoke target method
+     * Get target method
      * @param target  target object
      * @param methodName method name
-     * @param parameterTypedObjects method parameters
+     * @param parameterTypes method parameter types
      * @return return value
      */
-    public static <T> T invoke(Object target, String methodName, TypedObject... parameterTypedObjects) {
+    public static Method getMethod(Object target, String methodName, Class... parameterTypes) {
         try {
-            Class<?>[] parameterTypes = new Class[parameterTypedObjects.length];
-            Object[] parameters = new Object[parameterTypedObjects.length];
-            for (int i = 0; i < parameterTypedObjects.length; i++) {
-                TypedObject parameterTypedObject = parameterTypedObjects[i];
-                parameterTypes[i] = parameterTypedObject.getType();
-                parameters[i] = parameterTypedObject.getObject();
-            }
-            Method method = target.getClass().getMethod(methodName, parameterTypes);
+            return target.getClass().getMethod(methodName, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            throw new ReflectionException(e);
+        }
+    }
+
+    /**
+     * Invoke target method
+     * @param method method to invoke
+     * @param parameters method parameters
+     * @return return value
+     */
+    public static <T> T invoke(Object target, Method method, Object... parameters) {
+        try {
             @SuppressWarnings("unchecked")
             T returnValue = (T) method.invoke(target, parameters);
             return returnValue;
-        } catch (NoSuchMethodException e) {
-            throw new ReflectionException(e);
         } catch (InvocationTargetException e) {
             throw new ReflectionException(e);
         } catch (IllegalAccessException e) {
