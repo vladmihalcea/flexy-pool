@@ -23,6 +23,6 @@ public class FlexyDataSourceConfiguration extends AbstractFlexyDataSourceConfigu
 
     @Bean
     public Configuration configuration() {
-        return configuration(HikariDataSourcePoolAdapter.BUILDER);
+        return configuration(HikariDataSourcePoolAdapter.FACTORY);
     }
 }

@@ -21,10 +21,10 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "XA pool of resource .*? still empty after .*?s wait time";
 
-    public static final PoolAdapterBuilder<PoolingDataSource> BUILDER = new PoolAdapterBuilder<PoolingDataSource>() {
+    public static final PoolAdapterFactory<PoolingDataSource> FACTORY = new PoolAdapterFactory<PoolingDataSource>() {
 
         @Override
-        public PoolAdapter<PoolingDataSource> build(
+        public PoolAdapter<PoolingDataSource> newInstance(
                 ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
             return new BitronixPoolAdapter(configurationProperties);
         }

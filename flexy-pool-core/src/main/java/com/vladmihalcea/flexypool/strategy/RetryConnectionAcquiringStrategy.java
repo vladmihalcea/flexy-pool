@@ -28,24 +28,24 @@ public final class RetryConnectionAcquiringStrategy<T extends DataSource> extend
     private static final Logger LOGGER = LoggerFactory.getLogger(RetryConnectionAcquiringStrategy.class);
 
     /**
-     * The {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy.Builder} class allows
+     * The {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy.Factory} class allows
      * creating this strategy for a given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
      */
-    public static class Builder<T extends DataSource> implements ConnectionAcquiringStrategyBuilder<RetryConnectionAcquiringStrategy, T> {
+    public static class Factory<T extends DataSource> implements ConnectionAcquiringStrategyFactory<RetryConnectionAcquiringStrategy, T> {
         private final int retryAttempts;
 
-        public Builder(int retryAttempts) {
+        public Factory(int retryAttempts) {
             this.retryAttempts = retryAttempts;
         }
 
         /**
-         * Build a {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy} for a given
+         * Creates a {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy} for a given
          * {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
          *
          * @param configurationProperties configurationProperties
          * @return strategy
          */
-        public RetryConnectionAcquiringStrategy build(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
+        public RetryConnectionAcquiringStrategy newInstance(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
             return new RetryConnectionAcquiringStrategy(
                     configurationProperties, retryAttempts
             );

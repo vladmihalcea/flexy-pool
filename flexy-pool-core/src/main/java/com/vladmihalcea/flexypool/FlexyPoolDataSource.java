@@ -2,7 +2,7 @@ package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.ConnectionCallback;
-import com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
@@ -12,7 +12,7 @@ import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyBuilder;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
@@ -36,19 +36,19 @@ import java.util.logging.Logger;
  * {@code @Autowired} private PoolingDataSource poolingDataSource;
  *
  * {@code @Bean} public Configuration configuration() {
- * return new Configuration.Builder<PoolingDataSource>(
+ * return new Configuration.Factory<PoolingDataSource>(
  * UUID.randomUUID().toString(),
  * poolingDataSource,
- * CodahaleMetrics.BUILDER,
- * BitronixPoolAdapter.BUILDER
+ * CodahaleMetrics.FACTORY,
+ * BitronixPoolAdapter.FACTORY
  * ).build();
  * }
  *
  * {@code @Bean} public FlexyPoolDataSource dataSource() {
  * Configuration configuration = configuration();
  * return new FlexyPoolDataSource(configuration,
- * new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(5),
- * new RetryConnectionAcquiringStrategy.Builder(2)
+ * new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
+ * new RetryConnectionAcquiringStrategy.Factory(2)
  * );
  * }
  * </pre>
@@ -57,37 +57,38 @@ import java.util.logging.Logger;
  * @version %I%, %E%
  * @since 1.0
  */
-public class FlexyPoolDataSource implements DataSource, LifeCycleAware, ConnectionCallback {
+public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleAware, ConnectionCallback {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
-    public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCountHistogram";
+    public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCount";
     public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
-    private final DataSource targetDataSource;
+    private final T targetDataSource;
     private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
     private final Histogram concurrentConnectionCountHistogram;
     private final Timer connectionLeaseTimer;
-    private final ConnectionProxyBuilder connectionProxyBuilder;
+    private final ConnectionProxyFactory connectionProxyFactory;
     private final Collection<ConnectionAcquiringStrategy> connectionAcquiringStrategies =
             new LinkedHashSet<ConnectionAcquiringStrategy>();
 
     private AtomicLong concurrentConnectionCount = new AtomicLong();
 
-    public FlexyPoolDataSource(final Configuration configuration,
-                               ConnectionAcquiringStrategyBuilder... strategyBuilders) {
+    public FlexyPoolDataSource(final Configuration<T> configuration,
+                               ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>... connectionAcquiringStrategyFactories) {
         this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
         this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT);
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
-        this.connectionProxyBuilder = configuration.getConnectionProxyBuilder();
-        if (strategyBuilders.length == 0) {
+        this.connectionProxyFactory = configuration.getConnectionProxyFactory();
+        if (connectionAcquiringStrategyFactories.length == 0) {
             throw new IllegalArgumentException("The flexy pool pool must use at least one strategy!");
         }
-        for (ConnectionAcquiringStrategyBuilder strategyBuilder : strategyBuilders) {
-            connectionAcquiringStrategies.add(strategyBuilder.build(configuration));
+        for (ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>
+                connectionAcquiringStrategyFactory : connectionAcquiringStrategyFactories) {
+            connectionAcquiringStrategies.add(connectionAcquiringStrategyFactory.newInstance(configuration));
         }
     }
 
@@ -130,7 +131,7 @@ public class FlexyPoolDataSource implements DataSource, LifeCycleAware, Connecti
                 }
             }
             if (connection != null) {
-                return connection;
+                return connectionProxyFactory.newInstance(connection, this);
             } else {
                 throw new CantAcquireConnectionException();
             }

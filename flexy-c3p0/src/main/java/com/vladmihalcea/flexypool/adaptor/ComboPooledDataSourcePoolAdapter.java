@@ -19,10 +19,10 @@ public class ComboPooledDataSourcePoolAdapter extends AbstractPoolAdapter<ComboP
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "An attempt by a client to checkout a Connection has timed out.";
 
-    public static final PoolAdapterBuilder<ComboPooledDataSource> BUILDER = new PoolAdapterBuilder<ComboPooledDataSource>() {
+    public static final PoolAdapterFactory<ComboPooledDataSource> FACTORY = new PoolAdapterFactory<ComboPooledDataSource>() {
 
         @Override
-        public PoolAdapter<ComboPooledDataSource> build(
+        public PoolAdapter<ComboPooledDataSource> newInstance(
                 ConfigurationProperties<ComboPooledDataSource, Metrics, PoolAdapter<ComboPooledDataSource>> configurationProperties) {
             return new ComboPooledDataSourcePoolAdapter(configurationProperties);
         }

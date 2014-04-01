@@ -4,7 +4,7 @@ import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.metric.MetricsBuilder;
+import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import org.junit.Before;
@@ -68,15 +68,15 @@ public class AbstractPoolAdapterTest {
         Configuration<DataSource> configuration = configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsBuilder() {
+                new MetricsFactory() {
                     @Override
-                    public Metrics build(ConfigurationProperties configurationProperties) {
+                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
                         return metrics;
                     }
                 },
-                new PoolAdapterBuilder<DataSource>() {
+                new PoolAdapterFactory<DataSource>() {
                     @Override
-                    public PoolAdapter<DataSource> build(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
+                    public PoolAdapter<DataSource> newInstance(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
                         return poolAdapter;
                     }
                 }

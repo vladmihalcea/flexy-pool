@@ -20,10 +20,10 @@ public class HikariDataSourcePoolAdapter extends AbstractPoolAdapter<HikariDataS
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
-    public static final PoolAdapterBuilder<HikariDataSource> BUILDER = new PoolAdapterBuilder<HikariDataSource>() {
+    public static final PoolAdapterFactory<HikariDataSource> FACTORY = new PoolAdapterFactory<HikariDataSource>() {
 
         @Override
-        public PoolAdapter<HikariDataSource> build(
+        public PoolAdapter<HikariDataSource> newInstance(
                 ConfigurationProperties<HikariDataSource, Metrics, PoolAdapter<HikariDataSource>> configurationProperties) {
             return new HikariDataSourcePoolAdapter(configurationProperties);
         }

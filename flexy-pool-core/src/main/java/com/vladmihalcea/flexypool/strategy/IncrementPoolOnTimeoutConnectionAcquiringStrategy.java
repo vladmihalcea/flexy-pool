@@ -33,24 +33,24 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
     /**
-     * The {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder} class allows
+     * The {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory} class allows
      * creating this strategy for a given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
      */
-    public static class Builder<T extends DataSource> implements ConnectionAcquiringStrategyBuilder<IncrementPoolOnTimeoutConnectionAcquiringStrategy, T> {
+    public static class Factory<T extends DataSource> implements ConnectionAcquiringStrategyFactory<IncrementPoolOnTimeoutConnectionAcquiringStrategy, T> {
         private final int maxOverflowPoolSize;
 
-        public Builder(int maxOverflowPoolSize) {
+        public Factory(int maxOverflowPoolSize) {
             this.maxOverflowPoolSize = maxOverflowPoolSize;
         }
 
         /**
-         * Build a {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy} for a given
+         * Creates a {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy} for a given
          * {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
          *
          * @param configurationProperties configurationProperties
          * @return strategy
          */
-        public IncrementPoolOnTimeoutConnectionAcquiringStrategy build(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
+        public IncrementPoolOnTimeoutConnectionAcquiringStrategy newInstance(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
             return new IncrementPoolOnTimeoutConnectionAcquiringStrategy(
                     configurationProperties, maxOverflowPoolSize
             );

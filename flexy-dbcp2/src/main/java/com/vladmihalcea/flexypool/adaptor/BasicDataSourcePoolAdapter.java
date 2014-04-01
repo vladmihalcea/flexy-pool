@@ -19,10 +19,10 @@ public class BasicDataSourcePoolAdapter extends AbstractPoolAdapter<BasicDataSou
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
 
-    public static final PoolAdapterBuilder<BasicDataSource> BUILDER = new PoolAdapterBuilder<BasicDataSource>() {
+    public static final PoolAdapterFactory<BasicDataSource> FACTORY = new PoolAdapterFactory<BasicDataSource>() {
 
         @Override
-        public PoolAdapter<BasicDataSource> build(
+        public PoolAdapter<BasicDataSource> newInstance(
                 ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
             return new BasicDataSourcePoolAdapter(configurationProperties);
         }

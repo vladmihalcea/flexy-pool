@@ -17,9 +17,9 @@ public class DynamicProxyInvocationHandler implements InvocationHandler {
 
     public static final String CLOSE_METHOD_NAME = "close";
 
-    public static ConnectionProxyBuilder BUILDER = new ConnectionProxyBuilder() {
+    public static ConnectionProxyFactory FACTORY = new ConnectionProxyFactory() {
         @Override
-        public Connection build(Connection target, ConnectionCallback callback) {
+        public Connection newInstance(Connection target, ConnectionCallback callback) {
             DynamicProxyInvocationHandler invocationHandler = new DynamicProxyInvocationHandler(target, callback);
             callback.acquire(invocationHandler.connection);
             return invocationHandler.connection;

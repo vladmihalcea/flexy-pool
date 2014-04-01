@@ -17,10 +17,10 @@
         <constructor-arg ref="configuration"/>
         <constructor-arg>
             <array>
-                <bean class="com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy$Builder">
+                <bean class="com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory">
                     <constructor-arg value="5"/>
                 </bean>
-                <bean class="com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy$Builder">
+                <bean class="com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy.Factory">
                     <constructor-arg value="2"/>
                 </bean>
             </array>

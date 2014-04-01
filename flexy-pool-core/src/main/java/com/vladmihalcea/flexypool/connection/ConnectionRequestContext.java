@@ -11,7 +11,7 @@ package com.vladmihalcea.flexypool.connection;
 public final class ConnectionRequestContext {
 
     /**
-     * Builder for creating ConnectionRequestContext instances.
+     * Factory for creating ConnectionRequestContext instances.
      */
     public static class Builder {
 

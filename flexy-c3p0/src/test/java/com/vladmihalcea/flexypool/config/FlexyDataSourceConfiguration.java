@@ -2,6 +2,7 @@ package com.vladmihalcea.flexypool.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.vladmihalcea.flexypool.adaptor.ComboPooledDataSourcePoolAdapter;
+import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
@@ -23,6 +24,6 @@ public class FlexyDataSourceConfiguration extends AbstractFlexyDataSourceConfigu
 
     @Bean
     public Configuration configuration() {
-        return configuration(ComboPooledDataSourcePoolAdapter.BUILDER);
+        return configuration(ComboPooledDataSourcePoolAdapter.FACTORY);
     }
 }

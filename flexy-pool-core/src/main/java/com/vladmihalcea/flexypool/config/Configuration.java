@@ -1,11 +1,11 @@
 package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
-import com.vladmihalcea.flexypool.adaptor.PoolAdapterBuilder;
-import com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder;
+import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.DynamicProxyInvocationHandler;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.metric.MetricsBuilder;
+import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
@@ -24,16 +24,16 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
     public static final long DEFAULT_METRIC_LOG_REPORTER_PERIOD = 5;
 
     /**
-     * A Builder for configuration data.
+     * A Factory for configuration data.
      *
      * @param <T> the data source type
      */
     public static class Builder<T extends DataSource> {
         private final String uniqueName;
         private final T targetDataSource;
-        private final PoolAdapterBuilder<T> poolAdapterBuilder;
-        private final MetricsBuilder metricsBuilder;
-        private ConnectionProxyBuilder connectionProxyBuilder;
+        private final PoolAdapterFactory<T> poolAdapterFactory;
+        private final MetricsFactory metricsFactory;
+        private ConnectionProxyFactory connectionProxyFactory;
         private boolean jmxEnabled = true;
         private long metricLogReporterPeriod = DEFAULT_METRIC_LOG_REPORTER_PERIOD;
 
@@ -42,23 +42,23 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
          *
          * @param uniqueName         the configuration unique name (required if you have multiple flexypool pools running)
          * @param targetDataSource   target data source
-         * @param metricsBuilder     metrics builder
-         * @param poolAdapterBuilder pool adaptor builder
+         * @param metricsFactory     metrics builder
+         * @param poolAdapterFactory pool adaptor builder
          */
-        public Builder(String uniqueName, T targetDataSource, MetricsBuilder metricsBuilder, PoolAdapterBuilder<T> poolAdapterBuilder) {
+        public Builder(String uniqueName, T targetDataSource, MetricsFactory metricsFactory, PoolAdapterFactory<T> poolAdapterFactory) {
             this.uniqueName = uniqueName;
             this.targetDataSource = targetDataSource;
-            this.metricsBuilder = metricsBuilder;
-            this.poolAdapterBuilder = poolAdapterBuilder;
+            this.metricsFactory = metricsFactory;
+            this.poolAdapterFactory = poolAdapterFactory;
         }
 
         /**
          * Set connection proxy builder.
-         * @param connectionProxyBuilder connection proxy builder
+         * @param connectionProxyFactory connection proxy builder
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
-        public Builder setConnectionProxyBuilder(ConnectionProxyBuilder connectionProxyBuilder) {
-            this.connectionProxyBuilder = connectionProxyBuilder;
+        public Builder setConnectionProxyFactory(ConnectionProxyFactory connectionProxyFactory) {
+            this.connectionProxyFactory = connectionProxyFactory;
             return this;
         }
 
@@ -93,10 +93,10 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
             configuration.setJmxEnabled(jmxEnabled);
             configuration.setMetricLogReporterPeriod(metricLogReporterPeriod);
-            configuration.metrics = metricsBuilder.build(configuration);
-            configuration.poolAdapter = poolAdapterBuilder.build(configuration);
-            configuration.connectionProxyBuilder = connectionProxyBuilder != null ?
-                    connectionProxyBuilder : DynamicProxyInvocationHandler.BUILDER;
+            configuration.metrics = metricsFactory.newInstance(configuration);
+            configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
+            configuration.connectionProxyFactory = connectionProxyFactory != null ?
+                    connectionProxyFactory : DynamicProxyInvocationHandler.FACTORY;
             return configuration;
         }
     }
@@ -104,7 +104,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
     private final T targetDataSource;
     private Metrics metrics;
     private PoolAdapter poolAdapter;
-    private ConnectionProxyBuilder connectionProxyBuilder;
+    private ConnectionProxyFactory connectionProxyFactory;
 
     private Configuration(String uniqueName, T targetDataSource) {
         super(uniqueName);
@@ -139,10 +139,10 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
     }
 
     /**
-     * Get the associated {@link com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder}
-     * @return {@link com.vladmihalcea.flexypool.connection.ConnectionProxyBuilder}
+     * Get the associated {@link com.vladmihalcea.flexypool.connection.ConnectionProxyFactory}
+     * @return {@link com.vladmihalcea.flexypool.connection.ConnectionProxyFactory}
      */
-    public ConnectionProxyBuilder getConnectionProxyBuilder() {
-        return connectionProxyBuilder;
+    public ConnectionProxyFactory getConnectionProxyFactory() {
+        return connectionProxyFactory;
     }
 }

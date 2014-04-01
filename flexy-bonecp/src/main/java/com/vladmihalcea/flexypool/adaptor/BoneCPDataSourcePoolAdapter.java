@@ -7,7 +7,6 @@ import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 
 /**
@@ -22,10 +21,10 @@ public class BoneCPDataSourcePoolAdapter extends AbstractPoolAdapter<BoneCPDataS
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timed out waiting for a free available connection.";
 
-    public static final PoolAdapterBuilder<BoneCPDataSource> BUILDER = new PoolAdapterBuilder<BoneCPDataSource>() {
+    public static final PoolAdapterFactory<BoneCPDataSource> FACTORY = new PoolAdapterFactory<BoneCPDataSource>() {
 
         @Override
-        public PoolAdapter<BoneCPDataSource> build(
+        public PoolAdapter<BoneCPDataSource> newInstance(
                 ConfigurationProperties<BoneCPDataSource, Metrics, PoolAdapter<BoneCPDataSource>> configurationProperties) {
             return new BoneCPDataSourcePoolAdapter(configurationProperties);
         }

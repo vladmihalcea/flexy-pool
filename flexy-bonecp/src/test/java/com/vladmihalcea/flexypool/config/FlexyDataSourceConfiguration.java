@@ -23,6 +23,6 @@ public class FlexyDataSourceConfiguration extends AbstractFlexyDataSourceConfigu
 
     @Bean
     public Configuration configuration() {
-        return configuration(BoneCPDataSourcePoolAdapter.BUILDER);
+        return configuration(BoneCPDataSourcePoolAdapter.FACTORY);
     }
 }

@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
-import com.vladmihalcea.flexypool.adaptor.PoolAdapterBuilder;
+import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
@@ -29,11 +29,11 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
         return 2;
     }
 
-    protected Configuration configuration(PoolAdapterBuilder<T> poolAdapter) {
+    protected Configuration configuration(PoolAdapterFactory<T> poolAdapter) {
         return new Configuration.Builder<T>(
                 UUID.randomUUID().toString(),
                 getPoolingDataSource(),
-                CodahaleMetrics.BUILDER,
+                CodahaleMetrics.FACTORY,
                 poolAdapter
         ).build();
     }
@@ -42,8 +42,8 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
     public FlexyPoolDataSource dataSource() {
         Configuration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Builder(getMaxOverflowPoolSize()),
-                new RetryConnectionAcquiringStrategy.Builder(getRetryAttempts())
+                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(getMaxOverflowPoolSize()),
+                new RetryConnectionAcquiringStrategy.Factory(getRetryAttempts())
         );
     }
 }
