@@ -100,6 +100,42 @@
                 <version>${codahale.metrics.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>${hsqldb.version}</version>
+            </dependency>
+
             <!-- Test dependencies -->
             <dependency>
                 <groupId>junit</groupId>
@@ -236,6 +272,8 @@
         <slf4j.version>1.7.6</slf4j.version>
         <logback.version>1.1.1</logback.version>
         <codahale.metrics.version>3.0.2</codahale.metrics.version>
+
+        <spring.version>3.2.2.RELEASE</spring.version>
 
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.8.1</junit.version>
