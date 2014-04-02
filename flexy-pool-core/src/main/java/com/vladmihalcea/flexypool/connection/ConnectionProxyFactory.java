@@ -7,14 +7,27 @@ import java.sql.Connection;
  *
  * @author Vlad Mihalcea
  */
-public interface ConnectionProxyFactory {
+public abstract class ConnectionProxyFactory {
 
     /**
-     * Creates a connection proxy for the specified target and attaching the
+     * Creates a ConnectionProxy for the specified target and attaching the
      * following callback.
      * @param target connection to proxy
-     * @param callback attaching connection lifecycle listener
-     * @return connection proxy
+     * @param connectionPoolCallback attaching connection lifecycle listener
+     * @return ConnectionProxy
      */
-    Connection newInstance(Connection target, ConnectionCallback callback);
+    public Connection newInstance(Connection target, ConnectionPoolCallback connectionPoolCallback) {
+        ConnectionCallback connectionCallback = new ConnectionCallback(connectionPoolCallback);
+        Connection proxy = proxyConnection(target, connectionCallback);
+        connectionCallback.init();
+        return proxy;
+    }
+
+    /**
+     * Proxy the given connection
+     * @param target connection to proxy
+     * @param callback attaching connection lifecycle listener
+     * @return proxy connection
+     */
+    protected abstract Connection proxyConnection(Connection target, ConnectionCallback callback);
 }

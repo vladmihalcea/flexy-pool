@@ -90,7 +90,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
                 return getConnectionFactory().getConnection(requestContext);
             } catch (AcquireTimeoutException e) {
                 if (!incrementPoolSize(expectingMaxSize)) {
-                    LOGGER.info("Can't acquire connection, pool size has already overflown to its max size.");
+                    LOGGER.info("Can't acquireConnection connection, pool size has already overflown to its max size.");
                     throw e;
                 }
             }

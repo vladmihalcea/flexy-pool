@@ -1,10 +1,7 @@
 package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.config.Configuration;
-import com.vladmihalcea.flexypool.connection.ConnectionCallback;
-import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
-import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
-import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.connection.*;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
@@ -28,7 +25,7 @@ import java.util.logging.Logger;
 
 /**
  * <code>FlexyPoolDataSource</code> is a {@link DataSource} wrapper that allows multiple
- * {@link ConnectionAcquiringStrategy} to be applied when trying to acquire a database {@link java.sql.Connection}.
+ * {@link ConnectionAcquiringStrategy} to be applied when trying to acquireConnection a database {@link java.sql.Connection}.
  * This is how you'd configure it suing Spring JavaConfig:
  * <p/>
  * <pre>
@@ -57,7 +54,7 @@ import java.util.logging.Logger;
  * @version %I%, %E%
  * @since 1.0
  */
-public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleAware, ConnectionCallback {
+public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleAware, ConnectionPoolCallback {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
@@ -145,7 +142,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      * {@inheritDoc}
      */
     @Override
-    public void acquire(Connection connection) {
+    public void acquireConnection() {
         concurrentConnectionCountHistogram.update(concurrentConnectionCount.incrementAndGet());
     }
 
@@ -153,9 +150,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      * {@inheritDoc}
      */
     @Override
-    public void release(Connection connection, long durationNanos) {
+    public void releaseConnection(long leaseDurationNanos) {
         concurrentConnectionCountHistogram.update(concurrentConnectionCount.decrementAndGet());
-        connectionLeaseTimer.update(durationNanos, TimeUnit.NANOSECONDS);
+        connectionLeaseTimer.update(leaseDurationNanos, TimeUnit.NANOSECONDS);
     }
 
     /**

@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.config;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
-import com.vladmihalcea.flexypool.connection.DynamicProxyInvocationHandler;
+import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
@@ -96,7 +96,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             configuration.connectionProxyFactory = connectionProxyFactory != null ?
-                    connectionProxyFactory : DynamicProxyInvocationHandler.FACTORY;
+                    connectionProxyFactory : JdkConnectionProxyFactory.INSTANCE;
             return configuration;
         }
     }

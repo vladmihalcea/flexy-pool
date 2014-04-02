@@ -1,17 +1,36 @@
 package com.vladmihalcea.flexypool.connection;
 
-import java.sql.Connection;
-
 /**
- * <code>ConnectionCallback</code> defines executing callbacks upon connection acquire or release.
+ * <code>ConnectionCallback</code> defines {@link java.sql.Connection} lifecycle callbacks.
  *
  * @author Vlad Mihalcea
  * @version    %I%, %E%
  * @since 1.0
  */
-public interface ConnectionCallback {
+public class ConnectionCallback {
 
-    void acquire(Connection connection);
+    private final ConnectionPoolCallback connectionPoolCallback;
 
-    void release(Connection connection, long durationNanos);
+    private long startNanos;
+
+    public ConnectionCallback(ConnectionPoolCallback connectionPoolCallback) {
+        this.connectionPoolCallback = connectionPoolCallback;
+    }
+
+    /**
+     * Connection init callback.
+     */
+    public void init() {
+        this.startNanos = System.nanoTime();
+        connectionPoolCallback.acquireConnection();
+    }
+
+    /**
+     * Connection close callback.
+     */
+    public void close() {
+        long endNanos = System.nanoTime();
+        long durationNanos = endNanos - startNanos;
+        connectionPoolCallback.releaseConnection(durationNanos);
+    }
 }
