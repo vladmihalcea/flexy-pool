@@ -11,18 +11,11 @@ public class ConnectionCallback {
 
     private final ConnectionPoolCallback connectionPoolCallback;
 
-    private long startNanos;
+    private final long startNanos = System.nanoTime();
 
     public ConnectionCallback(ConnectionPoolCallback connectionPoolCallback) {
         this.connectionPoolCallback = connectionPoolCallback;
-    }
-
-    /**
-     * Connection init callback.
-     */
-    public void init() {
-        this.startNanos = System.nanoTime();
-        connectionPoolCallback.acquireConnection();
+        this.connectionPoolCallback.acquireConnection();
     }
 
     /**

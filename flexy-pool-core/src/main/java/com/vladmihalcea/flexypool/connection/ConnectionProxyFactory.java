@@ -17,10 +17,7 @@ public abstract class ConnectionProxyFactory {
      * @return ConnectionProxy
      */
     public Connection newInstance(Connection target, ConnectionPoolCallback connectionPoolCallback) {
-        ConnectionCallback connectionCallback = new ConnectionCallback(connectionPoolCallback);
-        Connection proxy = proxyConnection(target, connectionCallback);
-        connectionCallback.init();
-        return proxy;
+        return proxyConnection(target, new ConnectionCallback(connectionPoolCallback));
     }
 
     /**
