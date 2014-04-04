@@ -24,8 +24,6 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 == 1.0 TODO list
 
-* make sure all metrics are closed on DataSource shutdown
-* Sonar issues and test coverage
 * write installation guide
 * write user guide
 * explain jmx metrics
