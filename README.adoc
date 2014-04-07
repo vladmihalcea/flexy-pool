@@ -22,10 +22,10 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ** connection request count histogram
 ** connection lease time histogram
 
+https://github.com/vladmihalcea/flexy-pool/wiki/Flexy-Pool-User-Guide[User Guide]
+
 == 1.0 TODO list
 
-* write installation guide
-* write user guide
-* explain jmx metrics
 * explain all configuration settings
+* explain jmx metrics
 * add real-life case study
