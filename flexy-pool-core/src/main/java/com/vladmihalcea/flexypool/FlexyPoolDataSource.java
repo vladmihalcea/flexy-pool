@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexypool;
 
+import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.*;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
@@ -57,10 +58,12 @@ import java.util.logging.Logger;
 public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleAware, ConnectionPoolCallback {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
+
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
     public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCount";
     public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
+    private final PoolAdapter<T> poolAdapter;
     private final T targetDataSource;
     private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
@@ -74,14 +77,15 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     public FlexyPoolDataSource(final Configuration<T> configuration,
                                ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>... connectionAcquiringStrategyFactories) {
-        this.targetDataSource = configuration.getPoolAdapter().getTargetDataSource();
+        this.poolAdapter = configuration.getPoolAdapter();
+        this.targetDataSource = poolAdapter.getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
         this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT);
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
         this.connectionProxyFactory = configuration.getConnectionProxyFactory();
         if (connectionAcquiringStrategyFactories.length == 0) {
-            throw new IllegalArgumentException("The flexy pool pool must use at least one strategy!");
+            LOGGER.info("The flexy pool is not using any strategy!");
         }
         for (ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>
                 connectionAcquiringStrategyFactory : connectionAcquiringStrategyFactories) {
@@ -119,13 +123,17 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         long startNanos = System.nanoTime();
         try {
             Connection connection = null;
-            for (ConnectionAcquiringStrategy strategy : connectionAcquiringStrategies) {
-                try {
-                    connection = strategy.getConnection(context);
-                    break;
-                } catch (AcquireTimeoutException e) {
-                    LOGGER.warn("Couldn't retrieve connection from strategy {} with context {}", strategy, context);
+            if (!connectionAcquiringStrategies.isEmpty()) {
+                for (ConnectionAcquiringStrategy strategy : connectionAcquiringStrategies) {
+                    try {
+                        connection = strategy.getConnection(context);
+                        break;
+                    } catch (AcquireTimeoutException e) {
+                        LOGGER.warn("Couldn't retrieve connection from strategy {} with context {}", strategy, context);
+                    }
                 }
+            } else {
+                connection = poolAdapter.getConnection(context);
             }
             if (connection != null) {
                 return connectionProxyFactory.newInstance(connection, this);

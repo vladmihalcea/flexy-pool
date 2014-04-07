@@ -65,7 +65,7 @@ public class FlexyPoolDataSourceTest {
 
     private Configuration<DataSource> configuration;
 
-    private FlexyPoolDataSource flexyPoolDataSource;
+    private FlexyPoolDataSource<DataSource> flexyPoolDataSource;
 
     @Before
     public void before() {
@@ -91,12 +91,26 @@ public class FlexyPoolDataSourceTest {
         when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_COUNT)).thenReturn(concurrentConnectionCountHistogram);
         when(metrics.timer(FlexyPoolDataSource.CONNECTION_LEASE_MILLIS)).thenReturn(connectionLeaseMillisTimer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
-        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, new ConnectionAcquiringStrategyFactory() {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
             @Override
             public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
             }
         });
+    }
+
+    @Test
+    public void testGetConnectionWhenNoStrategy() throws SQLException {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration);
+        ArgumentCaptor<ConnectionRequestContext> connectionRequestContextArgumentCaptor
+                = ArgumentCaptor.forClass(ConnectionRequestContext.class);
+        when(poolAdapter.getConnection(connectionRequestContextArgumentCaptor.capture()))
+                .thenReturn(connection);
+        verify(connection, never()).getMetaData();
+        flexyPoolDataSource.getConnection().getMetaData();
+        verify(connection, times(1)).getMetaData();
+        assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
+        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
     }
 
     @Test
@@ -131,7 +145,7 @@ public class FlexyPoolDataSourceTest {
     public void testGetConnectionFromTheLastStrategy() throws SQLException {
 
         final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, new ConnectionAcquiringStrategyFactory() {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
             @Override
             public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
@@ -160,7 +174,7 @@ public class FlexyPoolDataSourceTest {
     public void testGetConnectionWhenStrategyThrowsException() throws SQLException {
 
         final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, new ConnectionAcquiringStrategyFactory() {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
             @Override
             public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
@@ -190,7 +204,7 @@ public class FlexyPoolDataSourceTest {
     public void testGetConnectionWhenNoStrategyCanAcquireConnection() throws SQLException {
 
         final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource(configuration, new ConnectionAcquiringStrategyFactory() {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
             @Override
             public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;

@@ -103,7 +103,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
     private final T targetDataSource;
     private Metrics metrics;
-    private PoolAdapter poolAdapter;
+    private PoolAdapter<T> poolAdapter;
     private ConnectionProxyFactory connectionProxyFactory;
 
     private Configuration(String uniqueName, T targetDataSource) {
