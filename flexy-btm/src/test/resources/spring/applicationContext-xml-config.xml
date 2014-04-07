@@ -7,8 +7,8 @@
     <bean id="configurationBuilder" class="com.vladmihalcea.flexypool.config.Configuration$Builder">
         <constructor-arg value="uniqueId"/>
         <constructor-arg ref="poolingDataSource"/>
-        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics).BUILDER }"/>
-        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.adaptor.BitronixPoolAdapter).BUILDER }"/>
+        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics).FACTORY }"/>
+        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.adaptor.BitronixPoolAdapter).FACTORY }"/>
     </bean>
 
     <bean id="configuration" factory-bean="configurationBuilder" factory-method="build"/>

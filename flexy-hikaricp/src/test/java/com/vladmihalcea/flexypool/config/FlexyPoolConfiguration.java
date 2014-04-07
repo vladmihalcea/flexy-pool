@@ -1,41 +1,43 @@
 package com.vladmihalcea.flexypool.config;
 
-import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
-import com.vladmihalcea.flexypool.adaptor.BitronixPoolAdapter;
+import com.vladmihalcea.flexypool.adaptor.HikariCPPoolAdapter;
 import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
-import java.util.UUID;
-
 /**
- * FlexyDataSourceConfiguration - Configuration for flexypool data source
+ * FlexyPoolConfiguration - Configuration for flexypool data source
  *
  * @author Vlad Mihalcea
  */
 @org.springframework.context.annotation.Configuration
-public class FlexyDataSourceConfiguration {
+public class FlexyPoolConfiguration {
 
     @Autowired
-    private PoolingDataSource poolingDataSource;
+    private HikariDataSource poolingDataSource;
+
+    @Value("${flexy.pool.uniqueId}")
+    private String uniqueId;
 
     @Bean
-    public Configuration configuration() {
-        return new Configuration.Builder<PoolingDataSource>(
-                UUID.randomUUID().toString(),
+    public Configuration<HikariDataSource> configuration() {
+        return new Configuration.Builder<HikariDataSource>(
+                uniqueId,
                 poolingDataSource,
                 CodahaleMetrics.FACTORY,
-                BitronixPoolAdapter.FACTORY
+                HikariCPPoolAdapter.FACTORY
         ).build();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FlexyPoolDataSource dataSource() {
-        Configuration configuration = configuration();
-        return new FlexyPoolDataSource(configuration,
+        Configuration<HikariDataSource> configuration = configuration();
+        return new FlexyPoolDataSource<HikariDataSource>(configuration,
                 new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
                 new RetryConnectionAcquiringStrategy.Factory(2)
         );
