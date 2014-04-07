@@ -13,7 +13,13 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 == Features 
 
-* extensive connection pool support(Bitronix TM, C3PO, DBCP 1, DBCP 2, BoneCP, HikariCP)
+* extensive connection pool support
+** http://docs.codehaus.org/display/BTM/Home[Bitronix Transaction Manager]
+** http://commons.apache.org/proper/commons-dbcp/[Apache DBCP]
+** http://commons.apache.org/proper/commons-dbcp/[Apache DBCP2]
+** http://www.mchange.com/projects/c3p0/[C3P0]
+** http://jolbox.com/[BoneCP]
+** http://brettwooldridge.github.io/HikariCP/[HikariCP]
 * statistics support
 ** source connection acquiring time histogram
 ** total connection acquiring time histogram
@@ -22,9 +28,11 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ** connection request count histogram
 ** connection lease time histogram
 
-https://github.com/vladmihalcea/flexy-pool/wiki/Flexy-Pool-User-Guide[User Guide]
+== Documentation 
 
-== 1.0 TODO list
+https://github.com/vladmihalcea/flexy-pool/wiki/Flexy-Pool-User-Guide[Flexy Pool User Guide]
+
+== 1.0 Release TODO list
 
 * explain all configuration settings
 * explain jmx metrics
