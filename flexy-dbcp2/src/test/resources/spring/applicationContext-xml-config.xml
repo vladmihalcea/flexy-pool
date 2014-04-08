@@ -7,7 +7,6 @@
     <bean id="configurationBuilder" class="com.vladmihalcea.flexypool.config.Configuration$Builder">
         <constructor-arg value="uniqueId"/>
         <constructor-arg ref="poolingDataSource"/>
-        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics).FACTORY }"/>
         <constructor-arg value="#{ T(com.vladmihalcea.flexypool.adaptor.DBCP2PoolAdapter).FACTORY }"/>
     </bean>
 

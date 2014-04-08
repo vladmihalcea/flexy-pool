@@ -73,12 +73,6 @@ public class FlexyPoolDataSourceTest {
         configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return metrics;
-                    }
-                },
                 new PoolAdapterFactory<DataSource>() {
                     @Override
                     public PoolAdapter<DataSource> newInstance(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
@@ -86,6 +80,12 @@ public class FlexyPoolDataSourceTest {
                     }
                 }
         )
+                .setMetricsFactory(new MetricsFactory() {
+                    @Override
+                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
+                        return metrics;
+                    }
+                })
                 .build();
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(overallConnectionAcquireTimer);
         when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_COUNT)).thenReturn(concurrentConnectionCountHistogram);

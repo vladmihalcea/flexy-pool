@@ -65,15 +65,9 @@ public class AbstractPoolAdapterTest {
     public void before() {
         MockitoAnnotations.initMocks(this);
         when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
-        Configuration<DataSource> configuration = configuration = new Configuration.Builder<DataSource>(
+        Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return metrics;
-                    }
-                },
                 new PoolAdapterFactory<DataSource>() {
                     @Override
                     public PoolAdapter<DataSource> newInstance(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
@@ -81,6 +75,12 @@ public class AbstractPoolAdapterTest {
                     }
                 }
         )
+                .setMetricsFactory(new MetricsFactory() {
+                    @Override
+                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
+                        return metrics;
+                    }
+                })
                 .build();
         poolAdapter = new TestPoolAdaptor(configuration);
     }

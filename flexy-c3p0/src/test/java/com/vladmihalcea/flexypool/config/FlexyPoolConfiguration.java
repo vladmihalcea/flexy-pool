@@ -3,6 +3,7 @@ package com.vladmihalcea.flexypool.config;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.C3P0PoolAdapter;
+import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
@@ -29,9 +30,13 @@ public class FlexyPoolConfiguration {
         return new Configuration.Builder<ComboPooledDataSource>(
                 uniqueId,
                 poolingDataSource,
-                CodahaleMetrics.FACTORY,
                 C3P0PoolAdapter.FACTORY
-        ).build();
+        )
+        .setMetricsFactory(CodahaleMetrics.INSTANCE)
+        .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
+        .setJmxEnabled(true)
+        .setMetricLogReporterPeriod(5)
+        .build();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")

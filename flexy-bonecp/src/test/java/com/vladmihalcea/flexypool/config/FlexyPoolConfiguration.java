@@ -3,7 +3,6 @@ package com.vladmihalcea.flexypool.config;
 import com.jolbox.bonecp.BoneCPDataSource;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.BoneCPPoolAdapter;
-import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ public class FlexyPoolConfiguration {
         return new Configuration.Builder<BoneCPDataSource>(
                 uniqueId,
                 poolingDataSource,
-                CodahaleMetrics.FACTORY,
                 BoneCPPoolAdapter.FACTORY
         ).build();
     }

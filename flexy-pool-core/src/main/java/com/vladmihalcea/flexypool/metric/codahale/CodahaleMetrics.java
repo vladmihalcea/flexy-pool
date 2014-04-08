@@ -26,7 +26,7 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
 
-    public static final MetricsFactory FACTORY = new MetricsFactory() {
+    public static final MetricsFactory INSTANCE = new MetricsFactory() {
         @Override
         public Metrics newInstance(ConfigurationProperties configurationProperties) {
             return new CodahaleMetrics(configurationProperties);

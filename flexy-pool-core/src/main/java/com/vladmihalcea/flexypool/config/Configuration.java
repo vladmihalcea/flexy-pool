@@ -6,6 +6,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
+import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
@@ -32,8 +33,8 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private final String uniqueName;
         private final T targetDataSource;
         private final PoolAdapterFactory<T> poolAdapterFactory;
-        private final MetricsFactory metricsFactory;
-        private ConnectionProxyFactory connectionProxyFactory;
+        private MetricsFactory metricsFactory = CodahaleMetrics.INSTANCE;
+        private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
         private boolean jmxEnabled = true;
         private long metricLogReporterPeriod = DEFAULT_METRIC_LOG_REPORTER_PERIOD;
 
@@ -42,22 +43,30 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
          *
          * @param uniqueName         the configuration unique name (required if you have multiple flexypool pools running)
          * @param targetDataSource   target data source
-         * @param metricsFactory     metrics builder
-         * @param poolAdapterFactory pool adaptor builder
+         * @param poolAdapterFactory pool adaptor factory
          */
-        public Builder(String uniqueName, T targetDataSource, MetricsFactory metricsFactory, PoolAdapterFactory<T> poolAdapterFactory) {
+        public Builder(String uniqueName, T targetDataSource, PoolAdapterFactory<T> poolAdapterFactory) {
             this.uniqueName = uniqueName;
             this.targetDataSource = targetDataSource;
-            this.metricsFactory = metricsFactory;
             this.poolAdapterFactory = poolAdapterFactory;
         }
 
         /**
-         * Set connection proxy builder.
-         * @param connectionProxyFactory connection proxy builder
+         * Set metrics factory
+         * @param metricsFactory metrics factory
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
-        public Builder setConnectionProxyFactory(ConnectionProxyFactory connectionProxyFactory) {
+        public Builder<T> setMetricsFactory(MetricsFactory metricsFactory) {
+            this.metricsFactory = metricsFactory;
+            return this;
+        }
+
+        /**
+         * Set connection proxy factory.
+         * @param connectionProxyFactory connection proxy factory
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setConnectionProxyFactory(ConnectionProxyFactory connectionProxyFactory) {
             this.connectionProxyFactory = connectionProxyFactory;
             return this;
         }
@@ -68,7 +77,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
          * @param enableJmx jmx enabling
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
-        public Builder setJmxEnabled(boolean enableJmx) {
+        public Builder<T> setJmxEnabled(boolean enableJmx) {
             this.jmxEnabled = enableJmx;
             return this;
         }
@@ -79,7 +88,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
          * @param metricLogReporterPeriod the period between two consecutive log reports
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
-        public Builder setMetricLogReporterPeriod(long metricLogReporterPeriod) {
+        public Builder<T> setMetricLogReporterPeriod(long metricLogReporterPeriod) {
             this.metricLogReporterPeriod = metricLogReporterPeriod;
             return this;
         }
@@ -95,8 +104,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             configuration.setMetricLogReporterPeriod(metricLogReporterPeriod);
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
-            configuration.connectionProxyFactory = connectionProxyFactory != null ?
-                    connectionProxyFactory : JdkConnectionProxyFactory.INSTANCE;
+            configuration.connectionProxyFactory = connectionProxyFactory;
             return configuration;
         }
     }

@@ -37,8 +37,8 @@ import java.util.logging.Logger;
  * return new Configuration.Factory<PoolingDataSource>(
  * UUID.randomUUID().toString(),
  * poolingDataSource,
- * CodahaleMetrics.FACTORY,
- * BitronixPoolAdapter.FACTORY
+ * CodahaleMetrics.INSTANCE,
+ * BitronixPoolAdapter.INSTANCE
  * ).build();
  * }
  *

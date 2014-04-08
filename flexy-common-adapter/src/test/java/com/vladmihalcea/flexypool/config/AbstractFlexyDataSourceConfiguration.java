@@ -2,7 +2,6 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
-import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +32,6 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
         return new Configuration.Builder<T>(
                 UUID.randomUUID().toString(),
                 getPoolingDataSource(),
-                CodahaleMetrics.FACTORY,
                 poolAdapter
         ).build();
     }

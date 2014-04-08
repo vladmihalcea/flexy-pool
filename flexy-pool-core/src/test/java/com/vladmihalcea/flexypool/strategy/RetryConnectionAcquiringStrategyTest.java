@@ -54,12 +54,6 @@ public class RetryConnectionAcquiringStrategyTest {
         configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
-                new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return metrics;
-                    }
-                },
                 new PoolAdapterFactory<DataSource>() {
                     @Override
                     public PoolAdapter<DataSource> newInstance(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
@@ -67,6 +61,12 @@ public class RetryConnectionAcquiringStrategyTest {
                     }
                 }
         )
+                .setMetricsFactory(new MetricsFactory() {
+                    @Override
+                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
+                        return metrics;
+                    }
+                })
                 .build();
         when(metrics.histogram(RetryConnectionAcquiringStrategy.RETRY_ATTEMPTS_HISTOGRAM)).thenReturn(histogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();

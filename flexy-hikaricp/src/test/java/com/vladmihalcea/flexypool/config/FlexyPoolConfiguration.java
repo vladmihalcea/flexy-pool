@@ -2,7 +2,6 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.HikariCPPoolAdapter;
-import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import com.zaxxer.hikari.HikariDataSource;
@@ -29,7 +28,6 @@ public class FlexyPoolConfiguration {
         return new Configuration.Builder<HikariDataSource>(
                 uniqueId,
                 poolingDataSource,
-                CodahaleMetrics.FACTORY,
                 HikariCPPoolAdapter.FACTORY
         ).build();
     }
