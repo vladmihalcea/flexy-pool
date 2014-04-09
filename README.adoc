@@ -28,9 +28,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 == Documentation 
 
-https://github.com/vladmihalcea/flexy-pool/wiki/Flexy-Pool-User-Guide[Flexy Pool User Guide]
+. https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide[Installation Guide]
+. https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide[User Guide]
 
-== 1.0 Release TODO list
-
-* explain jmx metrics and add real-life case study
-* Maven OSS release
+IMPORTANT: Flexy Pool has not yet been released to OSS Maven Repository.
