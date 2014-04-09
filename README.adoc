@@ -2,8 +2,6 @@
 Author <mih_vlad@yahoo.com>
 v1.0.0, 2014-02-25
 
-:toc:
-:imagesdir: images
 :homepage: http://vladmihalcea.com/
 
 == Introduction
