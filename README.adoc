@@ -34,5 +34,5 @@ https://github.com/vladmihalcea/flexy-pool/wiki/Flexy-Pool-User-Guide[Flexy Pool
 
 == 1.0 Release TODO list
 
-* explain jmx metrics
-* add real-life case study
+* explain jmx metrics and add real-life case study
+* Maven OSS release
