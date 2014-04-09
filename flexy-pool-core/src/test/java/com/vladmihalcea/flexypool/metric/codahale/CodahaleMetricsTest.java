@@ -1,6 +1,8 @@
 package com.vladmihalcea.flexypool.metric.codahale;
 
+import com.codahale.metrics.Reservoir;
 import com.vladmihalcea.flexypool.metric.Histogram;
+import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import org.junit.Before;
@@ -9,7 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * CodahaleMetricsTest - CodahaleMetrics Test
@@ -21,6 +24,12 @@ public class CodahaleMetricsTest {
     @Mock
     private ConfigurationProperties configurationProperties;
 
+    @Mock
+    private ReservoirFactory reservoirFactory;
+
+    @Mock
+    private Reservoir reservoir;
+
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
@@ -28,15 +37,19 @@ public class CodahaleMetricsTest {
 
     @Test
     public void testHistogram() {
-        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties);
+        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties, reservoirFactory);
+        when(reservoirFactory.newInstance(eq("histo"))).thenReturn(reservoir);
         Histogram histogram = codahaleMetrics.histogram("histo");
+        verify(reservoirFactory, times(1)).newInstance("histo");
         assertNotNull(histogram);
     }
 
     @Test
     public void testTimer() {
-        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties);
+        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties, reservoirFactory);
+        when(reservoirFactory.newInstance(eq("timer"))).thenReturn(reservoir);
         Timer timer = codahaleMetrics.timer("timer");
+        verify(reservoirFactory, times(1)).newInstance("timer");
         assertNotNull(timer);
     }
 
@@ -55,7 +68,7 @@ public class CodahaleMetricsTest {
     }
 
     public void testStartStop(ConfigurationProperties currentConfiguration) {
-        CodahaleMetrics codahaleMetrics = new CodahaleMetrics(currentConfiguration);
+        Metrics codahaleMetrics = CodahaleMetrics.FACTORY.newInstance(currentConfiguration);
         codahaleMetrics.histogram("histo");
         codahaleMetrics.timer("timer");
         codahaleMetrics.start();

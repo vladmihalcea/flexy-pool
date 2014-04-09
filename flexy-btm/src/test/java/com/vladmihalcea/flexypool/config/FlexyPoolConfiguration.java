@@ -3,6 +3,8 @@ package com.vladmihalcea.flexypool.config;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.BitronixPoolAdapter;
+import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
+import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,12 @@ public class FlexyPoolConfiguration {
                 uniqueId,
                 poolingDataSource,
                 BitronixPoolAdapter.FACTORY
-        ).build();
+        )
+        .setMetricsFactory(CodahaleMetrics.UNIFORM_RESERVOIR_FACTORY)
+        .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
+        .setJmxEnabled(true)
+        .setMetricLogReporterPeriod(5)
+        .build();
     }
 
     @Bean(initMethod = "start", destroyMethod = "stop")

@@ -19,7 +19,7 @@
         <property name="password" value="${jdbc.password}" />
         <property name="maxConnectionsPerPartition" value="3"/>
         <property name="partitionCount" value="1"/>
-        <property name="connectionTimeoutInMs" value="500"/>
+        <property name="connectionTimeoutInMs" value="1000"/>
     </bean>
 
 </beans>

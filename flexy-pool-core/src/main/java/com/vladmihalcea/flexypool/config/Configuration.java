@@ -33,7 +33,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private final String uniqueName;
         private final T targetDataSource;
         private final PoolAdapterFactory<T> poolAdapterFactory;
-        private MetricsFactory metricsFactory = CodahaleMetrics.INSTANCE;
+        private MetricsFactory metricsFactory = CodahaleMetrics.FACTORY;
         private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
         private boolean jmxEnabled = true;
         private long metricLogReporterPeriod = DEFAULT_METRIC_LOG_REPORTER_PERIOD;

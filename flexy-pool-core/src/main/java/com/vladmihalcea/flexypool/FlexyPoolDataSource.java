@@ -2,7 +2,10 @@ package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.config.Configuration;
-import com.vladmihalcea.flexypool.connection.*;
+import com.vladmihalcea.flexypool.connection.ConnectionPoolCallback;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
+import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
@@ -37,8 +40,7 @@ import java.util.logging.Logger;
  * return new Configuration.Factory<PoolingDataSource>(
  * UUID.randomUUID().toString(),
  * poolingDataSource,
- * CodahaleMetrics.INSTANCE,
- * BitronixPoolAdapter.INSTANCE
+ * BitronixPoolAdapter.FACTORY
  * ).build();
  * }
  *
