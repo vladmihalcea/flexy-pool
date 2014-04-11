@@ -30,6 +30,3 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 . https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide[Installation Guide]
 . https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide[User Guide]
-
-[IMPORTANT]
-Flexy Pool has not yet been released to OSS Maven Repository.
