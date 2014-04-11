@@ -38,9 +38,9 @@
     </developers>
 	
 	<scm>
-        <developerConnection>https://github.com/vladmihalcea/flexy-pool.git</developerConnection>
-        <url>https://github.com/vladmihalcea/flexy-pool.git</url>
-        <connection>git://github.com/vladmihalcea/flexy-pool.git</connection>
+        <developerConnection>git@github.com:vladmihalcea/flexy-pool.git</developerConnection>
+        <url>git@github.com:vladmihalcea/flexy-pool.git</url>
+        <connection>git@github.com:vladmihalcea/flexy-pool.git</connection>
     </scm>
 
     <modules>
