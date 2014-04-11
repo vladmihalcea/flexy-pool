@@ -1,4 +1,4 @@
-= flexy-pool
+= Flexy Pool
 Author <mih_vlad@yahoo.com>
 v1.0.0, 2014-02-25
 
@@ -6,7 +6,7 @@ v1.0.0, 2014-02-25
 
 == Introduction
 
-The flexy-pool library brings adaptability to a given Connection Pool, allowing it to resize on demand.
+The Flexy Pool library brings adaptability to a given Connection Pool, allowing it to resize on demand.
 This is very handy since most connection pools offer a limited set of dynamic configuration strategies.
 
 == Features 
