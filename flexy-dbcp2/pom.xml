@@ -84,6 +84,9 @@
     </dependencies>
 
     <properties>
+        <jdk.version>7</jdk.version>
+        <jdk>${env.JAVA_HOME_7}</jdk>
+
         <dbcp2.version>2.0</dbcp2.version>
     </properties>
 

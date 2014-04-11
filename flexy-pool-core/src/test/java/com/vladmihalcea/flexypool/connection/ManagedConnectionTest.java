@@ -104,8 +104,11 @@ public class ManagedConnectionTest {
         long startNanos = System.nanoTime();
         try {
             managedConnection.getMetaData();
-            managedConnection.setSchema("schema");
-            managedConnection.abort(null);
+            String javaVersion = System.getProperty("java.version");
+            if (javaVersion.contains("1.7") || javaVersion.contains("1.8")) {
+                managedConnection.setSchema("schema");
+                managedConnection.abort(null);
+            }
         } finally {
             long endNanos = System.nanoTime();
             timer.update((endNanos - startNanos), TimeUnit.NANOSECONDS);
@@ -135,9 +138,9 @@ public class ManagedConnectionTest {
         int i = 0;
         while (true) {
             long endMillis = System.currentTimeMillis();
-            if(i % 1000 == 0) {
+            if (i % 1000 == 0) {
                 LOGGER.info("Iteration: {}, total millis {}!", i, endMillis - startMillis);
-                if((endMillis - startMillis) > durationMillis) {
+                if ((endMillis - startMillis) > durationMillis) {
                     break;
                 }
             }
