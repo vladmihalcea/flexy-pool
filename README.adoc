@@ -9,6 +9,8 @@ v1.0.0, 2014-02-25
 The Flexy Pool library brings adaptability to a given Connection Pool, allowing it to resize on demand.
 This is very handy since most connection pools offer a limited set of dynamic configuration strategies.
 
+image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/architecture/FlexyPoolArchitecture.gif[Flexy Pool Architecture]
+
 == Features 
 
 * extensive connection pool support
