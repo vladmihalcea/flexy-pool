@@ -48,6 +48,9 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
     @Mock
     private Histogram maxPoolSizeHistogram;
 
+    @Mock
+    private Histogram overflowPoolSizeHistogram;
+
     private Configuration<DataSource> configuration;
 
     private ConnectionRequestContext connectionRequestContext;
@@ -73,6 +76,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
                 })
                 .build();
         when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn(maxPoolSizeHistogram);
+        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquiringStrategy.OVERFLOW_POOL_SIZE_HISTOGRAM)).thenReturn(overflowPoolSizeHistogram);
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
     }
@@ -85,6 +89,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(1);
+        verify(overflowPoolSizeHistogram, never()).update(anyLong());
     }
 
     @Test
@@ -98,6 +103,7 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
         verify(maxPoolSizeHistogram, times(1)).update(2);
         verify(maxPoolSizeHistogram, times(1)).update(3);
+        verify(overflowPoolSizeHistogram, times(1)).update(1);
     }
 
     @Test
@@ -133,5 +139,8 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         verify(maxPoolSizeHistogram, times(1)).update(3);
         verify(maxPoolSizeHistogram, times(1)).update(4);
         verify(maxPoolSizeHistogram, times(1)).update(5);
+        verify(overflowPoolSizeHistogram, times(1)).update(1);
+        verify(overflowPoolSizeHistogram, times(1)).update(2);
+        verify(overflowPoolSizeHistogram, times(1)).update(3);
     }
 }

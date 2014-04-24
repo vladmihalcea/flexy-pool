@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -29,6 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends DataSource> extends AbstractConnectionAcquiringStrategy {
 
     public static final String MAX_POOL_SIZE_HISTOGRAM = "maxPoolSizeHistogram";
+    public static final String OVERFLOW_POOL_SIZE_HISTOGRAM = "overflowPoolSizeHistogram";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IncrementPoolOnTimeoutConnectionAcquiringStrategy.class);
 
@@ -61,7 +63,11 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
 
     private final int maxOverflowPoolSize;
 
+    private AtomicLong overflowPoolSize = new AtomicLong();
+
     private final Histogram maxPoolSizeHistogram;
+
+    private final Histogram overflowPoolSizeHistogram;
 
     private final PoolAdapter poolAdapter;
 
@@ -75,6 +81,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
         super(configurationProperties);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
         this.maxPoolSizeHistogram = configurationProperties.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
+        this.overflowPoolSizeHistogram = configurationProperties.getMetrics().histogram(OVERFLOW_POOL_SIZE_HISTOGRAM);
         maxPoolSizeHistogram.update(configurationProperties.getPoolAdapter().getMaxPoolSize());
         poolAdapter = configurationProperties.getPoolAdapter();
     }
@@ -105,6 +112,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
     protected boolean incrementPoolSize(int expectingMaxSize) {
 
         Integer maxSize = null;
+        long currentOverflowPoolSize;
         try {
             lock.lockInterruptibly();
             int currentMaxSize = poolAdapter.getMaxPoolSize();
@@ -116,6 +124,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
             if (!incrementMaxPoolSize) {
                 return false;
             }
+            currentOverflowPoolSize = overflowPoolSize.incrementAndGet();
             poolAdapter.setMaxPoolSize(++currentMaxSize);
             maxSize = currentMaxSize;
         } catch (InterruptedException e) {
@@ -126,6 +135,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
         }
         LOGGER.info("Pool size changed from previous value {} to {}", expectingMaxSize, maxSize);
         maxPoolSizeHistogram.update(maxSize);
+        overflowPoolSizeHistogram.update(currentOverflowPoolSize);
         return true;
     }
 
