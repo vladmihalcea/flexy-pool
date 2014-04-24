@@ -63,6 +63,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
     public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCount";
+    public static final String CONCURRENT_CONNECTION_REQUEST_COUNT = "concurrentConnectionRequestCount";
     public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
     private final PoolAdapter<T> poolAdapter;
@@ -70,12 +71,14 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     private final Metrics metrics;
     private final Timer connectionAcquireTotalTimer;
     private final Histogram concurrentConnectionCountHistogram;
+    private final Histogram concurrentConnectionRequestCountHistogram;
     private final Timer connectionLeaseTimer;
     private final ConnectionProxyFactory connectionProxyFactory;
     private final Collection<ConnectionAcquiringStrategy> connectionAcquiringStrategies =
             new LinkedHashSet<ConnectionAcquiringStrategy>();
 
     private AtomicLong concurrentConnectionCount = new AtomicLong();
+    private AtomicLong concurrentConnectionRequestCount = new AtomicLong();
 
     public FlexyPoolDataSource(final Configuration<T> configuration,
                                ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>... connectionAcquiringStrategyFactories) {
@@ -84,6 +87,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
         this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT);
+        this.concurrentConnectionRequestCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_REQUEST_COUNT);
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
         this.connectionProxyFactory = configuration.getConnectionProxyFactory();
         if (connectionAcquiringStrategyFactories.length == 0) {
@@ -122,6 +126,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      * @throws SQLException
      */
     private Connection getConnection(ConnectionRequestContext context) throws SQLException {
+        concurrentConnectionRequestCountHistogram.update(concurrentConnectionRequestCount.incrementAndGet());
         long startNanos = System.nanoTime();
         try {
             Connection connection = null;
@@ -145,6 +150,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         } finally {
             long endNanos = System.nanoTime();
             connectionAcquireTotalTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
+            concurrentConnectionRequestCountHistogram.update(concurrentConnectionRequestCount.decrementAndGet());
         }
     }
 
@@ -162,7 +168,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     @Override
     public void releaseConnection(long leaseDurationNanos) {
         concurrentConnectionCountHistogram.update(concurrentConnectionCount.decrementAndGet());
-        connectionLeaseTimer.update(leaseDurationNanos, TimeUnit.NANOSECONDS);
+        connectionLeaseTimer.update(TimeUnit.NANOSECONDS.toMillis(leaseDurationNanos), TimeUnit.MILLISECONDS);
     }
 
     /**

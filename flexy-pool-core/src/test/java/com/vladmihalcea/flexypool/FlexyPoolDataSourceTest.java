@@ -61,6 +61,9 @@ public class FlexyPoolDataSourceTest {
     private Histogram concurrentConnectionCountHistogram;
 
     @Mock
+    private Histogram concurrentConnectionRequestCountHistogram;
+
+    @Mock
     private Timer connectionLeaseMillisTimer;
 
     private Configuration<DataSource> configuration;
@@ -89,6 +92,7 @@ public class FlexyPoolDataSourceTest {
                 .build();
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(overallConnectionAcquireTimer);
         when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_COUNT)).thenReturn(concurrentConnectionCountHistogram);
+        when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_REQUEST_COUNT)).thenReturn(concurrentConnectionRequestCountHistogram);
         when(metrics.timer(FlexyPoolDataSource.CONNECTION_LEASE_MILLIS)).thenReturn(connectionLeaseMillisTimer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
         this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
@@ -111,6 +115,8 @@ public class FlexyPoolDataSourceTest {
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
 
     @Test
@@ -124,6 +130,8 @@ public class FlexyPoolDataSourceTest {
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
 
     @Test
@@ -139,6 +147,8 @@ public class FlexyPoolDataSourceTest {
         assertEquals("username", credentials.getUsername());
         assertEquals("password", credentials.getPassword());
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
 
     @Test
@@ -168,6 +178,8 @@ public class FlexyPoolDataSourceTest {
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
 
     @Test
@@ -198,6 +210,8 @@ public class FlexyPoolDataSourceTest {
 
         }
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
 
     @Test
@@ -228,6 +242,26 @@ public class FlexyPoolDataSourceTest {
 
         }
         verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
+        verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
+    }
+
+    @Test
+    public void testAcquireReleaseConnection() throws SQLException {
+        verify(concurrentConnectionCountHistogram, never()).update(anyLong());
+        flexyPoolDataSource.acquireConnection();
+        verify(concurrentConnectionCountHistogram, times(1)).update(1);
+        flexyPoolDataSource.acquireConnection();
+        flexyPoolDataSource.acquireConnection();
+        verify(concurrentConnectionCountHistogram, times(1)).update(2);
+        verify(concurrentConnectionCountHistogram, times(1)).update(3);
+        verify(connectionLeaseMillisTimer, never()).update(anyLong(), any(TimeUnit.class));
+        flexyPoolDataSource.releaseConnection(123456789L);
+        verify(concurrentConnectionCountHistogram, times(2)).update(2);
+        verify(connectionLeaseMillisTimer, times(1)).update(123, TimeUnit.MILLISECONDS);
+        flexyPoolDataSource.releaseConnection(987654321L);
+        verify(concurrentConnectionCountHistogram, times(2)).update(1);
+        verify(connectionLeaseMillisTimer, times(1)).update(987, TimeUnit.MILLISECONDS);
     }
 
     @Test

@@ -57,21 +57,19 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      */
     @Override
     public Connection getConnection(ConnectionRequestContext requestContext) throws SQLException {
+        long startNanos = System.nanoTime();
         try {
             Credentials credentials = requestContext.getCredentials();
-            long startNanos = System.nanoTime();
-            try {
-                return (credentials == null) ?
-                        targetDataSource.getConnection() :
-                        targetDataSource.getConnection(credentials.getUsername(), credentials.getPassword());
-            } finally {
-                long endNanos = System.nanoTime();
-                connectionAcquireTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
-            }
+            return (credentials == null) ?
+                    targetDataSource.getConnection() :
+                    targetDataSource.getConnection(credentials.getUsername(), credentials.getPassword());
         } catch (SQLException e) {
             throw translateException(e);
         } catch (RuntimeException e) {
             throw translateException(e);
+        } finally {
+            long endNanos = System.nanoTime();
+            connectionAcquireTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
         }
     }
 
