@@ -1,7 +1,6 @@
 = image:https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg[height=196]
 Author <mih_vlad@yahoo.com>
 v1.0.0, 2014-02-25
-
 :homepage: http://vladmihalcea.com/
 
 == Introduction
@@ -21,12 +20,14 @@ image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/arch
 ** http://jolbox.com/[BoneCP]
 ** http://brettwooldridge.github.io/HikariCP/[HikariCP]
 * statistics support
-** source connection acquiring time histogram
-** total connection acquiring time histogram
-** retries attempts histogram
-** maximum CP size histogram
-** connection request count histogram
+** concurrent connection count histogram
+** concurrent connection request count histogram
+** data source connection acquiring time histogram
 ** connection lease time histogram
+** maximum pool size histogram
+** total connection acquiring time histogram
+** overflow pool size histogram
+** retries attempts histogram
 
 == Documentation 
 
