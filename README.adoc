@@ -34,6 +34,11 @@ image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/arch
 . https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide[Installation Guide]
 . https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide[User Guide]
 
+== Press
+
+. http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling[The anatomy of Connection Pooling]
+. http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling[Flexy Pool, reactive connection pooling]
+
 == Requirements
 
 * Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
