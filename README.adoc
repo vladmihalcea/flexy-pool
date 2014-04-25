@@ -34,7 +34,7 @@ image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/arch
 . https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide[Installation Guide]
 . https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide[User Guide]
 
-== Press
+== In the Press
 
 . http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling[The anatomy of Connection Pooling]
 . http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling[Flexy Pool, reactive connection pooling]
