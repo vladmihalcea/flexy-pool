@@ -10,6 +10,7 @@ import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <code>Configuration</code> defines all required external associations for a given Flexy Pool instance.
@@ -22,7 +23,7 @@ import javax.sql.DataSource;
  */
 public final class Configuration<T extends DataSource> extends ConfigurationProperties<T, Metrics, PoolAdapter<T>> {
 
-    public static final long DEFAULT_METRIC_LOG_REPORTER_PERIOD = 5;
+    public static final long DEFAULT_METRIC_LOG_REPORTER_MILLIS = TimeUnit.MINUTES.toMillis(5);
 
     /**
      * A Factory for configuration data.
@@ -36,7 +37,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private MetricsFactory metricsFactory = CodahaleMetrics.FACTORY;
         private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
         private boolean jmxEnabled = true;
-        private long metricLogReporterPeriod = DEFAULT_METRIC_LOG_REPORTER_PERIOD;
+        private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
 
         /**
          * Construct the builder with the mandatory associations.
@@ -83,13 +84,13 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         }
 
         /**
-         * Set metric log report period
+         * Set metric log report millis
          *
-         * @param metricLogReporterPeriod the period between two consecutive log reports
+         * @param metricLogReporterMillis millis between two consecutive log reports
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
-        public Builder<T> setMetricLogReporterPeriod(long metricLogReporterPeriod) {
-            this.metricLogReporterPeriod = metricLogReporterPeriod;
+        public Builder<T> setMetricLogReporterMillis(long metricLogReporterMillis) {
+            this.metricLogReporterMillis = metricLogReporterMillis;
             return this;
         }
 
@@ -101,7 +102,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         public Configuration<T> build() {
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
             configuration.setJmxEnabled(jmxEnabled);
-            configuration.setMetricLogReporterPeriod(metricLogReporterPeriod);
+            configuration.setMetricLogReporterMillis(metricLogReporterMillis);
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             configuration.connectionProxyFactory = connectionProxyFactory;

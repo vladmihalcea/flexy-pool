@@ -15,7 +15,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private final String uniqueName;
     private boolean jmxEnabled;
-    private long metricLogReporterPeriod;
+    private long metricLogReporterMillis;
 
     public ConfigurationProperties(String uniqueName) {
         this.uniqueName = uniqueName;
@@ -49,21 +49,21 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
     }
 
     /**
-     * Get the metric log report period
+     * Get the metric log report millis
      *
-     * @return the period between two consecutive log reports
+     * @return millis between two consecutive log reports
      */
-    public long getMetricLogReporterPeriod() {
-        return metricLogReporterPeriod;
+    public long getMetricLogReporterMillis() {
+        return metricLogReporterMillis;
     }
 
     /**
-     * Set metric log report period
+     * Set metric log report millis
      *
-     * @param metricLogReporterPeriod the period between two consecutive log reports
+     * @param metricLogReporterMillis millis between two consecutive log reports
      */
-    protected void setMetricLogReporterPeriod(long metricLogReporterPeriod) {
-        this.metricLogReporterPeriod = metricLogReporterPeriod;
+    protected void setMetricLogReporterMillis(long metricLogReporterMillis) {
+        this.metricLogReporterMillis = metricLogReporterMillis;
     }
 
     /**

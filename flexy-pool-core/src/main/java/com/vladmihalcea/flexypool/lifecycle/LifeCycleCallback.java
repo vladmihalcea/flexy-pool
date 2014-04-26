@@ -1,13 +1,13 @@
 package com.vladmihalcea.flexypool.lifecycle;
 
 /**
- * <code>LifeCycleAware</code> defines lifecycle listening hooks.
+ * <code>LifeCycleCallback</code> defines lifecycle listening hooks.
  *
  * @author Vlad Mihalcea
  * @version    %I%, %E%
  * @since 1.0
  */
-public interface LifeCycleAware {
+public interface LifeCycleCallback {
 
     /**
      * Starting callback.

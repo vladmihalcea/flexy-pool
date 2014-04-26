@@ -8,7 +8,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
-import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
+import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  * @version %I%, %E%
  * @since 1.0
  */
-public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleAware, ConnectionPoolCallback {
+public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleCallback, ConnectionPoolCallback {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
 

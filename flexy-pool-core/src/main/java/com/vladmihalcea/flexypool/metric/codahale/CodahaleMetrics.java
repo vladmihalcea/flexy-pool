@@ -5,17 +5,16 @@ import com.vladmihalcea.flexypool.metric.*;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  * <code>CodahaleMetrics</code> extends the {@link AbstractMetrics} class and configures the Codahale
  * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
  * If the Jmx is enabled, a {@link JmxReporter} will also be added.
  * <p/>
- * This class implements the {@link com.vladmihalcea.flexypool.lifecycle.LifeCycleAware} interface so it can
+ * This class implements the {@link com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback} interface so it can
  * start/stop the metrics reports.
  *
  * @author Vlad Mihalcea
@@ -23,8 +22,6 @@ import java.util.concurrent.TimeUnit;
  * @since 1.0
  */
 public class CodahaleMetrics extends AbstractMetrics {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CodahaleMetrics.class);
 
     public static class ReservoirMetricsFactory implements MetricsFactory {
 
@@ -42,39 +39,35 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     public static final MetricsFactory FACTORY = new ReservoirMetricsFactory(new ReservoirFactory() {
         @Override
-        public Reservoir newInstance(String metricName) {
+        public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
             return new ExponentiallyDecayingReservoir();
         }
     });
 
     public static final MetricsFactory UNIFORM_RESERVOIR_FACTORY = new ReservoirMetricsFactory(new ReservoirFactory() {
         @Override
-        public Reservoir newInstance(String metricName) {
+        public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
             return new UniformReservoir();
         }
     });
 
     private final MetricRegistry metricRegistry;
-    private final Slf4jReporter logReporter;
-    private final JmxReporter jmxReporter;
+
     private final ReservoirFactory reservoirFactory;
 
-    public CodahaleMetrics(ConfigurationProperties configurationProperties, ReservoirFactory reservoirFactory) {
+    private final Collection<MetricsLifeCycleCallback> callbacks = new LinkedHashSet<MetricsLifeCycleCallback>();
+
+    public CodahaleMetrics(ConfigurationProperties configurationProperties,
+                           ReservoirFactory reservoirFactory,
+                           MetricsLifeCycleCallback... callbacks) {
         super(configurationProperties);
         this.metricRegistry = new MetricRegistry();
-        this.logReporter = Slf4jReporter
-                .forRegistry(metricRegistry)
-                .outputTo(LOGGER)
-                .build();
-        if (configurationProperties.isJmxEnabled()) {
-            jmxReporter = JmxReporter
-                    .forRegistry(metricRegistry)
-                    .inDomain(MetricRegistry.name(getClass(), configurationProperties.getUniqueName()))
-                    .build();
-        } else {
-            jmxReporter = null;
-        }
         this.reservoirFactory = reservoirFactory;
+        this.callbacks.add(new Slf4jMetricReporter().init(configurationProperties, metricRegistry));
+        this.callbacks.add(new JmxMetricReporter().init(configurationProperties, metricRegistry));
+        for (MetricsLifeCycleCallback callback : callbacks) {
+            this.callbacks.add(callback.init(configurationProperties, metricRegistry));
+        }
     }
 
     /**
@@ -83,7 +76,7 @@ public class CodahaleMetrics extends AbstractMetrics {
     @Override
     public Histogram histogram(String name) {
         com.codahale.metrics.Histogram histogram = new com.codahale.metrics.Histogram(
-                reservoirFactory.newInstance(name)
+                reservoirFactory.newInstance(com.codahale.metrics.Histogram.class, name)
         );
         return new CodahaleHistogram(metricRegistry.register(name, histogram));
     }
@@ -94,7 +87,7 @@ public class CodahaleMetrics extends AbstractMetrics {
     @Override
     public Timer timer(String name) {
         com.codahale.metrics.Timer timer = new com.codahale.metrics.Timer(
-                reservoirFactory.newInstance(name)
+                reservoirFactory.newInstance(com.codahale.metrics.Timer.class, name)
         );
         return new CodahaleTimer(metricRegistry.register(name, timer));
     }
@@ -103,9 +96,8 @@ public class CodahaleMetrics extends AbstractMetrics {
      * Start metrics reports.
      */
     public void start() {
-        logReporter.start(getConfigurationProperties().getMetricLogReporterPeriod(), TimeUnit.MINUTES);
-        if (jmxReporter != null) {
-            jmxReporter.start();
+        for (MetricsLifeCycleCallback callback : callbacks) {
+           callback.start();
         }
     }
 
@@ -113,9 +105,8 @@ public class CodahaleMetrics extends AbstractMetrics {
      * Stop metrics reports.
      */
     public void stop() {
-        logReporter.stop();
-        if (jmxReporter != null) {
-            jmxReporter.stop();
+        for (MetricsLifeCycleCallback callback : callbacks) {
+            callback.stop();
         }
     }
 }

@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -38,32 +37,32 @@ public class CodahaleMetricsTest {
     @Test
     public void testHistogram() {
         CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties, reservoirFactory);
-        when(reservoirFactory.newInstance(eq("histo"))).thenReturn(reservoir);
+        when(reservoirFactory.newInstance(com.codahale.metrics.Histogram.class, "histo")).thenReturn(reservoir);
         Histogram histogram = codahaleMetrics.histogram("histo");
-        verify(reservoirFactory, times(1)).newInstance("histo");
+        verify(reservoirFactory, times(1)).newInstance(com.codahale.metrics.Histogram.class, "histo");
         assertNotNull(histogram);
     }
 
     @Test
     public void testTimer() {
         CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties, reservoirFactory);
-        when(reservoirFactory.newInstance(eq("timer"))).thenReturn(reservoir);
+        when(reservoirFactory.newInstance(com.codahale.metrics.Timer.class, "timer")).thenReturn(reservoir);
         Timer timer = codahaleMetrics.timer("timer");
-        verify(reservoirFactory, times(1)).newInstance("timer");
+        verify(reservoirFactory, times(1)).newInstance(com.codahale.metrics.Timer.class, "timer");
         assertNotNull(timer);
     }
 
     @Test
     public void testStartStopUsingDefaultConfiguration() {
         when(configurationProperties.isJmxEnabled()).thenReturn(true);
-        when(configurationProperties.getMetricLogReporterPeriod()).thenReturn(5L);
+        when(configurationProperties.getMetricLogReporterMillis()).thenReturn(5L);
         testStartStop(configurationProperties);
     }
 
     @Test
     public void testStartStopUsingNoJmx() {
         when(configurationProperties.isJmxEnabled()).thenReturn(false);
-        when(configurationProperties.getMetricLogReporterPeriod()).thenReturn(5L);
+        when(configurationProperties.getMetricLogReporterMillis()).thenReturn(5L);
         testStartStop(configurationProperties);
     }
 

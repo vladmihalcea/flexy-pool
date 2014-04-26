@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexypool.metric.codahale;
 
+import com.codahale.metrics.Metric;
 import com.codahale.metrics.Reservoir;
 
 /**
@@ -11,5 +12,11 @@ import com.codahale.metrics.Reservoir;
  */
 public interface ReservoirFactory {
 
-    Reservoir newInstance(String metricName);
+    /**
+     * Create new reservoir for the given metric name.
+     * @param metricClass metrics class
+     * @param metricName metrics name
+     * @return metrics specific reservoir
+     */
+    Reservoir newInstance(Class<? extends Metric> metricClass, String metricName);
 }

@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.metric;
 
-import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
+import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
 
 /**
  * <code>Metrics</code> defines the basic Metrics behavior..
@@ -9,7 +9,7 @@ import com.vladmihalcea.flexypool.lifecycle.LifeCycleAware;
  * @version %I%, %E%
  * @since 1.0
  */
-public interface Metrics extends LifeCycleAware {
+public interface Metrics extends LifeCycleCallback {
 
     /**
      * Get histogram

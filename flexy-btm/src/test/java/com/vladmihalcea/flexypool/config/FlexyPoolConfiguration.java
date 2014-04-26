@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * FlexyDataSourceConfiguration - Configuration for flexypool data source
  *
@@ -35,7 +37,7 @@ public class FlexyPoolConfiguration {
         .setMetricsFactory(CodahaleMetrics.UNIFORM_RESERVOIR_FACTORY)
         .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
         .setJmxEnabled(true)
-        .setMetricLogReporterPeriod(5)
+        .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))
         .build();
     }
 
