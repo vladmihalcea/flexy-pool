@@ -9,6 +9,8 @@ package com.vladmihalcea.flexypool.exception;
  */
 public class ReflectionException extends RuntimeException {
 
+    private static final long serialVersionUID = -8241199836349576388L;
+
     /**
      * Store the originating cause.
      *

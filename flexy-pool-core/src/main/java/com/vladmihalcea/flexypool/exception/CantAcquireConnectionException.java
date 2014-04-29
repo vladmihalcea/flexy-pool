@@ -12,7 +12,13 @@ import java.sql.SQLException;
  */
 public class CantAcquireConnectionException extends SQLException {
 
-    public CantAcquireConnectionException() {
-        super();
+    private static final long serialVersionUID = 2752173976156070744L;
+
+    /**
+     * Couldn't acquire connection
+     * @param reason connection acquire failing reason
+     */
+    public CantAcquireConnectionException(String reason) {
+        super(reason);
     }
 }

@@ -12,6 +12,8 @@ import java.sql.SQLException;
  */
 public class AcquireTimeoutException extends SQLException {
 
+    private static final long serialVersionUID = -5632855297822130922L;
+
     /**
      * Store the originating cause.
      *

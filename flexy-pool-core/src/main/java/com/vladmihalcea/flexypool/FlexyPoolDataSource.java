@@ -145,7 +145,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             if (connection != null) {
                 return connectionProxyFactory.newInstance(connection, this);
             } else {
-                throw new CantAcquireConnectionException();
+                throw new CantAcquireConnectionException("Couldn't acquire connection for current strategies: " + connectionAcquiringStrategies);
             }
         } finally {
             long endNanos = System.nanoTime();
