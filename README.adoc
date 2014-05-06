@@ -20,8 +20,8 @@ image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/arch
 ** http://jolbox.com/[BoneCP]
 ** http://brettwooldridge.github.io/HikariCP/[HikariCP]
 * statistics support
-** concurrent connection count histogram
-** concurrent connection request count histogram
+** concurrent connections histogram
+** concurrent connection requests histogram
 ** data source connection acquiring time histogram
 ** connection lease time histogram
 ** maximum pool size histogram
