@@ -10,7 +10,7 @@
 
     <groupId>com.vladmihalcea.flexy-pool</groupId>
     <artifactId>flexy-pool-parent</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Flexy Pool</name>
