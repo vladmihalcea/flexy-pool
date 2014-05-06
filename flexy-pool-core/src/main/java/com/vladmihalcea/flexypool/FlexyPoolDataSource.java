@@ -62,8 +62,8 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
 
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
-    public static final String CONCURRENT_CONNECTION_COUNT = "concurrentConnectionCount";
-    public static final String CONCURRENT_CONNECTION_REQUEST_COUNT = "concurrentConnectionRequestCount";
+    public static final String CONCURRENT_CONNECTION_COUNT_HISTOGRAM = "concurrentConnectionCountHistogram";
+    public static final String CONCURRENT_CONNECTION_REQUEST_COUNT_HISTOGRAM = "concurrentConnectionRequestCountHistogram";
     public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
     private final PoolAdapter<T> poolAdapter;
@@ -86,8 +86,8 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         this.targetDataSource = poolAdapter.getTargetDataSource();
         this.metrics = configuration.getMetrics();
         this.connectionAcquireTotalTimer = metrics.timer(OVERALL_CONNECTION_ACQUIRE_MILLIS);
-        this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT);
-        this.concurrentConnectionRequestCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_REQUEST_COUNT);
+        this.concurrentConnectionCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_COUNT_HISTOGRAM);
+        this.concurrentConnectionRequestCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_REQUEST_COUNT_HISTOGRAM);
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
         this.connectionProxyFactory = configuration.getConnectionProxyFactory();
         if (connectionAcquiringStrategyFactories.length == 0) {

@@ -91,8 +91,8 @@ public class FlexyPoolDataSourceTest {
                 })
                 .build();
         when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(overallConnectionAcquireTimer);
-        when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_COUNT)).thenReturn(concurrentConnectionCountHistogram);
-        when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_REQUEST_COUNT)).thenReturn(concurrentConnectionRequestCountHistogram);
+        when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_COUNT_HISTOGRAM)).thenReturn(concurrentConnectionCountHistogram);
+        when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_REQUEST_COUNT_HISTOGRAM)).thenReturn(concurrentConnectionRequestCountHistogram);
         when(metrics.timer(FlexyPoolDataSource.CONNECTION_LEASE_MILLIS)).thenReturn(connectionLeaseMillisTimer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
         this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
