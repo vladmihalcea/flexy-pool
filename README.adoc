@@ -5,7 +5,7 @@ v1.0.0, 2014-02-25
 
 == Introduction
 
-The flexy-pool library adds metrics and flexible strategies to a given Connection Pool, allowing it to resize on demand.
+The FlexyPool library adds metrics and flexible strategies to a given Connection Pool, allowing it to resize on demand.
 This is very handy since most connection pools offer a limited set of dynamic configuration strategies.
 
 image::https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/architecture/FlexyPoolArchitecture.gif[Flexy Pool Architecture]
