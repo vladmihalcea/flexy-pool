@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -39,10 +40,18 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
      * creating this strategy for a given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
      */
     public static class Factory<T extends DataSource> implements ConnectionAcquiringStrategyFactory<IncrementPoolOnTimeoutConnectionAcquiringStrategy, T> {
+
         private final int maxOverflowPoolSize;
 
-        public Factory(int maxOverflowPoolSize) {
+        private final int timeoutMillis;
+
+        public Factory(int maxOverflowPoolSize, int timeoutMillis) {
             this.maxOverflowPoolSize = maxOverflowPoolSize;
+            this.timeoutMillis = timeoutMillis;
+        }
+
+        public Factory(int maxOverflowPoolSize) {
+            this(maxOverflowPoolSize, Integer.MAX_VALUE);
         }
 
         /**
@@ -54,7 +63,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
          */
         public IncrementPoolOnTimeoutConnectionAcquiringStrategy newInstance(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
             return new IncrementPoolOnTimeoutConnectionAcquiringStrategy(
-                    configurationProperties, maxOverflowPoolSize
+                    configurationProperties, maxOverflowPoolSize, timeoutMillis
             );
         }
     }
@@ -62,6 +71,8 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
     private final Lock lock = new ReentrantLock();
 
     private final int maxOverflowPoolSize;
+
+    private final int timeoutMillis;
 
     private AtomicLong overflowPoolSize = new AtomicLong();
 
@@ -76,10 +87,12 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
      *
      * @param configurationProperties configurationProperties
      * @param maxOverflowPoolSize     maximum overflowing pool sizing
+     * @param timeoutMillis           if the connection acquiring time took more than this value a pool size increment is attempted
      */
-    private IncrementPoolOnTimeoutConnectionAcquiringStrategy(ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties, int maxOverflowPoolSize) {
+    private IncrementPoolOnTimeoutConnectionAcquiringStrategy(ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties, int maxOverflowPoolSize, int timeoutMillis) {
         super(configurationProperties);
         this.maxOverflowPoolSize = maxOverflowPoolSize;
+        this.timeoutMillis = timeoutMillis;
         this.maxPoolSizeHistogram = configurationProperties.getMetrics().histogram(MAX_POOL_SIZE_HISTOGRAM);
         this.overflowPoolSizeHistogram = configurationProperties.getMetrics().histogram(OVERFLOW_POOL_SIZE_HISTOGRAM);
         maxPoolSizeHistogram.update(configurationProperties.getPoolAdapter().getMaxPoolSize());
@@ -94,10 +107,16 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
         do {
             int expectingMaxSize = poolAdapter.getMaxPoolSize();
             try {
-                return getConnectionFactory().getConnection(requestContext);
+                long startNanos = System.nanoTime();
+                Connection connection = getConnectionFactory().getConnection(requestContext);
+                long endNanos = System.nanoTime();
+                if(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos) > timeoutMillis && !incrementPoolSize(expectingMaxSize)) {
+                    LOGGER.warn("Can't acquireConnection connection, pool size has already overflown to its max size.");
+                }
+                return connection;
             } catch (AcquireTimeoutException e) {
                 if (!incrementPoolSize(expectingMaxSize)) {
-                    LOGGER.info("Can't acquireConnection connection, pool size has already overflown to its max size.");
+                    LOGGER.warn("Can't acquireConnection connection due to adaptor timeout, pool size has already overflown to its max size.");
                     throw e;
                 }
             }

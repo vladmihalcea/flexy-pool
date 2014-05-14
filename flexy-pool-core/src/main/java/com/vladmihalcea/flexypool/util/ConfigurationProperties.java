@@ -5,7 +5,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import javax.sql.DataSource;
 
 /**
- * <code>Configuration</code> defines basic properties for a given Flexy Pool instance.
+ * <code>Configuration</code> defines basic properties for a given FlexyPool instance.
  *
  * @author Vlad Mihalcea
  * @version    %I%, %E%

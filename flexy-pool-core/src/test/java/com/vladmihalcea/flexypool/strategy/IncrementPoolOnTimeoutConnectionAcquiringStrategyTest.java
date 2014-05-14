@@ -143,4 +143,22 @@ public class IncrementPoolOnTimeoutConnectionAcquiringStrategyTest {
         verify(overflowPoolSizeHistogram, times(1)).update(2);
         verify(overflowPoolSizeHistogram, times(1)).update(3);
     }
+
+    @Test
+    public void testConnectionAcquiredInOneAttemptWithTimeoutThreshold() throws SQLException {
+        when(poolAdapter.getConnection(same(connectionRequestContext))).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                Thread.sleep(150);
+                return connection;
+            }
+        });
+        when(poolAdapter.getMaxPoolSize()).thenReturn(1);
+        IncrementPoolOnTimeoutConnectionAcquiringStrategy incrementPoolOnTimeoutConnectionAcquiringStrategy = new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory<DataSource>(5, 100).newInstance(configuration);
+        assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
+        verify(poolAdapter, times(1)).setMaxPoolSize(2);
+        verify(maxPoolSizeHistogram, times(1)).update(1);
+        verify(maxPoolSizeHistogram, times(1)).update(2);
+        verify(overflowPoolSizeHistogram, times(1)).update(1);
+    }
 }

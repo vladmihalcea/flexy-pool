@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <code>Configuration</code> defines all required external associations for a given Flexy Pool instance.
+ * <code>Configuration</code> defines all required external associations for a given FlexyPool instance.
  * An instance is retrieved through the {@link com.vladmihalcea.flexypool.config.Configuration.Builder} which takes care
  * of the actual order of setting required dependencies.
  *

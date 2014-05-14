@@ -88,7 +88,7 @@ public final class RetryConnectionAcquiringStrategy<T extends DataSource> extend
                 } catch (AcquireTimeoutException e) {
                     requestContext.incrementAttempts();
                     remainingAttempts--;
-                    LOGGER.info("Can't acquireConnection connection, remaining retry attempts {}", remainingAttempts);
+                    LOGGER.warn("Can't acquireConnection connection, remaining retry attempts {}", remainingAttempts);
                     if (remainingAttempts <= 0) {
                         throw e;
                     }

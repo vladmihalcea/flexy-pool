@@ -91,7 +91,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
         this.connectionProxyFactory = configuration.getConnectionProxyFactory();
         if (connectionAcquiringStrategyFactories.length == 0) {
-            LOGGER.info("The flexy pool is not using any strategy!");
+            LOGGER.info("FlexyPool is not using any strategy!");
         }
         for (ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>
                 connectionAcquiringStrategyFactory : connectionAcquiringStrategyFactories) {

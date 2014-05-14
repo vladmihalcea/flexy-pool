@@ -13,9 +13,9 @@
     <version>1.0.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Flexy Pool</name>
+    <name>FlexyPool</name>
     <description>
-    	Flexy Pool bring flexibility to external Connection pooling libraries. It's meant to
+    	FlexyPool bring flexibility to external Connection pooling libraries. It's meant to
 	assist developers finding the right pool size while allowing you to adapt the size automatically.
     </description>
     
