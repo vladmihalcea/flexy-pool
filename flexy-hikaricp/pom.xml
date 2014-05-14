@@ -3,13 +3,13 @@
     <parent>
         <groupId>com.vladmihalcea.flexy-pool</groupId>
         <artifactId>flexy-pool-parent</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flexy-hikaricp</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>flexy-hikaricp</name>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-pool-core</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6-SNAPSHOT</version>
         </dependency>
 		
         <dependency>
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-common-adapter</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
