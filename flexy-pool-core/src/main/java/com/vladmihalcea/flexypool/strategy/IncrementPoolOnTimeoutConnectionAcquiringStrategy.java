@@ -110,7 +110,9 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
                 long startNanos = System.nanoTime();
                 Connection connection = getConnectionFactory().getConnection(requestContext);
                 long endNanos = System.nanoTime();
-                if(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos) > timeoutMillis && !incrementPoolSize(expectingMaxSize)) {
+                if((TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos) > timeoutMillis) &&
+                        (poolAdapter.getMaxPoolSize() < maxOverflowPoolSize) &&
+                        !incrementPoolSize(expectingMaxSize)) {
                     LOGGER.warn("Can't acquireConnection connection, pool size has already overflown to its max size.");
                 }
                 return connection;
