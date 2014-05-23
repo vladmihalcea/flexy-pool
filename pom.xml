@@ -51,6 +51,7 @@
         <module>flexy-c3p0</module>
         <module>flexy-bonecp</module>
         <module>flexy-hikaricp</module>
+        <module>flexy-tomcatcp</module>
     </modules>
 
     <dependencies>
