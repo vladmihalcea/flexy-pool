@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 /**
  * <code>C3P0PoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the DBCP {@link ComboPooledDataSource}
+ * communicate with the c3p0 {@link ComboPooledDataSource}
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
@@ -43,7 +43,7 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
+     * Translate the c3p0 Exception to AcquireTimeoutException.
      *
      * @param e exception
      * @return translated exception

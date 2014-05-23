@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 /**
  * <code>BoneCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the DBCP {@link BoneCPDataSource}
+ * communicate with the BoneCP {@link BoneCPDataSource}
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
@@ -49,7 +49,7 @@ public class BoneCPPoolAdapter extends AbstractPoolAdapter<BoneCPDataSource> {
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
+     * Translate the BonCP Exception to AcquireTimeoutException.
      *
      * @param e exception
      * @return translated exception

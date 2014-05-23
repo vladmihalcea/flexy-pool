@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 /**
  * <code>DBCP2PoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the DBCP {@link BasicDataSource}
+ * communicate with the DBCP2 {@link BasicDataSource}
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
@@ -43,7 +43,7 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
+     * Translate the DBCP2 Exception to AcquireTimeoutException.
      *
      * @param e exception
      * @return translated exception

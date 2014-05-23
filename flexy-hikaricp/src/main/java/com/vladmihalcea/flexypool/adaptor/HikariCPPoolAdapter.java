@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * <code>HikariCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the DBCP {@link HikariDataSource}
+ * communicate with the HikariCP {@link HikariDataSource}
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
@@ -44,7 +44,7 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
+     * Translate the HikariCP Exception to AcquireTimeoutException.
      *
      * @param e exception
      * @return translated exception
