@@ -37,6 +37,18 @@ This is very handy since most connection pools offer a limited set of dynamic co
 3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
 4. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
 
+### Who uses FlexyPool
+
+<img src="http://avain.etuovi.com/media/layout/images/etuovi-logo.gif"/>
+
+[Etuovi.com](http://www.etuovi.com/[) is the leading real estate portal in Finland.
+
+> New Etuovi.com has used FlexyPool in production since early 2014. 
+> The library has proven to be reliable and allows our infrastructure to handle temporary spikes much better. 
+> We use it everywhere in our stack, ranging from our frontends to the backend services.
+>
+> -- <cite>Antti Koivisto, Software Architect, Etuovi.com</cite>
+
 ### Requirements
 
 * Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
