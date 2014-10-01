@@ -41,9 +41,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### Who uses FlexyPool
 
-<img src="http://avain.etuovi.com/media/layout/images/etuovi-logo.gif"/>
-
-[Etuovi.com](http://www.etuovi.com/[) is the leading real estate portal in Finland.
+<a href="http://www.etuovi.com/"><img src="http://avain.etuovi.com/media/layout/images/etuovi-logo.gif"/></a> is the leading real estate portal in Finland.
 
 > New Etuovi.com has used FlexyPool in production since early 2014. 
 > The library has proven to be reliable and allows our infrastructure to handle temporary spikes much better. 
