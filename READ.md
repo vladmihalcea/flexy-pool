@@ -8,22 +8,22 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ### Features 
 
 * extensive connection pool support
-** [Bitronix Transaction Manager](http://docs.codehaus.org/display/BTM/Home)
-** [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
-** [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
-** [C3P0](http://www.mchange.com/projects/c3p0/)
-** [BoneCP](http://jolbox.com/)
-** [HikariCP](http://brettwooldridge.github.io/HikariCP/)
-** [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
+ * [Bitronix Transaction Manager](http://docs.codehaus.org/display/BTM/Home)
+ * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
+ * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
+ * [C3P0](http://www.mchange.com/projects/c3p0/)
+ * [BoneCP](http://jolbox.com/)
+ * [HikariCP](http://brettwooldridge.github.io/HikariCP/)
+ * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
 * statistics support
-** concurrent connections histogram
-** concurrent connection requests histogram
-** data source connection acquiring time histogram
-** connection lease time histogram
-** maximum pool size histogram
-** total connection acquiring time histogram
-** overflow pool size histogram
-** retries attempts histogram
+ * concurrent connections histogram
+ * concurrent connection requests histogram
+ * data source connection acquiring time histogram
+ * connection lease time histogram
+ * maximum pool size histogram
+ * total connection acquiring time histogram
+ * overflow pool size histogram
+ * retries attempts histogram
 
 ### Documentation 
 
