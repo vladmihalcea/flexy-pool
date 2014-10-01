@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
+
 ### Introduction
 
 The FlexyPool library adds metrics and flexible strategies to a given Connection Pool, allowing it to resize on demand.
