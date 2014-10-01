@@ -27,15 +27,15 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### Documentation 
 
-. [Installation Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide)
-. [User Guide](https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide)
+1. [Installation Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide)
+2. [User Guide](https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide)
 
 ### In the Press
 
-. [The anatomy of Connection Pooling](http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling)
-. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
-. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
-. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
+1. [The anatomy of Connection Pooling](http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling)
+2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
+3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
+4. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
 
 ### Requirements
 
