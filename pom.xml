@@ -100,7 +100,7 @@
             </dependency>
 
             <dependency>
-                <groupId>com.codahale.metrics</groupId>
+                <groupId>io.dropwizard.metrics</groupId>
                 <artifactId>metrics-core</artifactId>
                 <version>${codahale.metrics.version}</version>
             </dependency>
@@ -302,7 +302,7 @@
 
         <slf4j.version>1.7.6</slf4j.version>
         <logback.version>1.1.1</logback.version>
-        <codahale.metrics.version>3.0.2</codahale.metrics.version>
+        <codahale.metrics.version>3.1.0</codahale.metrics.version>
 
         <spring.version>3.2.2.RELEASE</spring.version>
 
