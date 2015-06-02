@@ -10,7 +10,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ### Features 
 
 * extensive connection pool support
- * [Bitronix Transaction Manager](http://docs.codehaus.org/display/BTM/Home)
+ * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
  * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
  * [C3P0](http://www.mchange.com/projects/c3p0/)
