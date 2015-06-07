@@ -34,13 +34,17 @@ public abstract class AbstractPoolAdapterIntegrationTest {
         List<Connection> leasedConnections = new ArrayList<Connection>();
 
         try {
-            for(;;++index) {
+            for(;hasMoreConnections(index);++index) {
                 leasedConnections.add(getConnection(index));
             }
         } catch (SQLException e) {
             assertTrue(e instanceof CantAcquireConnectionException);
             verifyLeasedConnections(leasedConnections);
         }
+    }
+
+    protected boolean hasMoreConnections(int index) {
+       return true;
     }
 
     private Connection getConnection(int index) throws SQLException {

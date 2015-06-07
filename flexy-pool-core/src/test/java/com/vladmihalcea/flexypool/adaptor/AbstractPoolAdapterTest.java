@@ -82,7 +82,7 @@ public class AbstractPoolAdapterTest {
                     }
                 })
                 .build();
-        poolAdapter = new TestPoolAdaptor(configuration);
+        poolAdapter = newPoolAdapter(configuration);
     }
 
     @Test
@@ -124,5 +124,13 @@ public class AbstractPoolAdapterTest {
         } catch (SQLException e) {
             verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
         }
+    }
+
+    protected AbstractPoolAdapter<DataSource> newPoolAdapter(Configuration<DataSource> configuration) {
+        return new TestPoolAdaptor(configuration);
+    }
+
+    protected AbstractPoolAdapter<DataSource> getPoolAdapter() {
+        return poolAdapter;
     }
 }

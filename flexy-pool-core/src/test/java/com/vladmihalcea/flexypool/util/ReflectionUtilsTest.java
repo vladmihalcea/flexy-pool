@@ -17,7 +17,7 @@ public class ReflectionUtilsTest {
     public void testGetFieldValue() {
         TestObject testObject = new TestObject();
         assertEquals("testObject", ReflectionUtils.getFieldValue(testObject, "name"));
-        assertEquals(1, ReflectionUtils.getFieldValue(testObject, "version"));
+        assertEquals(1, ((Number) ReflectionUtils.getFieldValue(testObject, "version")).intValue());
     }
 
     @Test(expected = ReflectionException.class)
