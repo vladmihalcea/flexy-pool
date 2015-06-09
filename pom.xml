@@ -45,6 +45,7 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-common-adapter</module>
+        <module>flexy-jpa-adapter</module>
         <module>flexy-btm</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
@@ -127,6 +128,24 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
                 <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
             </dependency>
 
             <dependency>
@@ -305,6 +324,7 @@
         <codahale.metrics.version>3.1.0</codahale.metrics.version>
 
         <spring.version>3.2.2.RELEASE</spring.version>
+        <aspectj.version>1.8.4</aspectj.version>
 
         <mockito.version>1.8.5</mockito.version>
         <junit.version>4.8.1</junit.version>

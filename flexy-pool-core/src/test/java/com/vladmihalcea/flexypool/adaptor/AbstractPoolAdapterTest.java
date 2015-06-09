@@ -30,9 +30,9 @@ import static org.mockito.Mockito.*;
  */
 public class AbstractPoolAdapterTest {
 
-    public static class TestPoolAdaptor extends AbstractPoolAdapter<DataSource> {
+    public static class TestPoolAdapter extends AbstractPoolAdapter<DataSource> {
 
-        public TestPoolAdaptor(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
+        public TestPoolAdapter(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
             super(configurationProperties);
         }
 
@@ -127,7 +127,7 @@ public class AbstractPoolAdapterTest {
     }
 
     protected AbstractPoolAdapter<DataSource> newPoolAdapter(Configuration<DataSource> configuration) {
-        return new TestPoolAdaptor(configuration);
+        return new TestPoolAdapter(configuration);
     }
 
     protected AbstractPoolAdapter<DataSource> getPoolAdapter() {
