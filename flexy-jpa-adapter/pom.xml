@@ -105,11 +105,24 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${dbcp.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
     </dependencies>
 
     <properties>
         <hibernate.version>4.3.9.Final</hibernate.version>
         <btm.version>2.1.1</btm.version>
+        <dbcp.version>1.4</dbcp.version>
     </properties>
 
 </project>

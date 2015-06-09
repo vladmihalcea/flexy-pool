@@ -2,18 +2,10 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <context:annotation-config/>
-
-    <context:property-placeholder location="/META-INF/spring/jdbc.properties"/>
+    <import resource="applicationContext-common-tx.xml"/>
 
     <bean id="btmConfig" factory-method="getConfiguration" class="bitronix.tm.TransactionManagerServices">
         <property name="serverId" value="spring-btm"/>
@@ -38,23 +30,9 @@
         </property>
     </bean>
 
-    <bean id="jndiExporter" class="com.vladmihalcea.flexypool.JndiExporter">
-        <constructor-arg name="jndiName" value="java:/comp/env/jdbc/hsqldb"/>
-        <constructor-arg name="jndiValue" ref="dataSource"/>
-    </bean>
-
     <bean id="persistenceUnitManager" depends-on="transactionManager"
           class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
         <property name="persistenceXmlLocation" value="classpath*:META-INF/persistence-jta.xml"/>
-    </bean>
-
-    <!-- JpaDialect must be configured for transactionManager to make JPA and JDBC share transactions -->
-    <bean id="jpaDialect" class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
-
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="persistenceUnit"/>
-        <property name="persistenceUnitManager" ref="persistenceUnitManager"/>
-        <property name="jpaDialect" ref="jpaDialect"/>
     </bean>
 
     <bean id="jtaTransactionManager" factory-method="getTransactionManager"
@@ -66,15 +44,5 @@
         <property name="userTransaction" ref="jtaTransactionManager"/>
         <property name="allowCustomIsolationLevels" value="true"/>
     </bean>
-
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <bean name="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
-        <property name="transactionManager" ref="transactionManager"/>
-    </bean>
-
-    <aop:aspectj-autoproxy/>
-
-    <bean id="metricsFactory" class="com.vladmihalcea.flexypool.adaptor.MockMetricsFactory"/>
 
 </beans>

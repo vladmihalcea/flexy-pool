@@ -2,13 +2,8 @@ package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.model.Book;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -20,14 +15,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * FlexyPoolConnectionProviderTest - FlexyPoolConnectionProvider Test
+ * AbstractFlexyPoolConnectionProviderIntegrationTest - FlexyPoolConnectionProvider Integration Test for Java EE Environment
  *
  * @author Vlad Mihalcea
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/applicationContext-tx.xml"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class FlexyPoolConnectionProviderTest {
+public abstract class AbstractFlexyPoolConnectionProviderIntegrationTest {
 
     @PersistenceContext(unitName = "persistenceUnit")
     private EntityManager entityManager;
@@ -39,7 +31,6 @@ public class FlexyPoolConnectionProviderTest {
     private MockMetricsFactory metricsFactory;
 
     @Test
-    @Transactional
     public void test() {
         final Book book = transactionTemplate.execute(new TransactionCallback<Book>() {
             @Override
@@ -59,7 +50,7 @@ public class FlexyPoolConnectionProviderTest {
                 return null;
             }
         });
-        verify(metricsFactory.getConcurrentConnectionRequestCountHistogram(), times(2)).update(1);
-        verify(metricsFactory.getConcurrentConnectionRequestCountHistogram(), times(2)).update(0);
+        verify(metricsFactory.getConcurrentConnectionRequestCountHistogram(), times(4)).update(1);
+        verify(metricsFactory.getConcurrentConnectionRequestCountHistogram(), times(4)).update(0);
     }
 }
