@@ -21,7 +21,7 @@
                       value="update"/>
 
             <property name="hibernate.connection.provider_class"
-                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolConnectionProvider"/>
+                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>
 
             <property name="flexy.pool.metrics.factory"
                       value="com.vladmihalcea.flexypool.adaptor.MockMetricsFactory"/>

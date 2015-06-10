@@ -25,9 +25,9 @@ import java.util.Map;
  *
  * @author Vlad Mihalcea
  */
-public class FlexyPoolConnectionProvider extends DatasourceConnectionProviderImpl {
+public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionProviderImpl {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlexyPoolConnectionProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FlexyPoolHibernateConnectionProvider.class);
 
     public interface Properties {
         String POOL_ADAPTER_FACTORY = "flexy.pool.adapter.factory";
@@ -170,7 +170,7 @@ public class FlexyPoolConnectionProvider extends DatasourceConnectionProviderImp
     @Override
     @SuppressWarnings("rawtypes")
     public boolean isUnwrappableAs(Class unwrapType) {
-        return super.isUnwrappableAs(unwrapType) || FlexyPoolConnectionProvider.class.isAssignableFrom(unwrapType);
+        return super.isUnwrappableAs(unwrapType) || FlexyPoolHibernateConnectionProvider.class.isAssignableFrom(unwrapType);
     }
 
     /**

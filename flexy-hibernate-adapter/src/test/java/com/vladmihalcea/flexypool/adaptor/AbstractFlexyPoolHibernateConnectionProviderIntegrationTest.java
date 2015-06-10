@@ -15,11 +15,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * AbstractFlexyPoolConnectionProviderIntegrationTest - FlexyPoolConnectionProvider Integration Test for Java EE Environment
+ * AbstractFlexyPoolHibernateConnectionProviderIntegrationTest - FlexyPoolConnectionProvider Integration Test for Java EE Environment
  *
  * @author Vlad Mihalcea
  */
-public abstract class AbstractFlexyPoolConnectionProviderIntegrationTest {
+public abstract class AbstractFlexyPoolHibernateConnectionProviderIntegrationTest {
 
     @PersistenceContext(unitName = "persistenceUnit")
     private EntityManager entityManager;

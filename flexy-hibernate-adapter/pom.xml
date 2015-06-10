@@ -8,12 +8,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-jpa-adapter</artifactId>
+    <artifactId>flexy-hibernate-adapter</artifactId>
     <version>1.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-jpa</name>
-    <description>The JPA adapter allows registering the FlexyPool DataSource in a Java EE container </description>
+    <name>flexy-hibernate</name>
+    <description>The Hibernate adapter allows registering the FlexyPool DataSource in a Java EE container </description>
 
     <dependencies>
 

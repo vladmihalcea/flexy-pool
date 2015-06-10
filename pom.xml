@@ -45,7 +45,7 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-common-adapter</module>
-        <module>flexy-jpa-adapter</module>
+        <module>flexy-hibernate-adapter</module>
         <module>flexy-btm</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>

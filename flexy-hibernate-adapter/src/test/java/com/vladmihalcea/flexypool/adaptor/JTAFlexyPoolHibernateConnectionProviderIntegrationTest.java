@@ -13,4 +13,4 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring/applicationContext-jta-tx.xml"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class JTAFlexyPoolConnectionProviderIntegrationTest extends AbstractFlexyPoolConnectionProviderIntegrationTest {}
+public class JTAFlexyPoolHibernateConnectionProviderIntegrationTest extends AbstractFlexyPoolHibernateConnectionProviderIntegrationTest {}
