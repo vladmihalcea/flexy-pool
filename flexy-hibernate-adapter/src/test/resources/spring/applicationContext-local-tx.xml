@@ -14,7 +14,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
-    <bean id="persistenceUnitManager" depends-on="transactionManager"
+    <bean id="persistenceUnitManager" depends-on="jndiExporter"
           class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
         <property name="persistenceXmlLocation" value="classpath*:META-INF/persistence-local.xml"/>
     </bean>

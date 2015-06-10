@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC
+        "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+        "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+
+    <jdbc-resource pool-name="ArquillianEmbeddedHSQLDBPool"
+                   jndi-name="jdbc/arquillian"/>
+
+    <jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
+                          res-type="javax.sql.DataSource"
+                          datasource-classname="org.hsqldb.jdbc.JDBCDataSource"
+                          steady-pool-size="3"
+                          max-pool-size="5">
+
+        <property name="user" value="sa"/>
+        <property name="password" value=""/>
+        <property name="url" value="jdbc:hsqldb:mem:test"/>
+    </jdbc-connection-pool>
+
+</resources>
