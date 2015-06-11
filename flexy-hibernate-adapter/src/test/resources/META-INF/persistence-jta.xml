@@ -26,8 +26,6 @@
             <property name="hibernate.connection.provider_class"
                       value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>
 
-            <property name="flexy.pool.metrics.factory"
-                      value="com.vladmihalcea.flexypool.adaptor.MockMetricsFactory"/>
         </properties>
     </persistence-unit>
 </persistence>

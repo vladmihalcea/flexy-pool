@@ -95,16 +95,25 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
         private final FlexyPoolDataSourceConfiguration<DS> flexyPoolDataSourceConfiguration;
 
+        @SuppressWarnings("unchecked")
         public ConfigurationLoader() {
-            flexyPoolDataSourceConfiguration = new FlexyPoolDataSourceConfiguration<DS>(
-                configuration(),
-                connectionAcquiringStrategyFactories()
+            DS dataSource = (DS) propertyLoader.getDataSource();
+            flexyPoolDataSourceConfiguration = init(dataSource);
+        }
+
+        public ConfigurationLoader(DS dataSource) {
+            flexyPoolDataSourceConfiguration = init(dataSource);
+        }
+
+        private FlexyPoolDataSourceConfiguration<DS> init(DS dataSource) {
+            return new FlexyPoolDataSourceConfiguration<DS>(
+                    configuration(dataSource),
+                    connectionAcquiringStrategyFactories()
             );
         }
 
         @SuppressWarnings("unchecked")
-        private Configuration<DS> configuration() {
-            DS dataSource = (DS) propertyLoader.getDataSource();
+        private Configuration<DS> configuration(DS dataSource) {
             PoolAdapterFactory<DS> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
 
@@ -155,6 +164,14 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         this(configuration, Arrays.asList(connectionAcquiringStrategyFactories));
     }
 
+    public FlexyPoolDataSource() {
+        this(new ConfigurationLoader().getFlexyPoolDataSourceConfiguration());
+    }
+
+    public FlexyPoolDataSource(T targetDataSource) {
+        this(new ConfigurationLoader<T>(targetDataSource).getFlexyPoolDataSourceConfiguration());
+    }
+
     private FlexyPoolDataSource(final Configuration<T> configuration,
                                List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> connectionAcquiringStrategyFactories) {
         this.poolAdapter = configuration.getPoolAdapter();
@@ -177,10 +194,6 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     private FlexyPoolDataSource(FlexyPoolDataSourceConfiguration flexyPoolDataSourceConfiguration) {
         this(flexyPoolDataSourceConfiguration.getConfiguration(),
             flexyPoolDataSourceConfiguration.getConnectionAcquiringStrategyFactories());
-    }
-
-    public FlexyPoolDataSource() {
-        this(new ConfigurationLoader().getFlexyPoolDataSourceConfiguration());
     }
 
     /**
