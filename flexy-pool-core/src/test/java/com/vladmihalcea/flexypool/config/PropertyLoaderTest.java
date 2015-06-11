@@ -8,13 +8,11 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
-import com.vladmihalcea.flexypool.util.JndiTestUtils;
+import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,15 +41,14 @@ public class PropertyLoaderTest {
     @Test
     public void testLoadPropertiesWhenFileExistsButIsEmpty() {
         try {
-            new JndiTestUtils();
             PropertiesTestUtils.setProperties(new Properties());
             PropertyLoader propertyLoader = new PropertyLoader();
             assertTrue(PropertiesTestUtils.getProperties(propertyLoader).isEmpty());
             try {
                 propertyLoader.getDataSource();
-                fail("The DATA_SOURCE_JNDI proeprty should be missing");
+                fail("The DATA_SOURCE_CLASS_NAME property should be missing");
             } catch (IllegalArgumentException e) {
-                assertEquals("The DATA_SOURCE_JNDI property is mandatory!", e.getMessage());
+                assertEquals("The DATA_SOURCE_CLASS_NAME property is mandatory!", e.getMessage());
             }
             assertNull(propertyLoader.getMetricsFactory());
             assertNull(propertyLoader.getPoolAdapterFactory());
@@ -64,10 +61,9 @@ public class PropertyLoaderTest {
     @Test
     public void testLoadPropertiesWhenFileExistsAndContainsAllConfigs() {
         try {
-            JndiTestUtils jndiTestUtils = new JndiTestUtils();
-            jndiTestUtils.namingContext().bind("jdbc/DS", Mockito.mock(DataSource.class));
             Properties properties = new Properties();
             properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI.getKey(), "jdbc/DS");
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_ADAPTER_FACTORY.getKey(), MockPoolAdapterFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());

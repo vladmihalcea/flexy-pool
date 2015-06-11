@@ -16,6 +16,7 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
+import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -328,12 +330,13 @@ public class FlexyPoolDataSourceTest {
     public void testDefaultConstructorWithExistingJNDIDataSource() throws SQLException, IOException {
         PropertiesTestUtils.init();
         JndiTestUtils jndiTestUtils = new JndiTestUtils();
-        DataSource dataSource = Mockito.mock(DataSource.class);
         jndiTestUtils.namingContext().bind("jdbc/DS", dataSource);
         Properties properties = new Properties();
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI.getKey(), "jdbc/DS");
+        properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
         PropertiesTestUtils.setProperties(properties);
         FlexyPoolDataSource<DataSource> flexyPoolDataSource = new FlexyPoolDataSource<DataSource>();
+        DataSource dataSource = ((PoolAdapter) ReflectionTestUtils.getField(flexyPoolDataSource, "poolAdapter")).getTargetDataSource();
         Connection connection = Mockito.mock(Connection.class);
         when(dataSource.getConnection()).thenReturn(connection);
         flexyPoolDataSource.getConnection().close();

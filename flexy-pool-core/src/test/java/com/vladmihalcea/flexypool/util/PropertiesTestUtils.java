@@ -37,7 +37,7 @@ public class PropertiesTestUtils {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(propertiesFile);
-            properties.save(outputStream, "");
+            properties.store(outputStream, "");
         } finally {
             if(outputStream != null) {
                 outputStream.close();

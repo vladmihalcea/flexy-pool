@@ -20,8 +20,8 @@
 
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
 
-            <property name="hibernate.connection.provider_class"
-                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>
+            <!--<property name="hibernate.connection.provider_class"
+                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>-->
         </properties>
     </persistence-unit>
 </persistence>

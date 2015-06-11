@@ -7,9 +7,20 @@
     <jdbc-resource pool-name="ArquillianEmbeddedHSQLDBPool"
                    jndi-name="jdbc/arquillian"/>
 
-    <jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
+    <!--<jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
                           res-type="javax.sql.DataSource"
                           datasource-classname="org.hsqldb.jdbc.JDBCDataSource"
+                          steady-pool-size="3"
+                          max-pool-size="5">
+
+        <property name="user" value="sa"/>
+        <property name="password" value=""/>
+        <property name="url" value="jdbc:hsqldb:mem:test"/>
+    </jdbc-connection-pool>-->
+
+    <jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
+                          res-type="javax.sql.DataSource"
+                          datasource-classname="com.vladmihalcea.flexypool.FlexyPoolDataSource"
                           steady-pool-size="3"
                           max-pool-size="5">
 

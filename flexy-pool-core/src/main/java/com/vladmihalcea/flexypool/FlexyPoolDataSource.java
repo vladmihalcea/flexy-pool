@@ -114,6 +114,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
         @SuppressWarnings("unchecked")
         private Configuration<DS> configuration(DS dataSource) {
+            String uniqueName = propertyLoader.getUniqueName();
             PoolAdapterFactory<DS> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
 
@@ -122,7 +123,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             }
 
             Configuration.Builder<DS> configurationBuilder = new Configuration.Builder<DS>(
-                "", dataSource, poolAdapterFactory
+                uniqueName, dataSource, poolAdapterFactory
             );
             if(metricsFactory != null) {
                 configurationBuilder.setMetricsFactory(metricsFactory);
@@ -338,4 +339,5 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     public void stop() {
         metrics.stop();
     }
+
 }
