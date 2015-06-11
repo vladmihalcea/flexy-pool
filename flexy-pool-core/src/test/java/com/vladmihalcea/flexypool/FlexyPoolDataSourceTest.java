@@ -3,6 +3,7 @@ package com.vladmihalcea.flexypool;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.PropertyLoader;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
@@ -14,6 +15,8 @@ import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.util.JndiTestUtils;
+import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,9 +25,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -307,5 +312,30 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testGetParentLogger() throws SQLException {
         assertEquals(Logger.getLogger(Logger.GLOBAL_LOGGER_NAME), flexyPoolDataSource.getParentLogger());
+    }
+
+    @Test
+    public void testDefaultConstructorWithMissingJNDIDataSource() throws SQLException {
+        try {
+            PropertiesTestUtils.init();
+            new FlexyPoolDataSource<DataSource>();
+            fail("DataSource should be missing from JNDI");
+        } catch (IllegalArgumentException expected) {
+        }
+    }
+
+    @Test
+    public void testDefaultConstructorWithExistingJNDIDataSource() throws SQLException, IOException {
+        PropertiesTestUtils.init();
+        JndiTestUtils jndiTestUtils = new JndiTestUtils();
+        DataSource dataSource = Mockito.mock(DataSource.class);
+        jndiTestUtils.namingContext().bind("jdbc/DS", dataSource);
+        Properties properties = new Properties();
+        properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI.getKey(), "jdbc/DS");
+        PropertiesTestUtils.setProperties(properties);
+        FlexyPoolDataSource<DataSource> flexyPoolDataSource = new FlexyPoolDataSource<DataSource>();
+        Connection connection = Mockito.mock(Connection.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        flexyPoolDataSource.getConnection().close();
     }
 }

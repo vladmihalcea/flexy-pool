@@ -132,8 +132,6 @@
 
     </dependencies>
 
-
-
     <properties>
         <hibernate.version>4.3.9.Final</hibernate.version>
         <arquillian.version>1.0.3.Final</arquillian.version>

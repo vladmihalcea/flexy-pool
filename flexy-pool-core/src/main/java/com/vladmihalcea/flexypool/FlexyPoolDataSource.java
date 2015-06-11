@@ -1,7 +1,10 @@
 package com.vladmihalcea.flexypool;
 
+import com.vladmihalcea.flexypool.adaptor.DataSourcePoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
+import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.PropertyLoader;
 import com.vladmihalcea.flexypool.connection.ConnectionPoolCallback;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
@@ -11,6 +14,7 @@ import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
+import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
@@ -21,8 +25,10 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
@@ -61,6 +67,70 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
 
+    private static class FlexyPoolDataSourceConfiguration<DS extends DataSource> {
+        private final Configuration<DS> configuration;
+
+        private final List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>>
+                connectionAcquiringStrategyFactories;
+
+        public FlexyPoolDataSourceConfiguration(
+                Configuration<DS> configuration,
+                List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>> connectionAcquiringStrategyFactories) {
+            this.configuration = configuration;
+            this.connectionAcquiringStrategyFactories = connectionAcquiringStrategyFactories;
+        }
+
+        public Configuration<DS> getConfiguration() {
+            return configuration;
+        }
+
+        public List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>> getConnectionAcquiringStrategyFactories() {
+            return connectionAcquiringStrategyFactories;
+        }
+    }
+
+    private static class ConfigurationLoader<DS extends DataSource> {
+
+        private final PropertyLoader propertyLoader = new PropertyLoader();
+
+        private final FlexyPoolDataSourceConfiguration<DS> flexyPoolDataSourceConfiguration;
+
+        public ConfigurationLoader() {
+            flexyPoolDataSourceConfiguration = new FlexyPoolDataSourceConfiguration<DS>(
+                configuration(),
+                connectionAcquiringStrategyFactories()
+            );
+        }
+
+        @SuppressWarnings("unchecked")
+        private Configuration<DS> configuration() {
+            DS dataSource = (DS) propertyLoader.getDataSource();
+            PoolAdapterFactory<DS> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
+            MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
+
+            if(poolAdapterFactory == null) {
+                poolAdapterFactory = (PoolAdapterFactory<DS>) DataSourcePoolAdapter.FACTORY;
+            }
+
+            Configuration.Builder<DS> configurationBuilder = new Configuration.Builder<DS>(
+                "", dataSource, poolAdapterFactory
+            );
+            if(metricsFactory != null) {
+                configurationBuilder.setMetricsFactory(metricsFactory);
+            }
+            return configurationBuilder.build();
+        }
+
+        private List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>>
+            connectionAcquiringStrategyFactories() {
+            return propertyLoader.getConnectionAcquiringStrategyFactories();
+        }
+
+        public FlexyPoolDataSourceConfiguration<DS> getFlexyPoolDataSourceConfiguration() {
+            return flexyPoolDataSourceConfiguration;
+        }
+    }
+
     public static final String OVERALL_CONNECTION_ACQUIRE_MILLIS = "overallConnectionAcquireMillis";
     public static final String CONCURRENT_CONNECTIONS_HISTOGRAM = "concurrentConnectionsHistogram";
     public static final String CONCURRENT_CONNECTION_REQUESTS_HISTOGRAM = "concurrentConnectionRequestsHistogram";
@@ -82,6 +152,11 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     public FlexyPoolDataSource(final Configuration<T> configuration,
                                ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>... connectionAcquiringStrategyFactories) {
+        this(configuration, Arrays.asList(connectionAcquiringStrategyFactories));
+    }
+
+    private FlexyPoolDataSource(final Configuration<T> configuration,
+                               List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> connectionAcquiringStrategyFactories) {
         this.poolAdapter = configuration.getPoolAdapter();
         this.targetDataSource = poolAdapter.getTargetDataSource();
         this.metrics = configuration.getMetrics();
@@ -90,13 +165,22 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         this.concurrentConnectionRequestCountHistogram = metrics.histogram(CONCURRENT_CONNECTION_REQUESTS_HISTOGRAM);
         this.connectionLeaseTimer = metrics.timer(CONNECTION_LEASE_MILLIS);
         this.connectionProxyFactory = configuration.getConnectionProxyFactory();
-        if (connectionAcquiringStrategyFactories.length == 0) {
+        if (connectionAcquiringStrategyFactories.isEmpty()) {
             LOGGER.info("FlexyPool is not using any strategy!");
         }
         for (ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>
                 connectionAcquiringStrategyFactory : connectionAcquiringStrategyFactories) {
             connectionAcquiringStrategies.add(connectionAcquiringStrategyFactory.newInstance(configuration));
         }
+    }
+
+    private FlexyPoolDataSource(FlexyPoolDataSourceConfiguration flexyPoolDataSourceConfiguration) {
+        this(flexyPoolDataSourceConfiguration.getConfiguration(),
+            flexyPoolDataSourceConfiguration.getConnectionAcquiringStrategyFactories());
+    }
+
+    public FlexyPoolDataSource() {
+        this(new ConfigurationLoader().getFlexyPoolDataSourceConfiguration());
     }
 
     /**

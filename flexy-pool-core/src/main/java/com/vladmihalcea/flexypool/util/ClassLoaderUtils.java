@@ -1,5 +1,7 @@
 package com.vladmihalcea.flexypool.util;
 
+import java.io.InputStream;
+
 /**
  * ClassLoaderUtils - Class loading utilities.
  *
@@ -29,5 +31,14 @@ public class ClassLoaderUtils {
     @SuppressWarnings("unchecked")
     public static <T> Class<T> loadClass(String className) throws ClassNotFoundException {
         return (Class<T>) getClassLoader().loadClass(className);
+    }
+
+    /**
+     * Get the resource InputStream
+     * @param resourceName resource name
+     * @return resource InputStream
+     */
+    public static InputStream getResourceAsStream(String resourceName) {
+        return getClassLoader().getResourceAsStream(resourceName);
     }
 }
