@@ -332,7 +332,7 @@ public class FlexyPoolDataSourceTest {
         JndiTestUtils jndiTestUtils = new JndiTestUtils();
         jndiTestUtils.namingContext().bind("jdbc/DS", dataSource);
         Properties properties = new Properties();
-        properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI.getKey(), "jdbc/DS");
+        properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
         PropertiesTestUtils.setProperties(properties);
         FlexyPoolDataSource<DataSource> flexyPoolDataSource = new FlexyPoolDataSource<DataSource>();

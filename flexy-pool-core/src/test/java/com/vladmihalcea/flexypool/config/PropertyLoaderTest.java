@@ -62,13 +62,22 @@ public class PropertyLoaderTest {
     public void testLoadPropertiesWhenFileExistsAndContainsAllConfigs() {
         try {
             Properties properties = new Properties();
-            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI.getKey(), "jdbc/DS");
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
             properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
+            properties.put("flexy.pool.data.source.property.user", "sa");
+            properties.put("flexy.pool.data.source.property.password", "admin");
+            properties.put("flexy.pool.data.source.property.url", "jdbc://host:1234/database");
             properties.put(PropertyLoader.PropertyKey.POOL_ADAPTER_FACTORY.getKey(), MockPoolAdapterFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
+            assertNotNull(propertyLoader.getDataSource());
+            MockDataSource mockDataSource = propertyLoader.getDataSource();
+            assertEquals("sa", mockDataSource.getUser());
+            assertEquals("admin", mockDataSource.getPassword());
+            assertEquals("jdbc://host:1234/database", mockDataSource.getUrl());
+            assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getMetricsFactory());
             assertNotNull(propertyLoader.getPoolAdapterFactory());

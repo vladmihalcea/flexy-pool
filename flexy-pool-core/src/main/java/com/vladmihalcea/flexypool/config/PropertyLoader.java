@@ -12,10 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -31,8 +35,9 @@ public class PropertyLoader {
     public static final String PROPERTIES_FILE_NAME = "flexy-pool.properties";
 
     public enum PropertyKey {
-        DATA_SOURCE_JNDI("flexy.pool.data.source.jndi"),
+        DATA_SOURCE_UNIQUE_NAME("flexy.pool.data.source.unique.name"),
         DATA_SOURCE_CLASS_NAME("flexy.pool.data.source.class.name"),
+        DATA_SOURCE_PROPERTY("flexy.pool.data.source.property."),
         POOL_ADAPTER_FACTORY("flexy.pool.adapter.factory"),
         POOL_METRICS_FACTORY("flexy.pool.metrics.factory"),
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver");
@@ -80,7 +85,7 @@ public class PropertyLoader {
      * @return DataSource unique name
      */
     public String getUniqueName() {
-        return properties.getProperty(PropertyKey.DATA_SOURCE_JNDI.getKey());
+        return properties.getProperty(PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey());
     }
 
     /**
@@ -92,6 +97,34 @@ public class PropertyLoader {
         T dataSource = instantiateClass(PropertyKey.DATA_SOURCE_CLASS_NAME);
         if(dataSource == null) {
             throw new IllegalArgumentException("The " +  PropertyKey.DATA_SOURCE_CLASS_NAME+ " property is mandatory!");
+        }
+        return applyDataSourceProperties(dataSource);
+    }
+
+    /**
+     * Apply DataSource specific properties
+     */
+    private <T extends DataSource> T applyDataSourceProperties(T dataSource) {
+        Class<?> dataSourceClass = dataSource.getClass();
+
+        for(Map.Entry<Object, Object> entry : properties.entrySet()) {
+            String key = entry.getKey().toString();
+            String value = entry.getValue().toString();
+
+            String propertyKey = PropertyKey.DATA_SOURCE_PROPERTY.getKey();
+            if(key.startsWith(propertyKey)) {
+                String dataSourceProperty = key.substring(propertyKey.length());
+                try {
+                    PropertyDescriptor propertyDescriptor = new PropertyDescriptor(dataSourceProperty, dataSourceClass);
+                    propertyDescriptor.getWriteMethod().invoke(dataSource, value);
+                } catch (IntrospectionException e) {
+                    LOGGER.error("Can't find " + dataSourceProperty + " property in " + dataSourceClass, e);
+                } catch (InvocationTargetException e) {
+                    LOGGER.error("Can't set  " + dataSourceProperty + " property in " + dataSourceClass, e);
+                } catch (IllegalAccessException e) {
+                    LOGGER.error("Can't access  " + dataSourceProperty + " property in " + dataSourceClass, e);
+                }
+            }
         }
         return dataSource;
     }

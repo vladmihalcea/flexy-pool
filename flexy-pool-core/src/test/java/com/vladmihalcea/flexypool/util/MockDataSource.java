@@ -18,6 +18,12 @@ public class MockDataSource implements DataSource {
 
     private final DataSource dataSource;
 
+    private String user;
+
+    private String password;
+
+    private String url;
+
     public MockDataSource() {
         this.dataSource = Mockito.mock(DataSource.class);
     }
@@ -28,6 +34,30 @@ public class MockDataSource implements DataSource {
 
     public DataSource getDataSource() {
         return dataSource;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
@@ -73,6 +103,5 @@ public class MockDataSource implements DataSource {
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return dataSource.isWrapperFor(iface);
     }
-
 
 }
