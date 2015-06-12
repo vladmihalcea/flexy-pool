@@ -21,6 +21,9 @@ public class JmxMetricReporter implements MetricsLifeCycleCallback {
                     .inDomain(MetricRegistry.name(getClass(), configurationProperties.getUniqueName()))
                     .build();
         }
+        if(configurationProperties.isJmxAutoStart()) {
+            start();
+        }
         return this;
     }
 

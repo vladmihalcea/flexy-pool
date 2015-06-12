@@ -37,6 +37,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private MetricsFactory metricsFactory = CodahaleMetrics.FACTORY;
         private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
         private boolean jmxEnabled = true;
+        private boolean jmxAutoStart = false;
         private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
 
         /**
@@ -84,6 +85,17 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         }
 
         /**
+         * Enable/Disable jmx auto-start
+         *
+         * @param jmxAutoStart jmx auto-started
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setJmxAutoStart(boolean jmxAutoStart) {
+            this.jmxAutoStart = jmxAutoStart;
+            return this;
+        }
+
+        /**
          * Set metric log report millis
          *
          * @param metricLogReporterMillis millis between two consecutive log reports
@@ -102,6 +114,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         public Configuration<T> build() {
             Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
             configuration.setJmxEnabled(jmxEnabled);
+            configuration.setJmxAutoStart(jmxAutoStart);
             configuration.setMetricLogReporterMillis(metricLogReporterMillis);
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);

@@ -29,10 +29,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import javax.management.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import java.lang.management.ManagementFactory;
+
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 public class GlassfishIntegrationTest {
@@ -73,6 +77,8 @@ public class GlassfishIntegrationTest {
                 return book;
             }
         });
+        MBeanInfo connectionLeaseMillisMBean = connectionLeaseMillisMBean();
+        assertNotNull(connectionLeaseMillisMBean);
     }
 
     private <V> V doInTransaction(Callable<V> callable) {
@@ -115,6 +121,15 @@ public class GlassfishIntegrationTest {
 
     public interface VoidCallable {
         void call();
+    }
+
+    private MBeanInfo connectionLeaseMillisMBean() {
+        try {
+            ObjectName objectName = new ObjectName("com.vladmihalcea.flexypool.metric.codahale.JmxMetricReporter.jdbc/arquillian:name=connectionLeaseMillis");
+            return ManagementFactory.getPlatformMBeanServer().getMBeanInfo(objectName);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 }

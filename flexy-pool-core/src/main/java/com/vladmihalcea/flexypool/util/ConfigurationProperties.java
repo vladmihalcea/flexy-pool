@@ -15,6 +15,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private final String uniqueName;
     private boolean jmxEnabled;
+    private boolean jmxAutoStart;
     private long metricLogReporterMillis;
 
     public ConfigurationProperties(String uniqueName) {
@@ -46,6 +47,24 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      */
     protected void setJmxEnabled(boolean jmxEnabled) {
         this.jmxEnabled = jmxEnabled;
+    }
+
+    /**
+     * Jmx auto-start
+     *
+     * @return jmx auto-start
+     */
+    public boolean isJmxAutoStart() {
+        return jmxAutoStart;
+    }
+
+    /**
+     * Set jmx auto-start.
+     *
+     * @param jmxAutoStart jmx auto-start
+     */
+    public void setJmxAutoStart(boolean jmxAutoStart) {
+        this.jmxAutoStart = jmxAutoStart;
     }
 
     /**

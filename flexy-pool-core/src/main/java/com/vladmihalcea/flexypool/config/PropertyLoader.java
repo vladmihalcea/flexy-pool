@@ -7,7 +7,6 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
-import com.vladmihalcea.flexypool.util.JndiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +39,9 @@ public class PropertyLoader {
         DATA_SOURCE_PROPERTY("flexy.pool.data.source.property."),
         POOL_ADAPTER_FACTORY("flexy.pool.adapter.factory"),
         POOL_METRICS_FACTORY("flexy.pool.metrics.factory"),
+        POOL_METRICS_REPORTER_LOG_MILLIS("flexy.pool.metrics.reporter.log.millis"),
+        POOL_METRICS_REPORTER_JMX_ENABLE("flexy.pool.metrics.reporter.jmx.enable"),
+        POOL_METRICS_REPORTER_JMX_AUTO_START("flexy.pool.metrics.reporter.jmx.auto.start"),
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver");
 
         private final String key;
@@ -148,6 +150,30 @@ public class PropertyLoader {
     }
 
     /**
+     * Get log reporter millis
+     * @return log reporter millis
+     */
+    public Integer getMetricLogReporterMillis() {
+        return integerProperty(PropertyKey.POOL_METRICS_REPORTER_LOG_MILLIS);
+    }
+
+    /**
+     * Is JMX Reporter enabled
+     * @return JMX Reporter enabled
+     */
+    public Boolean isJmxEnabled() {
+        return booleanProperty(PropertyKey.POOL_METRICS_REPORTER_JMX_ENABLE);
+    }
+
+    /**
+     * Is JMX Reporter auto-started
+     * @return JMX Reporter auto-started
+     */
+    public Boolean isJmxAutoStart() {
+        return booleanProperty(PropertyKey.POOL_METRICS_REPORTER_JMX_AUTO_START);
+    }
+
+    /**
      * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link FlexyPoolDataSource}
      *
      * @return the array of {@link ConnectionAcquiringStrategyFactory}
@@ -164,7 +190,7 @@ public class PropertyLoader {
     }
 
     /**
-     * Instantiate class associated to teh given proeprty key
+     * Instantiate class associated to the given property key
      *
      * @param propertyKey property key
      * @param <T>         class parameter type
@@ -190,18 +216,32 @@ public class PropertyLoader {
     }
 
     /**
-     * Lookup object from JNDI
+     * Get Integer property value
      *
      * @param propertyKey property key
-     * @param <T>         JNDI object type
-     * @return JNDI object
+     * @return Integer property value
      */
-    @SuppressWarnings("unchecked")
-    private <T> T jndiLookup(PropertyKey propertyKey) {
+    private Integer integerProperty(PropertyKey propertyKey) {
+        Integer value = null;
         String property = properties.getProperty(propertyKey.getKey());
-        if(property == null) {
-            throw new IllegalArgumentException("The " + propertyKey + " property is mandatory!");
+        if (property != null) {
+            value = Integer.valueOf(property);
         }
-        return (T) JndiUtils.lookup(property);
+        return value;
+    }
+
+    /**
+     * Get Boolean property value
+     *
+     * @param propertyKey property key
+     * @return Boolean property value
+     */
+    private Boolean booleanProperty(PropertyKey propertyKey) {
+        Boolean value = null;
+        String property = properties.getProperty(propertyKey.getKey());
+        if (property != null) {
+            value = Boolean.valueOf(property);
+        }
+        return value;
     }
 }

@@ -97,7 +97,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
         @SuppressWarnings("unchecked")
         public ConfigurationLoader() {
-            DS dataSource = (DS) propertyLoader.getDataSource();
+            DS dataSource = propertyLoader.getDataSource();
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
@@ -117,6 +117,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             String uniqueName = propertyLoader.getUniqueName();
             PoolAdapterFactory<DS> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
+            Integer metricLogReporterMillis = propertyLoader.getMetricLogReporterMillis();
+            Boolean jmxEnabled = propertyLoader.isJmxEnabled();
+            Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
 
             if(poolAdapterFactory == null) {
                 poolAdapterFactory = (PoolAdapterFactory<DS>) DataSourcePoolAdapter.FACTORY;
@@ -127,6 +130,15 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             );
             if(metricsFactory != null) {
                 configurationBuilder.setMetricsFactory(metricsFactory);
+            }
+            if(metricLogReporterMillis != null) {
+                configurationBuilder.setMetricLogReporterMillis(metricLogReporterMillis);
+            }
+            if(jmxEnabled != null) {
+                configurationBuilder.setJmxEnabled(jmxEnabled);
+            }
+            if(jmxAutoStart != null) {
+                configurationBuilder.setJmxAutoStart(jmxAutoStart);
             }
             return configurationBuilder.build();
         }

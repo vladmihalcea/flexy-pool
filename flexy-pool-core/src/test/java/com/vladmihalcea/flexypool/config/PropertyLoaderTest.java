@@ -69,6 +69,10 @@ public class PropertyLoaderTest {
             properties.put("flexy.pool.data.source.property.url", "jdbc://host:1234/database");
             properties.put(PropertyLoader.PropertyKey.POOL_ADAPTER_FACTORY.getKey(), MockPoolAdapterFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
+            properties.put(PropertyLoader.PropertyKey.POOL_METRICS_REPORTER_LOG_MILLIS.getKey(), "123");
+            properties.put(PropertyLoader.PropertyKey.POOL_METRICS_REPORTER_JMX_AUTO_START.getKey(), "true");
+            properties.put(PropertyLoader.PropertyKey.POOL_METRICS_REPORTER_JMX_ENABLE.getKey(), "false");
+            properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
@@ -80,6 +84,9 @@ public class PropertyLoaderTest {
             assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getMetricsFactory());
+            assertEquals(123, propertyLoader.getMetricLogReporterMillis().intValue());
+            assertTrue(propertyLoader.isJmxAutoStart());
+            assertFalse(propertyLoader.isJmxEnabled());
             assertNotNull(propertyLoader.getPoolAdapterFactory());
             assertEquals(1, propertyLoader.getConnectionAcquiringStrategyFactories().size());
         } catch (IOException e) {
