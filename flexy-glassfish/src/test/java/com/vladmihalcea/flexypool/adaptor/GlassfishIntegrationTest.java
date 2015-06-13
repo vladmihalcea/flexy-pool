@@ -29,7 +29,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-import javax.management.*;
+import javax.management.MBeanInfo;
+import javax.management.ObjectName;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.SystemException;
@@ -45,6 +46,7 @@ public class GlassfishIntegrationTest {
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(JavaArchive.class)
             .addPackage(Book.class.getPackage())
+                .addClasses(DataSourceConfiguration.class)
             .addAsManifestResource("test-persistence.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }

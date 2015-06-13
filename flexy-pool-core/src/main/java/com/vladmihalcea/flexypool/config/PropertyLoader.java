@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -117,9 +115,8 @@ public class PropertyLoader {
             if(key.startsWith(propertyKey)) {
                 String dataSourceProperty = key.substring(propertyKey.length());
                 try {
-                    PropertyDescriptor propertyDescriptor = new PropertyDescriptor(dataSourceProperty, dataSourceClass);
-                    propertyDescriptor.getWriteMethod().invoke(dataSource, value);
-                } catch (IntrospectionException e) {
+                    dataSourceClass.getMethod(toWriteMethod(dataSourceProperty), value.getClass()).invoke(dataSource, value);
+                } catch (NoSuchMethodException e) {
                     LOGGER.error("Can't find " + dataSourceProperty + " property in " + dataSourceClass, e);
                 } catch (InvocationTargetException e) {
                     LOGGER.error("Can't set  " + dataSourceProperty + " property in " + dataSourceClass, e);
@@ -129,6 +126,10 @@ public class PropertyLoader {
             }
         }
         return dataSource;
+    }
+
+    public String toWriteMethod(String name) {
+        return "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
     /**
