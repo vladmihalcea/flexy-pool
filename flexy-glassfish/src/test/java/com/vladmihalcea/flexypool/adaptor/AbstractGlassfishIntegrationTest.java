@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.decorator.Decorator;
 import javax.inject.Inject;
 import javax.management.MBeanInfo;
 import javax.management.ObjectName;
@@ -40,19 +41,9 @@ import java.lang.management.ManagementFactory;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public class GlassfishIntegrationTest {
+public abstract class AbstractGlassfishIntegrationTest {
 
-    @Deployment
-    public static Archive<?> createDeployment() {
-        return ShrinkWrap.create(JavaArchive.class)
-            .addPackage(Book.class.getPackage())
-                .addClasses(DataSourceConfiguration.class)
-            .addAsManifestResource("test-persistence.xml", "persistence.xml")
-            .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-    }
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    protected abstract EntityManager getEntityManager();
     
     @Inject
     private UserTransaction userTransaction;
@@ -62,7 +53,7 @@ public class GlassfishIntegrationTest {
         doInTransaction(new VoidCallable() {
             @Override
             public void call() {
-                entityManager.createQuery("delete from Book").executeUpdate();
+                getEntityManager().createQuery("delete from Book").executeUpdate();
             }
         });
     }
@@ -75,7 +66,7 @@ public class GlassfishIntegrationTest {
                 Book book = new Book();
                 book.setId(1L);
                 book.setName("High-Performance Java Persistence");
-                entityManager.persist(book);
+                getEntityManager().persist(book);
                 return book;
             }
         });
@@ -84,10 +75,10 @@ public class GlassfishIntegrationTest {
     }
 
     private <V> V doInTransaction(Callable<V> callable) {
-        V result = null;
+        V result;
         try {
             userTransaction.begin();
-            entityManager.joinTransaction();
+            getEntityManager().joinTransaction();
             result = callable.call();
             userTransaction.commit();
         } catch (Exception e) {
@@ -104,7 +95,7 @@ public class GlassfishIntegrationTest {
     private void doInTransaction(VoidCallable callable) {
         try {
             userTransaction.begin();
-            entityManager.joinTransaction();
+            getEntityManager().joinTransaction();
             callable.call();
             userTransaction.commit();
         } catch (Exception e) {

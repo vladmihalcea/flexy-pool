@@ -161,6 +161,7 @@
                             ${project.build.directory}/derby.log
                         </derby.stream.error.file>
                     </systemPropertyVariables>
+                    <!--<forkMode>pertest</forkMode>-->
                 </configuration>
             </plugin>
         </plugins>

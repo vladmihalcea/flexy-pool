@@ -18,11 +18,14 @@
         <property name="url" value="jdbc:hsqldb:mem:test"/>
     </jdbc-connection-pool>
 
-    <!--<jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
+    <jdbc-resource pool-name="FlexyPoolEmbeddedHSQLDBPool"
+                   jndi-name="jdbc/flexypool"/>
+
+    <jdbc-connection-pool name="FlexyPoolEmbeddedHSQLDBPool"
                           res-type="javax.sql.DataSource"
                           datasource-classname="com.vladmihalcea.flexypool.FlexyPoolDataSource"
                           steady-pool-size="3"
                           max-pool-size="5">
-    </jdbc-connection-pool>-->
+    </jdbc-connection-pool>
 
 </resources>
