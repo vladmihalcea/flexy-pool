@@ -33,11 +33,12 @@ public class PropertiesTestUtils {
         return (Properties) ReflectionTestUtils.getField(propertyLoader, "properties");
     }
 
-    public static void setProperties(Properties properties) throws IOException {
+    public static File setProperties(Properties properties) throws IOException {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(propertiesFile);
             properties.store(outputStream, "");
+            return propertiesFile;
         } finally {
             if(outputStream != null) {
                 outputStream.close();

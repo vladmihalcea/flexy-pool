@@ -13,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ public class PropertyLoader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyLoader.class);
 
+    public static final String PROPERTIES_FILE_PATH = "flexy.pool.properties.path";
     public static final String PROPERTIES_FILE_NAME = "flexy-pool.properties";
 
     public enum PropertyKey {
@@ -66,20 +69,55 @@ public class PropertyLoader {
      * Load Properties from class-path configuration file.
      */
     private void load() {
-        InputStream propertiesInputStream = ClassLoaderUtils.getResourceAsStream(PROPERTIES_FILE_NAME);
-        if (propertiesInputStream != null) {
+        InputStream propertiesInputStream = null;
+        try {
+            propertiesInputStream = propertiesInputStream();
+            if(propertiesInputStream == null) {
+                throw new IllegalArgumentException("The properties file could not be loaded!");
+            }
+            properties.load(propertiesInputStream);
+        } catch (IOException e) {
+            LOGGER.error("Can't load properties", e);
+        } finally {
             try {
-                properties.load(propertiesInputStream);
-            } catch (IOException e) {
-                LOGGER.error("Can't load properties", e);
-            } finally {
-                try {
+                if (propertiesInputStream != null) {
                     propertiesInputStream.close();
-                } catch (IOException e) {
-                    LOGGER.error("Can't close the properties InputStream", e);
                 }
+            } catch (IOException e) {
+                LOGGER.error("Can't close the properties InputStream", e);
             }
         }
+    }
+
+    /**
+     * Get Properties file InputStream
+     * @return Properties file InputStream
+     * @throws IOException the file couldn't be loaded properly
+     */
+    private InputStream propertiesInputStream() throws IOException {
+        String propertiesFilePath = System.getProperty(PROPERTIES_FILE_PATH);
+        URL propertiesFileUrl = null;
+        if (propertiesFilePath != null) {
+            try {
+                propertiesFileUrl = new URL(propertiesFilePath);
+            } catch (MalformedURLException ignore) {
+                propertiesFileUrl = ClassLoaderUtils.getResource(propertiesFilePath);
+                if (propertiesFileUrl == null) {
+                    File f = new File(propertiesFilePath);
+                    if (f.exists() && f.isFile()) {
+                        try {
+                            propertiesFileUrl = f.toURI().toURL();
+                        } catch (MalformedURLException e) {
+                            LOGGER.error("The property " + propertiesFilePath + " can't be resolved to either a URL/a Classpath resource or a File");
+                        }
+                    }
+                }
+            }
+            if(propertiesFileUrl != null) {
+                return propertiesFileUrl.openStream();
+            }
+        }
+        return ClassLoaderUtils.getResourceAsStream(PROPERTIES_FILE_NAME);
     }
 
     /**

@@ -13,6 +13,7 @@ import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,69 @@ public class PropertyLoaderTest {
     public void testLoadPropertiesWhenFileIsMissing() {
         PropertyLoader propertyLoader = new PropertyLoader();
         assertTrue(PropertiesTestUtils.getProperties(propertyLoader).isEmpty());
+    }
+
+    @Test
+    public void testLoadPropertiesFromURLSystemProperty() {
+        try {
+            Properties properties = new Properties();
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
+            File propertiesFile = PropertiesTestUtils.setProperties(properties);
+            try {
+                System.setProperty(PropertyLoader.PROPERTIES_FILE_PATH, propertiesFile.toURI().toURL().toString());
+                PropertyLoader propertyLoader = new PropertyLoader();
+                assertEquals("jdbc/DS", propertyLoader.getUniqueName());
+            } finally {
+                System.clearProperty(PropertyLoader.PROPERTIES_FILE_PATH);
+            }
+        } catch (IOException e) {
+            fail("Can't save/load properties");
+        }
+    }
+
+    @Test
+    public void testLoadPropertiesFromFileSystemProperty() {
+        try {
+            Properties properties = new Properties();
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
+            File propertiesFile = PropertiesTestUtils.setProperties(properties);
+            try {
+                System.setProperty(PropertyLoader.PROPERTIES_FILE_PATH, propertiesFile.getAbsolutePath());
+                PropertyLoader propertyLoader = new PropertyLoader();
+                assertEquals("jdbc/DS", propertyLoader.getUniqueName());
+            } finally {
+                System.clearProperty(PropertyLoader.PROPERTIES_FILE_PATH);
+            }
+        } catch (IOException e) {
+            fail("Can't save/load properties");
+        }
+    }
+
+    @Test
+    public void testLoadPropertiesFromNestedClassPathSystemProperty() {
+        try {
+            Properties properties = new Properties();
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
+            File propertiesFile = PropertiesTestUtils.setProperties(properties);
+            String resourceFolder = "nested";
+            File newFileFolder = new File(propertiesFile.getParentFile().getAbsolutePath() + "/" + resourceFolder);
+            newFileFolder.mkdirs();
+            String resourceFile = "fp.properties";
+            File newFile = new File(newFileFolder, resourceFile);
+            propertiesFile.renameTo(newFile);
+            String resourcePath = resourceFolder + "/" + resourceFile;
+            try {
+                System.setProperty(PropertyLoader.PROPERTIES_FILE_PATH, resourcePath);
+                PropertyLoader propertyLoader = new PropertyLoader();
+                assertEquals("jdbc/DS", propertyLoader.getUniqueName());
+            } finally {
+                System.clearProperty(PropertyLoader.PROPERTIES_FILE_PATH);
+                newFile.delete();
+                newFileFolder.delete();
+            }
+        } catch (IOException e) {
+            fail("Can't save/load properties");
+        }
     }
 
     @Test
