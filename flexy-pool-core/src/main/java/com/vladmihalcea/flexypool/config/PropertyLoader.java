@@ -8,6 +8,7 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import com.vladmihalcea.flexypool.util.JndiUtils;
+import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,23 +121,13 @@ public class PropertyLoader {
             String propertyKey = PropertyKey.DATA_SOURCE_PROPERTY.getKey();
             if(key.startsWith(propertyKey)) {
                 String dataSourceProperty = key.substring(propertyKey.length());
-                try {
-                    dataSourceClass.getMethod(toWriteMethod(dataSourceProperty), value.getClass()).invoke(dataSource, value);
-                } catch (NoSuchMethodException e) {
-                    LOGGER.error("Can't find " + dataSourceProperty + " property in " + dataSourceClass, e);
-                } catch (InvocationTargetException e) {
-                    LOGGER.error("Can't set  " + dataSourceProperty + " property in " + dataSourceClass, e);
-                } catch (IllegalAccessException e) {
-                    LOGGER.error("Can't access  " + dataSourceProperty + " property in " + dataSourceClass, e);
-                }
+                ReflectionUtils.invokeSetter(dataSource, dataSourceProperty, value);
             }
         }
         return dataSource;
     }
 
-    public String toWriteMethod(String name) {
-        return "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-    }
+
 
     /**
      * Get the {@link PoolAdapterFactory}

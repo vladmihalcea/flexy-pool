@@ -3,8 +3,7 @@ package com.vladmihalcea.flexypool.util;
 import com.vladmihalcea.flexypool.exception.ReflectionException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * ReflectionUtilsTest - ReflectionUtils Test
@@ -47,5 +46,24 @@ public class ReflectionUtilsTest {
         ReflectionUtils.setFieldValue(testObject, "name", "testObjectNameChanged");
         assertEquals("testObjectNameChanged", ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "getName")));
         assertNull(ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "start")));
+    }
+
+    @Test
+    public void testGetSetter() {
+        TestObject testObject = new TestObject();
+        try {
+            ReflectionUtils.getSetter(testObject, "name", String.class);
+            fail("There is no setName in TestObject");
+        } catch (ReflectionException expected) {
+            assertEquals(NoSuchMethodException.class, expected.getCause().getClass());
+        }
+        assertNotNull(ReflectionUtils.getSetter(testObject, "version", Integer.class));
+    }
+
+    @Test
+    public void testInvokeSetter() {
+        TestObject testObject = new TestObject();
+        ReflectionUtils.invokeSetter(testObject, "version", 12);
+        assertEquals(12, ReflectionUtils.getFieldValue(testObject, "version"));
     }
 }

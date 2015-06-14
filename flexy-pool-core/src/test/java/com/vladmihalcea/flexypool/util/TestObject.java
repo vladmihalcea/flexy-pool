@@ -14,6 +14,10 @@ public class TestObject {
         return name;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     public void start() {
     }
 }
