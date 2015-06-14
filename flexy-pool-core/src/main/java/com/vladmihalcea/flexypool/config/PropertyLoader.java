@@ -34,6 +34,7 @@ public class PropertyLoader {
 
     public enum PropertyKey {
         DATA_SOURCE_UNIQUE_NAME("flexy.pool.data.source.unique.name"),
+        DATA_SOURCE_JNDI_NAME("flexy.pool.data.source.jndi.name"),
         DATA_SOURCE_CLASS_NAME("flexy.pool.data.source.class.name"),
         DATA_SOURCE_PROPERTY("flexy.pool.data.source.property."),
         POOL_ADAPTER_FACTORY("flexy.pool.adapter.factory"),
@@ -95,7 +96,11 @@ public class PropertyLoader {
      * @return DataSource
      */
     public <T extends DataSource> T getDataSource() {
-        T dataSource = instantiateClass(PropertyKey.DATA_SOURCE_CLASS_NAME);
+        T dataSource = jndiLookup(PropertyKey.DATA_SOURCE_JNDI_NAME);
+        if(dataSource != null) {
+            return dataSource;
+        }
+        dataSource = instantiateClass(PropertyKey.DATA_SOURCE_CLASS_NAME);
         if(dataSource == null) {
             throw new IllegalArgumentException("The " +  PropertyKey.DATA_SOURCE_CLASS_NAME+ " property is mandatory!");
         }
@@ -245,5 +250,21 @@ public class PropertyLoader {
             value = Boolean.valueOf(property);
         }
         return value;
+    }
+
+    /**
+     * Lookup object from JNDI
+     *
+     * @param propertyKey property key
+     * @param <T>         JNDI object type
+     * @return JNDI object
+     */
+    @SuppressWarnings("unchecked")
+    private <T> T jndiLookup(PropertyKey propertyKey) {
+        String property = properties.getProperty(propertyKey.getKey());
+        if(property != null) {
+            return (T) JndiUtils.lookup(property);
+        }
+        return null;
     }
 }

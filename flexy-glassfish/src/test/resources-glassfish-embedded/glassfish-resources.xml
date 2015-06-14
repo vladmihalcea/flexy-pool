@@ -13,7 +13,7 @@
                           steady-pool-size="3"
                           max-pool-size="5">
 
-        <property name="user" value="sa"/>
+        <property name="user" value=""/>
         <property name="password" value=""/>
         <property name="url" value="jdbc:hsqldb:mem:test"/>
     </jdbc-connection-pool>

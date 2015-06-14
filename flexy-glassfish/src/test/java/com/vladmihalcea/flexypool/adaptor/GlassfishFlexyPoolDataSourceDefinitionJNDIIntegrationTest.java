@@ -28,7 +28,8 @@ import org.junit.Ignore;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class GlassfishHibernateIntegrationTest extends AbstractGlassfishIntegrationTest {
+@Ignore("It doesn't work with Glassfish")
+public class GlassfishFlexyPoolDataSourceDefinitionJNDIIntegrationTest extends AbstractGlassfishIntegrationTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -37,9 +38,10 @@ public class GlassfishHibernateIntegrationTest extends AbstractGlassfishIntegrat
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(JavaArchive.class)
             .addPackage(Book.class.getPackage())
-            .addAsManifestResource("test-persistence-hibernate.xml", "persistence.xml")
+            .addClasses(DataSourceConfiguration.class)
+            .addAsManifestResource("test-persistence-flexy-pool-data-source-definition.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsResource("flexy-pool-hibernate.properties", "flexy-pool.properties");
+            .addAsResource("flexy-pool-create-data-source-jndi.properties", "flexy-pool.properties");
     }
 
     @Override

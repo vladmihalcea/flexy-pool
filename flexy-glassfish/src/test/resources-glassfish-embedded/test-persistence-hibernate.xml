@@ -12,7 +12,7 @@
         <jta-data-source>jdbc/arquillian</jta-data-source>
 
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <property name="hibernate.show_sql" value="true"/>
 
@@ -20,8 +20,8 @@
 
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
 
-            <property name="hibernate.connection.provider_class"
-                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>
+            <!--<property name="hibernate.connection.provider_class"
+                      value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>-->
         </properties>
     </persistence-unit>
 </persistence>
