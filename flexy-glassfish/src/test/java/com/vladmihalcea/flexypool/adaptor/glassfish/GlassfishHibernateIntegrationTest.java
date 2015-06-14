@@ -15,15 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vladmihalcea.flexypool.adaptor;
+package com.vladmihalcea.flexypool.adaptor.glassfish;
 
+import com.vladmihalcea.flexypool.adaptor.glassfish.AbstractGlassfishIntegrationTest;
+import com.vladmihalcea.flexypool.adaptor.glassfish.datasource.DefaultDataSourceConfiguration;
 import com.vladmihalcea.flexypool.model.Book;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Ignore;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,9 +38,10 @@ public class GlassfishHibernateIntegrationTest extends AbstractGlassfishIntegrat
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(JavaArchive.class)
             .addPackage(Book.class.getPackage())
-            .addAsManifestResource("test-persistence-hibernate.xml", "persistence.xml")
+            .addClass(DefaultDataSourceConfiguration.class)
+            .addAsManifestResource("hibernate-connection-provider/test-persistence-hibernate.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsResource("flexy-pool-hibernate.properties", "flexy-pool.properties");
+            .addAsResource("hibernate-connection-provider/flexy-pool-hibernate.properties", "flexy-pool.properties");
     }
 
     @Override

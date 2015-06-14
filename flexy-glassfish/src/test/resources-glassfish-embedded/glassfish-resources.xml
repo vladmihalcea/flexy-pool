@@ -4,28 +4,4 @@
         "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
 
-    <jdbc-resource pool-name="ArquillianEmbeddedHSQLDBPool"
-                   jndi-name="jdbc/arquillian"/>
-
-    <jdbc-connection-pool name="ArquillianEmbeddedHSQLDBPool"
-                          res-type="javax.sql.DataSource"
-                          datasource-classname="org.hsqldb.jdbc.JDBCDataSource"
-                          steady-pool-size="3"
-                          max-pool-size="5">
-
-        <property name="user" value=""/>
-        <property name="password" value=""/>
-        <property name="url" value="jdbc:hsqldb:mem:test"/>
-    </jdbc-connection-pool>
-
-    <jdbc-resource pool-name="FlexyPoolEmbeddedHSQLDBPool"
-                   jndi-name="jdbc/flexypool"/>
-
-    <jdbc-connection-pool name="FlexyPoolEmbeddedHSQLDBPool"
-                          res-type="javax.sql.DataSource"
-                          datasource-classname="com.vladmihalcea.flexypool.FlexyPoolDataSource"
-                          steady-pool-size="3"
-                          max-pool-size="5">
-    </jdbc-connection-pool>
-
 </resources>

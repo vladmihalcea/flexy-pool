@@ -15,8 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vladmihalcea.flexypool.adaptor;
+package com.vladmihalcea.flexypool.adaptor.glassfish;
 
+import com.vladmihalcea.flexypool.adaptor.glassfish.AbstractGlassfishIntegrationTest;
+import com.vladmihalcea.flexypool.adaptor.glassfish.datasource.FlexyPoolDataSourceConfiguration;
 import com.vladmihalcea.flexypool.model.Book;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -27,7 +29,9 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-public class GlassfishFlexyPoolDataSourceDefinitionIntegrationTest extends AbstractGlassfishIntegrationTest {
+import static org.junit.Assert.assertNotNull;
+
+public class GlassfishFlexyPoolDataSourceAutoCreateIntegrationTest extends AbstractGlassfishIntegrationTest {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -36,10 +40,10 @@ public class GlassfishFlexyPoolDataSourceDefinitionIntegrationTest extends Abstr
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(JavaArchive.class)
             .addPackage(Book.class.getPackage())
-            .addClasses(DataSourceConfiguration.class)
-            .addAsManifestResource("test-persistence-flexy-pool-data-source-definition.xml", "persistence.xml")
+            .addClass(FlexyPoolDataSourceConfiguration.class)
+            .addAsManifestResource("data-source-auto-create/test-persistence-data-source-auto-create.xml", "persistence.xml")
             .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-            .addAsResource("flexy-pool-create-data-source.properties", "flexy-pool.properties");
+            .addAsResource("data-source-auto-create/flexy-pool-data-source-auto-create.properties", "flexy-pool.properties");
     }
 
     @Override

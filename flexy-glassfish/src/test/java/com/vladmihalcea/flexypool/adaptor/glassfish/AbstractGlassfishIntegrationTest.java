@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.vladmihalcea.flexypool.adaptor;
+package com.vladmihalcea.flexypool.adaptor.glassfish;
 
 import com.vladmihalcea.flexypool.model.Book;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -118,7 +118,7 @@ public abstract class AbstractGlassfishIntegrationTest {
 
     private MBeanInfo connectionLeaseMillisMBean() {
         try {
-            ObjectName objectName = new ObjectName("com.vladmihalcea.flexypool.metric.codahale.JmxMetricReporter.jdbc/arquillian:name=connectionLeaseMillis");
+            ObjectName objectName = new ObjectName("com.vladmihalcea.flexypool.metric.codahale.JmxMetricReporter.unique-name:name=connectionLeaseMillis");
             return ManagementFactory.getPlatformMBeanServer().getMBeanInfo(objectName);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
