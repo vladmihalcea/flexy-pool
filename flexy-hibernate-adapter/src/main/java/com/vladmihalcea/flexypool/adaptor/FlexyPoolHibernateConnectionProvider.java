@@ -1,7 +1,6 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
-import org.hibernate.HibernateException;
 import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,17 +19,18 @@ import java.util.Map;
  */
 public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionProviderImpl {
 
+    private static final long serialVersionUID = -1828184937430573196L;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FlexyPoolHibernateConnectionProvider.class);
 
-    private FlexyPoolDataSource<DataSource> flexyPoolDataSource;
+    private transient FlexyPoolDataSource<DataSource> flexyPoolDataSource;
 
     /**
      * Substitute the already configured {@link DataSource} with the {@link FlexyPoolDataSource}
-     * @param props
-     * @throws HibernateException
+     * @param props JPA/Hibernate properties
      */
     @Override
-    public void configure(Map props) throws HibernateException {
+    public void configure(Map props) {
         super.configure(props);
         LOGGER.debug("Hibernate switched to using FlexyPoolDataSource");
         flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(getDataSource());

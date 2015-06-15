@@ -67,65 +67,65 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
 
-    private static class FlexyPoolDataSourceConfiguration<DS extends DataSource> {
-        private final Configuration<DS> configuration;
+    private static class FlexyPoolDataSourceConfiguration<D extends DataSource> {
+        private final Configuration<D> configuration;
 
-        private final List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>>
+        private final List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, D>>
                 connectionAcquiringStrategyFactories;
 
         public FlexyPoolDataSourceConfiguration(
-                Configuration<DS> configuration,
-                List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>> connectionAcquiringStrategyFactories) {
+                Configuration<D> configuration,
+                List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, D>> connectionAcquiringStrategyFactories) {
             this.configuration = configuration;
             this.connectionAcquiringStrategyFactories = connectionAcquiringStrategyFactories;
         }
 
-        public Configuration<DS> getConfiguration() {
+        public Configuration<D> getConfiguration() {
             return configuration;
         }
 
-        public List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>> getConnectionAcquiringStrategyFactories() {
+        public List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, D>> getConnectionAcquiringStrategyFactories() {
             return connectionAcquiringStrategyFactories;
         }
     }
 
-    private static class ConfigurationLoader<DS extends DataSource> {
+    private static class ConfigurationLoader<D extends DataSource> {
 
         private final PropertyLoader propertyLoader = new PropertyLoader();
 
-        private final FlexyPoolDataSourceConfiguration<DS> flexyPoolDataSourceConfiguration;
+        private final FlexyPoolDataSourceConfiguration<D> flexyPoolDataSourceConfiguration;
 
         @SuppressWarnings("unchecked")
         public ConfigurationLoader() {
-            DS dataSource = propertyLoader.getDataSource();
+            D dataSource = propertyLoader.getDataSource();
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
-        public ConfigurationLoader(DS dataSource) {
+        public ConfigurationLoader(D dataSource) {
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
-        private FlexyPoolDataSourceConfiguration<DS> init(DS dataSource) {
-            return new FlexyPoolDataSourceConfiguration<DS>(
+        private FlexyPoolDataSourceConfiguration<D> init(D dataSource) {
+            return new FlexyPoolDataSourceConfiguration<D>(
                     configuration(dataSource),
                     connectionAcquiringStrategyFactories()
             );
         }
 
         @SuppressWarnings("unchecked")
-        private Configuration<DS> configuration(DS dataSource) {
+        private Configuration<D> configuration(D dataSource) {
             String uniqueName = propertyLoader.getUniqueName();
-            PoolAdapterFactory<DS> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
+            PoolAdapterFactory<D> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
             Integer metricLogReporterMillis = propertyLoader.getMetricLogReporterMillis();
             Boolean jmxEnabled = propertyLoader.isJmxEnabled();
             Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
 
             if(poolAdapterFactory == null) {
-                poolAdapterFactory = (PoolAdapterFactory<DS>) DataSourcePoolAdapter.FACTORY;
+                poolAdapterFactory = (PoolAdapterFactory<D>) DataSourcePoolAdapter.FACTORY;
             }
 
-            Configuration.Builder<DS> configurationBuilder = new Configuration.Builder<DS>(
+            Configuration.Builder<D> configurationBuilder = new Configuration.Builder<D>(
                 uniqueName, dataSource, poolAdapterFactory
             );
             if(metricsFactory != null) {
@@ -143,12 +143,12 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             return configurationBuilder.build();
         }
 
-        private List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, DS>>
+        private List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, D>>
             connectionAcquiringStrategyFactories() {
             return propertyLoader.getConnectionAcquiringStrategyFactories();
         }
 
-        public FlexyPoolDataSourceConfiguration<DS> getFlexyPoolDataSourceConfiguration() {
+        public FlexyPoolDataSourceConfiguration<D> getFlexyPoolDataSourceConfiguration() {
             return flexyPoolDataSourceConfiguration;
         }
     }
@@ -204,7 +204,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         }
     }
 
-    private FlexyPoolDataSource(FlexyPoolDataSourceConfiguration flexyPoolDataSourceConfiguration) {
+    private FlexyPoolDataSource(FlexyPoolDataSourceConfiguration<T> flexyPoolDataSourceConfiguration) {
         this(flexyPoolDataSourceConfiguration.getConfiguration(),
             flexyPoolDataSourceConfiguration.getConnectionAcquiringStrategyFactories());
     }

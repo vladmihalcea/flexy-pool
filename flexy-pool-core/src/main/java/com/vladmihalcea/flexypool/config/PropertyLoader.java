@@ -1,6 +1,5 @@
 package com.vladmihalcea.flexypool.config;
 
-import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
@@ -150,8 +149,6 @@ public class PropertyLoader {
      * Apply DataSource specific properties
      */
     private <T extends DataSource> T applyDataSourceProperties(T dataSource) {
-        Class<?> dataSourceClass = dataSource.getClass();
-
         for(Map.Entry<Object, Object> entry : properties.entrySet()) {
             String key = entry.getKey().toString();
             String value = entry.getValue().toString();
@@ -164,8 +161,6 @@ public class PropertyLoader {
         }
         return dataSource;
     }
-
-
 
     /**
      * Get the {@link PoolAdapterFactory}
@@ -210,7 +205,7 @@ public class PropertyLoader {
     }
 
     /**
-     * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link FlexyPoolDataSource}
+     * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link com.vladmihalcea.flexypool.FlexyPoolDataSource}
      *
      * @return the array of {@link ConnectionAcquiringStrategyFactory}
      */

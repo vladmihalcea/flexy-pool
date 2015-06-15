@@ -8,7 +8,7 @@ import java.net.URL;
  *
  * @author Vlad Mihalcea
  */
-public class ClassLoaderUtils {
+public final class ClassLoaderUtils {
 
     private ClassLoaderUtils() {
         throw new UnsupportedOperationException("ClassLoaderUtils is not instantiable!");

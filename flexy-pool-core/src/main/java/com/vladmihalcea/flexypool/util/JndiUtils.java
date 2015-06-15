@@ -12,7 +12,7 @@ import javax.naming.NamingException;
  *
  * @author Vlad Mihalcea
  */
-public class JndiUtils {
+public final class JndiUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JndiUtils.class);
 
@@ -28,7 +28,6 @@ public class JndiUtils {
      */
     public static <T> T lookup(String name) {
         InitialContext initialContext = initialContext();
-        Object located;
         try {
             @SuppressWarnings("unchecked")
             T object = (T) initialContext.lookup(name);
