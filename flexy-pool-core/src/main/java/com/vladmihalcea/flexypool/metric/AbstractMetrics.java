@@ -7,17 +7,27 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
  * adds the Configuration property.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
+ * @version %I%, %E%
  * @since 1.0
  */
 public abstract class AbstractMetrics implements Metrics {
 
     private final ConfigurationProperties configurationProperties;
 
+    /**
+     * Create {@link AbstractMetrics} from the given {@link ConfigurationProperties}
+     *
+     * @param configurationProperties configuration properties
+     */
     protected AbstractMetrics(ConfigurationProperties configurationProperties) {
         this.configurationProperties = configurationProperties;
     }
 
+    /**
+     * Get {@link ConfigurationProperties}
+     *
+     * @return configuration properties
+     */
     public ConfigurationProperties getConfigurationProperties() {
         return configurationProperties;
     }

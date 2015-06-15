@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.metric;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 /**
- * MetricsFactory - Metrics Configuration based factory
+ * <code>MetricsFactory</code> - Metrics Configuration based factory
  *
  * @author Vlad Mihalcea
  */

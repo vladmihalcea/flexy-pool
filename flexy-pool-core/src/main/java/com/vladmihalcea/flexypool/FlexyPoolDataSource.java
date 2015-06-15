@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  * <code>FlexyPoolDataSource</code> is a {@link DataSource} wrapper that allows multiple
  * {@link ConnectionAcquiringStrategy} to be applied when trying to acquireConnection a database {@link java.sql.Connection}.
  * This is how you'd configure it suing Spring JavaConfig:
- * <p/>
+ * <p>
  * <pre>
  *
  * {@code @Autowired} private PoolingDataSource poolingDataSource;
@@ -121,30 +121,30 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             Boolean jmxEnabled = propertyLoader.isJmxEnabled();
             Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
 
-            if(poolAdapterFactory == null) {
+            if (poolAdapterFactory == null) {
                 poolAdapterFactory = (PoolAdapterFactory<D>) DataSourcePoolAdapter.FACTORY;
             }
 
             Configuration.Builder<D> configurationBuilder = new Configuration.Builder<D>(
-                uniqueName, dataSource, poolAdapterFactory
+                    uniqueName, dataSource, poolAdapterFactory
             );
-            if(metricsFactory != null) {
+            if (metricsFactory != null) {
                 configurationBuilder.setMetricsFactory(metricsFactory);
             }
-            if(metricLogReporterMillis != null) {
+            if (metricLogReporterMillis != null) {
                 configurationBuilder.setMetricLogReporterMillis(metricLogReporterMillis);
             }
-            if(jmxEnabled != null) {
+            if (jmxEnabled != null) {
                 configurationBuilder.setJmxEnabled(jmxEnabled);
             }
-            if(jmxAutoStart != null) {
+            if (jmxAutoStart != null) {
                 configurationBuilder.setJmxAutoStart(jmxAutoStart);
             }
             return configurationBuilder.build();
         }
 
         private List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, D>>
-            connectionAcquiringStrategyFactories() {
+        connectionAcquiringStrategyFactories() {
             return propertyLoader.getConnectionAcquiringStrategyFactories();
         }
 
@@ -172,21 +172,42 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     private AtomicLong concurrentConnectionCount = new AtomicLong();
     private AtomicLong concurrentConnectionRequestCount = new AtomicLong();
 
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from {@link Configuration} and the array of {@link ConnectionAcquiringStrategyFactory}
+     *
+     * @param configuration                        configuration
+     * @param connectionAcquiringStrategyFactories array of {@link ConnectionAcquiringStrategyFactory}
+     */
     public FlexyPoolDataSource(final Configuration<T> configuration,
                                ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>... connectionAcquiringStrategyFactories) {
         this(configuration, Arrays.asList(connectionAcquiringStrategyFactories));
     }
 
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from declarative properties configuration.
+     */
     public FlexyPoolDataSource() {
-        this(new ConfigurationLoader().getFlexyPoolDataSourceConfiguration());
+        this(new ConfigurationLoader<T>().getFlexyPoolDataSourceConfiguration());
     }
 
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from declarative properties configuration and using the given
+     * target {@link DataSource}
+     *
+     * @param targetDataSource target {@link DataSource}
+     */
     public FlexyPoolDataSource(T targetDataSource) {
         this(new ConfigurationLoader<T>(targetDataSource).getFlexyPoolDataSourceConfiguration());
     }
 
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from {@link Configuration} and the associated list of {@link ConnectionAcquiringStrategyFactory}
+     *
+     * @param configuration                        configuration
+     * @param connectionAcquiringStrategyFactories list of {@link ConnectionAcquiringStrategyFactory}
+     */
     private FlexyPoolDataSource(final Configuration<T> configuration,
-                               List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> connectionAcquiringStrategyFactories) {
+                                List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> connectionAcquiringStrategyFactories) {
         this.poolAdapter = configuration.getPoolAdapter();
         this.targetDataSource = poolAdapter.getTargetDataSource();
         this.metrics = configuration.getMetrics();
@@ -204,9 +225,14 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         }
     }
 
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from {@link FlexyPoolDataSourceConfiguration}
+     *
+     * @param flexyPoolDataSourceConfiguration configuration
+     */
     private FlexyPoolDataSource(FlexyPoolDataSourceConfiguration<T> flexyPoolDataSourceConfiguration) {
         this(flexyPoolDataSourceConfiguration.getConfiguration(),
-            flexyPoolDataSourceConfiguration.getConnectionAcquiringStrategyFactories());
+                flexyPoolDataSourceConfiguration.getConnectionAcquiringStrategyFactories());
     }
 
     /**

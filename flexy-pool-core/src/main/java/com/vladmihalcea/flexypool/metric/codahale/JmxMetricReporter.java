@@ -5,7 +5,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 /**
- * JmxMetricReporter - Jmx Metric Reporter
+ * <code>JmxMetricReporter</code> - Jmx Metric Reporter
  *
  * @author Vlad Mihalcea
  */
@@ -13,6 +13,14 @@ public class JmxMetricReporter implements MetricsLifeCycleCallback {
 
     private JmxReporter jmxReporter;
 
+    /**
+     * The JMX Reporter is actiavated only if the jmxEnabled property is set. If the jmxAutoStart property is enabled,
+     * the JMX Reporter will start automatically.
+     *
+     * @param configurationProperties configuration properties
+     * @param metricRegistry metric registry
+     * @return {@link JmxMetricReporter}
+     */
     @Override
     public JmxMetricReporter init(ConfigurationProperties configurationProperties, MetricRegistry metricRegistry) {
         if (configurationProperties.isJmxEnabled()) {
@@ -27,6 +35,9 @@ public class JmxMetricReporter implements MetricsLifeCycleCallback {
         return this;
     }
 
+    /**
+     * Start JMX Reporter
+     */
     @Override
     public void start() {
         if (jmxReporter != null) {
@@ -34,6 +45,9 @@ public class JmxMetricReporter implements MetricsLifeCycleCallback {
         }
     }
 
+    /**
+     * Stop JMX Reporter
+     */
     @Override
     public void stop() {
         if (jmxReporter != null) {

@@ -7,7 +7,7 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import javax.sql.DataSource;
 
 /**
- * ConnectionAcquiringStrategyFactory - ConnectionAcquiringStrategy Configuration based factory
+ * <code>ConnectionAcquiringStrategyFactory</code> - ConnectionAcquiringStrategy Configuration based factory
  *
  * @author Vlad Mihalcea
  */

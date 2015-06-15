@@ -11,11 +11,13 @@ import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * FlexyPoolConnectionProvider - This is the Hibernate custom DataSource adapter.
+ * <code>FlexyPoolHibernateConnectionProvider</code> - This is the Hibernate custom {@link DataSource} adapter.
  * It allows registering the {@link com.vladmihalcea.flexypool.FlexyPoolDataSource} instead of the original
  * {@link javax.sql.DataSource} defined in the persistence.xml descriptor.
  *
  * @author Vlad Mihalcea
+ * @version %I%, %E%
+ * @since 1.2
  */
 public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionProviderImpl {
 
@@ -27,6 +29,7 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
 
     /**
      * Substitute the already configured {@link DataSource} with the {@link FlexyPoolDataSource}
+     *
      * @param props JPA/Hibernate properties
      */
     @Override
@@ -41,7 +44,7 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
      */
     @Override
     public Connection getConnection() throws SQLException {
-        return this.flexyPoolDataSource.getConnection();
+        return flexyPoolDataSource.getConnection();
     }
 
     /**
@@ -58,7 +61,7 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
      */
     @Override
     public void stop() {
-        this.flexyPoolDataSource.stop();
+        flexyPoolDataSource.stop();
         super.stop();
     }
 }

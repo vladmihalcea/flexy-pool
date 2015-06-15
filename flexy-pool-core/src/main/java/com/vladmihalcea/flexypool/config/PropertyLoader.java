@@ -23,10 +23,11 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * PropertyLoader - The Property Loader scans the class-path for a flexy-pool.properties file and loads the
- * available configuration properties.
+ * <code>PropertyLoader</code> - The Property Loader resolves and loads the {@link Properties} configuration file.
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.2
  */
 public class PropertyLoader {
 
@@ -35,6 +36,9 @@ public class PropertyLoader {
     public static final String PROPERTIES_FILE_PATH = "flexy.pool.properties.path";
     public static final String PROPERTIES_FILE_NAME = "flexy-pool.properties";
 
+    /**
+     * Each Property has a well-defined key.
+     */
     public enum PropertyKey {
         DATA_SOURCE_UNIQUE_NAME("flexy.pool.data.source.unique.name"),
         DATA_SOURCE_JNDI_NAME("flexy.pool.data.source.jndi.name"),
@@ -65,7 +69,7 @@ public class PropertyLoader {
     }
 
     /**
-     * Load Properties from class-path configuration file.
+     * Load {@link Properties} from the resolved {@link InputStream}
      */
     private void load() {
         InputStream propertiesInputStream = null;
@@ -89,8 +93,8 @@ public class PropertyLoader {
     }
 
     /**
-     * Get Properties file InputStream
-     * @return Properties file InputStream
+     * Get {@link Properties} file {@link InputStream}
+     * @return {@link Properties} file {@link InputStream}
      * @throws IOException the file couldn't be loaded properly
      */
     private InputStream propertiesInputStream() throws IOException {
@@ -120,18 +124,19 @@ public class PropertyLoader {
     }
 
     /**
-     * Get DataSource unique name
+     * Get {@link DataSource} unique name
      *
-     * @return DataSource unique name
+     * @return {@link DataSource} unique name
      */
     public String getUniqueName() {
         return properties.getProperty(PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey());
     }
 
     /**
-     * Get DataSource from JNDI
+     * Get associated {@link DataSource}. The {@link DataSource} can either be looked up in JNDI or instantiated
+     * from the configuration meta-data.
      *
-     * @return DataSource
+     * @return {@link DataSource}
      */
     public <T extends DataSource> T getDataSource() {
         T dataSource = jndiLookup(PropertyKey.DATA_SOURCE_JNDI_NAME);

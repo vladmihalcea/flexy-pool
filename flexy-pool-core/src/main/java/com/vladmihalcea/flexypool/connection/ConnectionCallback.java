@@ -13,6 +13,10 @@ public class ConnectionCallback {
 
     private final long startNanos = System.nanoTime();
 
+    /**
+     * Create Connection Callback with {@link ConnectionPoolCallback} hook
+     * @param connectionPoolCallback {@link ConnectionPoolCallback} hook
+     */
     public ConnectionCallback(ConnectionPoolCallback connectionPoolCallback) {
         this.connectionPoolCallback = connectionPoolCallback;
         this.connectionPoolCallback.acquireConnection();

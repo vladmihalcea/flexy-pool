@@ -6,9 +6,11 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 import javax.sql.DataSource;
 
 /**
- * PoolAdapterFactory - Pool Adapter Configuration based factory
+ * <code>PoolAdapterFactory</code> - Pool Adapter Configuration based factory
  *
  * @author Vlad Mihalcea
+ * @version    %I%, %E%
+ * @since 1.0
  */
 public interface PoolAdapterFactory<T extends DataSource> {
 

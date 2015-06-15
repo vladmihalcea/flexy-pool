@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.connection;
 import java.sql.Connection;
 
 /**
- * ConnectionProxyFactory - Builds Connection Proxies
+ * <code>ConnectionProxyFactory</code> - Builds Connection Proxies
  *
  * @author Vlad Mihalcea
  */
