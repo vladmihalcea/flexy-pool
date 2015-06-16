@@ -33,6 +33,7 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->
@@ -83,7 +84,7 @@
     </dependencies>
 
     <properties>
-        <btm.version>2.1.1</btm.version>
+        <btm.version>2.1.4</btm.version>
     </properties>
 
 </project>

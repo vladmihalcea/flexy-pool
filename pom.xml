@@ -45,7 +45,7 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-common-adapter</module>
-        <module>flexy-hibernate-adapter</module>
+        <module>flexy-java-ee</module>
         <module>flexy-btm</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
@@ -54,6 +54,7 @@
         <module>flexy-hikaricp</module>
         <module>flexy-tomcatcp</module>
         <module>flexy-glassfish</module>
+        <module>flexy-tomee</module>
     </modules>
 
     <dependencies>
@@ -180,6 +181,8 @@
     </dependencyManagement>
 
     <build>
+        <defaultGoal>test</defaultGoal>
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

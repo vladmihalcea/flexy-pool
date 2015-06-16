@@ -6,7 +6,6 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
-import com.vladmihalcea.flexypool.util.JndiUtils;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -292,7 +291,8 @@ public class PropertyLoader {
     private <T> T jndiLookup(PropertyKey propertyKey) {
         String property = properties.getProperty(propertyKey.getKey());
         if(property != null) {
-            return (T) JndiUtils.lookup(property);
+            //return (T) JndiUtils.lookup(property);
+            return LazyJndiResolver.newInstance(property, DataSource.class);
         }
         return null;
     }

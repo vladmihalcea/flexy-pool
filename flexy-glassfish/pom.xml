@@ -20,16 +20,16 @@
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-hibernate-adapter</artifactId>
+            <artifactId>flexy-java-ee</artifactId>
             <version>1.1.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Test dependencies -->
+
         <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-common-adapter</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
-            <type>test-jar</type>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -82,20 +82,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>1.2.0.Final</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <scope>test</scope>
@@ -112,7 +98,7 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
-            <version>${arquillian-junit-container.version}</version>
+            <version>${arquillian.junit.container.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -126,8 +112,8 @@
         <dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
-            <version>3.1.2</version>
-            <scope>provided</scope>
+            <version>${glassfish.embedded.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -135,11 +121,14 @@
     <properties>
         <hibernate.version>4.3.9.Final</hibernate.version>
         <arquillian.version>1.0.3.Final</arquillian.version>
-        <arquillian-junit-container.version>1.0.3.Final</arquillian-junit-container.version>
+        <arquillian.junit.container.version>1.0.3.Final</arquillian.junit.container.version>
         <arquillian.glassfish.version>1.0.0.CR3</arquillian.glassfish.version>
+        <glassfish.embedded.version>3.1.2</glassfish.embedded.version>
     </properties>
 
     <build>
+        <defaultGoal>test</defaultGoal>
+
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

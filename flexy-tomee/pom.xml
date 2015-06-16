@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>com.vladmihalcea.flexy-pool</groupId>
+        <artifactId>flexy-pool-parent</artifactId>
+        <version>1.1.2-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>flexy-tomee</artifactId>
+    <version>1.1.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>flexy-tomee</name>
+    <description>The flexible pool TomEE Application Server adapter</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-java-ee</artifactId>
+            <version>1.1.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.openejb</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${openejb.javaee.api}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.openejb</groupId>
+            <artifactId>arquillian-tomee-embedded</artifactId>
+            <version>${tomee.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.openejb</groupId>
+            <artifactId>tomee-jaxrs</artifactId>
+            <version>${tomee.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources-tomee-embedded</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.openejb.maven</groupId>
+                <artifactId>tomee-maven-plugin</artifactId>
+                <version>${tomee.version}</version>
+                <configuration>
+                    <tomeeVersion>${tomee.version}</tomeeVersion>
+                    <tomeeClassifier>jaxrs</tomeeClassifier>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <jdk.version>7</jdk.version>
+        <jdk>${env.JAVA_HOME_7}</jdk>
+
+        <tomee.version>1.7.1</tomee.version>
+        <openejb.javaee.api>6.0-6</openejb.javaee.api>
+        <hibernate.version>4.3.9.Final</hibernate.version>
+    </properties>
+</project>

@@ -1,22 +1,19 @@
-package com.vladmihalcea.flexypool.adaptor.glassfish;
+package com.vladmihalcea.flexypool.adaptor.tomee;
 
 import com.vladmihalcea.flexypool.model.Book;
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.decorator.Decorator;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.management.MBeanInfo;
 import javax.management.ObjectName;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityTransaction;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.lang.management.ManagementFactory;
@@ -24,21 +21,25 @@ import java.lang.management.ManagementFactory;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
-public abstract class AbstractGlassfishIntegrationTest {
+@TransactionManagement(TransactionManagementType.BEAN)
+public abstract class AbstractJavaEEIntegrationTest {
 
-    protected abstract EntityManager getEntityManager();
-    
-    @Inject
-    private UserTransaction userTransaction;
+    private EntityManager entityManager;
 
     @Before
-    public void init() throws Exception {
+    public void init() {
+        entityManager = newEntityManager();
         doInTransaction(new VoidCallable() {
             @Override
             public void call() {
-                getEntityManager().createQuery("delete from Book").executeUpdate();
+                entityManager.createQuery("delete from Book").executeUpdate();
             }
         });
+    }
+
+    @After
+    public void destroy() {
+        entityManager.close();
     }
 
     @Test
@@ -49,7 +50,7 @@ public abstract class AbstractGlassfishIntegrationTest {
                 Book book = new Book();
                 book.setId(1L);
                 book.setName("High-Performance Java Persistence");
-                getEntityManager().persist(book);
+                entityManager.persist(book);
                 return book;
             }
         });
@@ -59,33 +60,31 @@ public abstract class AbstractGlassfishIntegrationTest {
 
     private <V> V doInTransaction(Callable<V> callable) {
         V result;
+        EntityTransaction entityTransaction = null;
         try {
-            userTransaction.begin();
-            getEntityManager().joinTransaction();
+            entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
             result = callable.call();
-            userTransaction.commit();
+            entityTransaction.commit();
+            return result;
         } catch (Exception e) {
-            try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                throw new IllegalStateException(e);
+            if (entityTransaction != null) {
+                entityTransaction.rollback();
             }
             throw new IllegalStateException(e);
         }
-        return result;
     }
 
     private void doInTransaction(VoidCallable callable) {
+        EntityTransaction entityTransaction = null;
         try {
-            userTransaction.begin();
-            getEntityManager().joinTransaction();
+            entityTransaction = entityManager.getTransaction();
+            entityTransaction.begin();
             callable.call();
-            userTransaction.commit();
+            entityTransaction.commit();
         } catch (Exception e) {
-            try {
-                userTransaction.rollback();
-            } catch (SystemException e1) {
-                throw new IllegalStateException(e);
+            if (entityTransaction != null && entityTransaction.isActive()) {
+                entityTransaction.rollback();
             }
             throw new IllegalStateException(e);
         }
@@ -107,5 +106,11 @@ public abstract class AbstractGlassfishIntegrationTest {
             throw new IllegalArgumentException(e);
         }
     }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    protected abstract EntityManager newEntityManager();
 
 }

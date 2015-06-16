@@ -33,6 +33,7 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
+			<scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->

@@ -8,12 +8,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-hibernate-adapter</artifactId>
+    <artifactId>flexy-java-ee</artifactId>
     <version>1.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-hibernate</name>
-    <description>The Hibernate adapter allows registering the FlexyPool DataSource in a Java EE container </description>
+    <name>flexy-java-ee</name>
+    <description>The Java EE adapter allows registering the FlexyPool DataSource in a managed environment</description>
 
     <dependencies>
 
@@ -28,6 +28,7 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <!-- Test dependencies -->
@@ -123,7 +124,7 @@
 
     <properties>
         <hibernate.version>4.3.9.Final</hibernate.version>
-        <btm.version>2.1.1</btm.version>
+        <btm.version>2.1.4</btm.version>
         <dbcp.version>1.4</dbcp.version>
     </properties>
 

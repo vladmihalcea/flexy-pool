@@ -33,6 +33,7 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Test dependencies -->
@@ -86,7 +87,7 @@
         <jdk.version>7</jdk.version>
         <jdk>${env.JAVA_HOME_7}</jdk>
 
-        <dbcp2.version>2.0</dbcp2.version>
+        <dbcp2.version>2.1</dbcp2.version>
     </properties>
 
 </project>
