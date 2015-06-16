@@ -1,17 +1,15 @@
 package com.vladmihalcea.flexypool.util;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import javax.naming.NoInitialContextException;
+import javax.naming.NameNotFoundException;
 import javax.sql.DataSource;
-
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -21,19 +19,25 @@ import static org.mockito.Mockito.when;
  */
 public class LazyJndiResolverTest {
 
+    private JndiTestUtils jndiTestUtils;
+
+    @Before
+    public void init() {
+        jndiTestUtils = new JndiTestUtils();
+    }
+
     @Test
     public void testLazyLookupFailure() {
         DataSource dataSource = LazyJndiResolver.newInstance("jdbc/DS", DataSource.class);
         try {
             dataSource.getLogWriter();
         } catch (Exception e) {
-            assertEquals(NoInitialContextException.class, e.getCause().getClass());
+            assertEquals(NameNotFoundException.class, e.getCause().getClass());
         }
     }
 
     @Test
     public void testLazyLookup() {
-        JndiTestUtils jndiTestUtils = new JndiTestUtils();
         jndiTestUtils.namingContext().bind("jdbc/DS", Mockito.mock(DataSource.class));
         DataSource dataSource = LazyJndiResolver.newInstance("jdbc/DS", DataSource.class);
         try {

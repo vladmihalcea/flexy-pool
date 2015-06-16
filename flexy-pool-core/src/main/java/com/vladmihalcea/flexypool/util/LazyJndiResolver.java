@@ -11,7 +11,7 @@ import java.lang.reflect.Proxy;
  * @version %I%, %E%
  * @since 1.2
  */
-public class LazyJndiResolver implements InvocationHandler {
+public final class LazyJndiResolver implements InvocationHandler {
 
     private final String name;
 
