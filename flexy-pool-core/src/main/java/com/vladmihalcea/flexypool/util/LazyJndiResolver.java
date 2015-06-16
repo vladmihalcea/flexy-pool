@@ -1,22 +1,25 @@
-package com.vladmihalcea.flexypool.config;
-
-import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
-import com.vladmihalcea.flexypool.util.JndiUtils;
+package com.vladmihalcea.flexypool.util;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * LazyJndiResolver - Resolves Jndi resources lazily
+ * <code>LazyJndiResolver</code> - Resolves Jndi resources lazily
  *
  * @author Vlad Mihalcea
+ * @version %I%, %E%
+ * @since 1.2
  */
 public class LazyJndiResolver implements InvocationHandler {
 
     private final String name;
 
     private Object target;
+
+    private LazyJndiResolver() {
+        throw new UnsupportedOperationException("ReflectionUtils is not instantiable!");
+    }
 
     /**
      * The JNDI name of the associated object

@@ -7,6 +7,7 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import com.vladmihalcea.flexypool.util.JndiUtils;
+import com.vladmihalcea.flexypool.util.LazyJndiResolver;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
