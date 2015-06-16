@@ -6,6 +6,7 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
+import com.vladmihalcea.flexypool.util.JndiUtils;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ public class PropertyLoader {
     public enum PropertyKey {
         DATA_SOURCE_UNIQUE_NAME("flexy.pool.data.source.unique.name"),
         DATA_SOURCE_JNDI_NAME("flexy.pool.data.source.jndi.name"),
+        DATA_SOURCE_JNDI_LAZY_LOOKUP("flexy.pool.data.source.jndi.lazy.lookup"),
         DATA_SOURCE_CLASS_NAME("flexy.pool.data.source.class.name"),
         DATA_SOURCE_PROPERTY("flexy.pool.data.source.property."),
         POOL_ADAPTER_FACTORY("flexy.pool.adapter.factory"),
@@ -209,6 +211,14 @@ public class PropertyLoader {
     }
 
     /**
+     * Is JNDI lazy lookup
+     * @return JNDI lazy lookup
+     */
+    public boolean isJndiLazyLookup() {
+        return Boolean.TRUE.equals(booleanProperty(PropertyKey.DATA_SOURCE_JNDI_LAZY_LOOKUP));
+    }
+
+    /**
      * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link com.vladmihalcea.flexypool.FlexyPoolDataSource}
      *
      * @return the array of {@link ConnectionAcquiringStrategyFactory}
@@ -291,8 +301,9 @@ public class PropertyLoader {
     private <T> T jndiLookup(PropertyKey propertyKey) {
         String property = properties.getProperty(propertyKey.getKey());
         if(property != null) {
-            //return (T) JndiUtils.lookup(property);
-            return LazyJndiResolver.newInstance(property, DataSource.class);
+            return isJndiLazyLookup() ?
+                (T) LazyJndiResolver.newInstance(property, DataSource.class) :
+                (T) JndiUtils.lookup(property);
         }
         return null;
     }

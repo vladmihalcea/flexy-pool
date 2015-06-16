@@ -8,13 +8,16 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -157,6 +160,34 @@ public class PropertyLoaderTest {
             fail("Can't save/load properties");
         }
     }
+
+    @Test
+    public void testLoadPropertiesWithLazyJndi() {
+        testDataSourceJndiLookup(true);
+    }
+
+    @Test
+    public void testLoadPropertiesWithoutLazyJndi() {
+        testDataSourceJndiLookup(false);
+    }
+
+    private void testDataSourceJndiLookup(boolean lazy) {
+        try {
+            DataSource mockDataSource = new MockDataSource();
+            JndiTestUtils jndiTestUtils = new JndiTestUtils();
+            jndiTestUtils.namingContext().bind("jdbc/DS", mockDataSource);
+            Properties properties = new Properties();
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI_NAME.getKey(), "jdbc/DS");
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_JNDI_LAZY_LOOKUP.getKey(), String.valueOf(lazy));
+            PropertiesTestUtils.setProperties(properties);
+            PropertyLoader propertyLoader = new PropertyLoader();
+            assertEquals(lazy, Proxy.isProxyClass(propertyLoader.getDataSource().getClass()));
+        } catch (IOException e) {
+            fail("Can't save/load properties");
+        }
+    }
+
     public static class MockPoolAdapterFactory implements PoolAdapterFactory {
 
         @Override
