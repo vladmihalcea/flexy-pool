@@ -9,6 +9,9 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### Features 
 
+* multiple environment options
+ * Stand-alone (Spring, Guice)
+ * Java EE
 * extensive connection pool support
  * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
