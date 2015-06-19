@@ -10,7 +10,7 @@ import org.vibur.dbcp.ViburDBCPDataSource;
 import java.sql.SQLException;
 
 /**
- * <code>DBCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
+ * <code>ViburDBCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
  * communicate with the Vubur DBCP {@link ViburDBCPDataSource}
  *
  * @author Vlad Mihalcea
@@ -52,7 +52,7 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
+     * Translate the Vibur DBCP Exception to AcquireTimeoutException.
      *
      * @param e exception
      * @return translated exception

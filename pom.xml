@@ -47,6 +47,7 @@
         <module>flexy-common-adapter</module>
         <module>flexy-java-ee</module>
         <module>flexy-btm</module>
+        <module>flexy-atomikos</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
         <module>flexy-c3p0</module>

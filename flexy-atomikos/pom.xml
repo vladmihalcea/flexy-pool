@@ -8,12 +8,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-vibur</artifactId>
+    <artifactId>flexy-atomikos</artifactId>
     <version>1.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-vibur</name>
-    <description>The flexible pool Vibur DBCP adapter</description>
+    <name>flexy-atomikos</name>
+    <description>The flexible pool Atomikos adapter</description>
 
     <dependencies>
 
@@ -24,11 +24,32 @@
         </dependency>
 
         <dependency>
-            <groupId>org.vibur</groupId>
-            <artifactId>vibur-dbcp</artifactId>
-            <version>${vibur.dbcp.version}</version>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions</artifactId>
+            <version>${atomikos.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-jta</artifactId>
+			<version>${atomikos.version}</version>
+			<scope>provided</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>com.atomikos</groupId>
+            <artifactId>transactions-jdbc</artifactId>
+            <version>${atomikos.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+            <version>1.0.1.Final</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>
@@ -78,7 +99,7 @@
     </dependencies>
 
     <properties>
-        <vibur.dbcp.version>3.0</vibur.dbcp.version>
+        <atomikos.version>3.9.3</atomikos.version>
     </properties>
 
 </project>
