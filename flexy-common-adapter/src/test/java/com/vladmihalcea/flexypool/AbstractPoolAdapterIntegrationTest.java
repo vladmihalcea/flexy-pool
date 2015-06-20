@@ -11,10 +11,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * AbstractPoolAdapterIntegrationTest - Abstract Pool Adapter Integration Test
@@ -26,7 +25,11 @@ public abstract class AbstractPoolAdapterIntegrationTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPoolAdapterIntegrationTest.class);
 
     @Resource
-    private DataSource dataSource;
+    private FlexyPoolDataSource dataSource;
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 
     @Test
     public void test() throws SQLException {
@@ -35,11 +38,18 @@ public abstract class AbstractPoolAdapterIntegrationTest {
 
         try {
             for(;hasMoreConnections(index);++index) {
-                leasedConnections.add(getConnection(index));
+                try {
+                    Connection connection = getConnection(index);
+                    leasedConnections.add(connection);
+                } catch (UnsupportedOperationException e) {
+                    LOGGER.info("DataSource doesn't support adjusting pool size", e);
+                }
             }
         } catch (SQLException e) {
             assertTrue(e instanceof CantAcquireConnectionException);
             verifyLeasedConnections(leasedConnections);
+        } finally {
+            closeConnection(leasedConnections);
         }
     }
 
@@ -57,5 +67,15 @@ public abstract class AbstractPoolAdapterIntegrationTest {
 
     protected void verifyLeasedConnections(List<Connection> leasedConnections) {
         assertEquals(5, leasedConnections.size());
+    }
+
+    protected void closeConnection(List<Connection> leasedConnections) {
+        for(Connection leasedConnection : leasedConnections) {
+            try {
+                leasedConnection.close();
+            } catch (SQLException e) {
+                fail(e.getMessage());
+            }
+        }
     }
 }

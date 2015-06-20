@@ -14,7 +14,7 @@ import java.sql.SQLException;
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
- * @since 1.0
+ * @since 1.2.1
  */
 public class AtomikosPoolAdapter extends AbstractPoolAdapter<AtomikosDataSourceBean> {
 

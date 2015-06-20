@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
+import java.util.UUID;
+
 /**
  * FlexyDataSourceConfiguration - Configuration for flexypool data source
  *
@@ -36,7 +38,6 @@ public class FlexyPoolConfiguration {
     public FlexyPoolDataSource dataSource() {
         Configuration<ViburDBCPDataSource> configuration = configuration();
         return new FlexyPoolDataSource<ViburDBCPDataSource>(configuration,
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
                 new RetryConnectionAcquiringStrategy.Factory(2)
         );
     }

@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  * @author Vlad Mihalcea
  * @version %I%, %E%
- * @since 1.0
+ * @since 1.2.1
  */
 public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSource> {
 
@@ -39,16 +39,18 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
         return getTargetDataSource().getPoolMaxSize();
     }
 
+    /**
+     * Vibur DBCP does not support pool resizing natively, as C3P0.
+     * This way, it's impossible to guarantee what will happen to the current acquired connections one the pool
+     * has to be destroyed and recreated, only to take into consideration the new pool size.
+     * Therefore, the safest approach is to throw an UnsupportedOperationException
+     * whenever the max pool size is about to be changed and document the behavior.
+     *
+     * @param maxPoolSize the upper amount of pooled connections.
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setPoolMaxSize(maxPoolSize);
-        ReflectionUtils.setFieldValue(getTargetDataSource(), "state", DataSourceLifecycle.State.NEW);
-        boolean enableJMX = getTargetDataSource().isEnableJMX();
-        getTargetDataSource().setEnableJMX(false);
-        getTargetDataSource().start();
-        if (enableJMX) {
-            getTargetDataSource().setEnableJMX(true);
-        }
+        throw new UnsupportedOperationException("Vibur DBCP doesn't reinitialize itself on pool size change");
     }
 
     /**
