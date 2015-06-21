@@ -58,4 +58,4 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ### Requirements
 
 * Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
-* SLF4J 1.7.6
+* SLF4J
