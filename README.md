@@ -43,6 +43,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
 3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
 4. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
+5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/2015/06/18/how-to-monitor-a-java-ee-datasource/)
 
 ### Who uses FlexyPool
 
