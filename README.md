@@ -21,7 +21,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
  * [Vibur DBCP](http://www.vibur.org/)
  * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
- * [Atomikos TransactionEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
+ * [Atomikos TransactionsEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
 * statistics support
  * concurrent connections histogram
  * concurrent connection requests histogram
