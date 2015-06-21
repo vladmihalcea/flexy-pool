@@ -13,13 +13,15 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * Stand-alone (Spring, Guice)
  * Java EE
 * extensive connection pool support
- * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
  * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
  * [C3P0](http://www.mchange.com/projects/c3p0/)
  * [BoneCP](http://jolbox.com/)
  * [HikariCP](http://brettwooldridge.github.io/HikariCP/)
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
+ * [Vibur DBCP](http://www.vibur.org/)
+ * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
+ * [Atomikos TransactionEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
 * statistics support
  * concurrent connections histogram
  * concurrent connection requests histogram
