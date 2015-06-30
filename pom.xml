@@ -211,7 +211,7 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <jvm>${jdk}/bin/java</jvm>
-                    <forkMode>once</forkMode>
+                    <forkMode>always</forkMode>
                 </configuration>
             </plugin>
             <plugin>
