@@ -36,7 +36,6 @@ public class FlexyPoolConfiguration {
     public FlexyPoolDataSource dataSource() {
         Configuration<BoneCPDataSource> configuration = configuration();
         return new FlexyPoolDataSource<BoneCPDataSource>(configuration,
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
                 new RetryConnectionAcquiringStrategy.Factory(2)
         );
     }

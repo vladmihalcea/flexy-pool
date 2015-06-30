@@ -1,13 +1,19 @@
 package com.vladmihalcea.flexypool;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.vibur.dbcp.ViburDBCPDataSource;
 
+import javax.annotation.Resource;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * ViburDBCPIntegrationTest - ViburDBCPDataSource Integration Test
@@ -20,10 +26,6 @@ public class ViburDBCPIntegrationTest extends AbstractPoolAdapterIntegrationTest
 
     @Override
     protected void verifyLeasedConnections(List<Connection> leasedConnections) {
-        //ViburDBCPDataSource#setPoolMaxSize requires a pool restart to be taken into consideration
-        //This will end up recreating teh data source, so the old connections are not managed anymore
-        //Because we have 2 overflows (from 3 to 4 and from 4 to 5) we will end up with
-        //12 connections = 3(initial max) + 4(initial max + 1 over flow) + 5(initial max + 2 over flow)
-        assertEquals(12, leasedConnections.size());
+        assertEquals(3, leasedConnections.size());
     }
 }

@@ -18,11 +18,6 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
 public class DataSourceIntegrationTest extends AbstractPoolAdapterIntegrationTest {
 
-    @Override
-    protected void verifyLeasedConnections(List<Connection> leasedConnections) {
-        assertEquals(5, leasedConnections.size());
-    }
-
     protected boolean hasMoreConnections(int index) {
         return index < 5;
     }

@@ -20,10 +20,6 @@ public class BoneCPIntegrationTest extends AbstractPoolAdapterIntegrationTest {
 
     @Override
     protected void verifyLeasedConnections(List<Connection> leasedConnections) {
-        //ComboPooledDataSource#setMaxPoolSize calls resetPoolManager( false );
-        //This will end up recreating teh data source, so the old connections are not managed anymore
-        //Because we have 2 overflows (from 3 to 4 and from 4 to 5) we will end up with
-        //12 connections = 3(initial max) + 4(initial max + 1 over flow) + 5(initial max + 2 over flow)
-        assertEquals(12, leasedConnections.size());
+        assertEquals(3, leasedConnections.size());
     }
 }

@@ -13,13 +13,15 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * Stand-alone (Spring, Guice)
  * Java EE
 * extensive connection pool support
- * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
  * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
  * [C3P0](http://www.mchange.com/projects/c3p0/)
  * [BoneCP](http://jolbox.com/)
  * [HikariCP](http://brettwooldridge.github.io/HikariCP/)
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
+ * [Vibur DBCP](http://www.vibur.org/)
+ * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
+ * [Atomikos TransactionsEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
 * statistics support
  * concurrent connections histogram
  * concurrent connection requests histogram
@@ -41,6 +43,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
 3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
 4. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
+5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/2015/06/18/how-to-monitor-a-java-ee-datasource/)
 
 ### Who uses FlexyPool
 
@@ -55,4 +58,4 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ### Requirements
 
 * Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
-* SLF4J 1.7.6
+* SLF4J

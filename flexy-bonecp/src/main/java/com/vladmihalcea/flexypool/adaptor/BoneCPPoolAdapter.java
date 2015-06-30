@@ -1,11 +1,9 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPDataSource;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
-import com.vladmihalcea.flexypool.util.ReflectionUtils;
 
 import java.sql.SQLException;
 
@@ -39,13 +37,18 @@ public class BoneCPPoolAdapter extends AbstractPoolAdapter<BoneCPDataSource> {
         return getTargetDataSource().getMaxConnectionsPerPartition();
     }
 
+    /**
+     * BoneCP does not support pool resizing natively, as C3P0.
+     * This way, it's impossible to guarantee what will happen to the current acquired connections one the pool
+     * has to be destroyed and recreated, only to take into consideration the new pool size.
+     * Therefore, the safest approach is to throw an UnsupportedOperationException
+     * whenever the max pool size is about to be changed and document the behavior.
+     *
+     * @param maxPoolSize the upper amount of pooled connections.
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxConnectionsPerPartition(maxPoolSize);
-        //BoneCP doesn't reinitialize itself on pool size change
-        BoneCP boneCP = ReflectionUtils.invoke(getTargetDataSource(), ReflectionUtils.getMethod(getTargetDataSource(), "getPool"));
-        boneCP.close();
-        ReflectionUtils.setFieldValue(getTargetDataSource(), "pool", null);
+        throw new UnsupportedOperationException("BoneCP doesn't reinitialize itself on pool size change");
     }
 
     /**

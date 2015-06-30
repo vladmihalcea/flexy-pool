@@ -3,13 +3,13 @@
     <parent>
         <groupId>com.vladmihalcea.flexy-pool</groupId>
         <artifactId>flexy-pool-parent</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.2-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flexy-vibur</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>flexy-vibur</name>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-pool-core</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-common-adapter</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
