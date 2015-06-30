@@ -4,6 +4,7 @@ import com.vladmihalcea.flexypool.model.Book;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.verify;
  *
  * @author Vlad Mihalcea
  */
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractFlexyPoolHibernateConnectionProviderIntegrationTest {
 
     @PersistenceContext(unitName = "persistenceUnit")

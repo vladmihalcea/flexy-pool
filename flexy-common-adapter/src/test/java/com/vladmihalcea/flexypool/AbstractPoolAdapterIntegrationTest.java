@@ -4,6 +4,7 @@ import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.annotation.DirtiesContext;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -11,7 +12,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
 
@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
  *
  * @author Vlad Mihalcea
  */
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractPoolAdapterIntegrationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPoolAdapterIntegrationTest.class);
