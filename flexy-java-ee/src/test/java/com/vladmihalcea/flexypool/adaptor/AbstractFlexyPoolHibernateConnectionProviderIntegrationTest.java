@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
  *
  * @author Vlad Mihalcea
  */
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractFlexyPoolHibernateConnectionProviderIntegrationTest {
 
     @PersistenceContext(unitName = "persistenceUnit")
