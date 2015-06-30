@@ -313,12 +313,38 @@
         </profile>
         <profile>
             <id>travis</id>
+
             <activation>
                 <property>
                     <name>env.TRAVIS</name>
                     <value>true</value>
                 </property>
             </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>${coveralls-maven-plugin.version}</version>
+                    </plugin>
+                </plugins>
+            </build>
+
             <properties>
                 <jdk.version>7</jdk.version>
                 <jdk>${env.JAVA_HOME}</jdk>
@@ -345,6 +371,8 @@
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
+        <coveralls-maven-plugin.version>3.1.0</coveralls-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.5.201505241946</jacoco-maven-plugin.version>
 
         <slf4j.version>1.7.6</slf4j.version>
         <logback.version>1.1.1</logback.version>
