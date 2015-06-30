@@ -6,3 +6,5 @@
 *.ear
 *.iml
 target/
+*.epoch
+*.log

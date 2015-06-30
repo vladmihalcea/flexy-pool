@@ -195,6 +195,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
@@ -207,6 +208,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <jvm>${jdk}/bin/java</jvm>
                     <forkMode>once</forkMode>
@@ -327,6 +329,8 @@
         <jdk>${env.JAVA_HOME_6}</jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
 
         <slf4j.version>1.7.6</slf4j.version>
