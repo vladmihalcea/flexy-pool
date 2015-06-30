@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)
 [![Coverage Status](https://coveralls.io/repos/vladmihalcea/flexy-pool/badge.svg?branch=master)](https://coveralls.io/r/vladmihalcea/flexy-pool?branch=master)
-[![JavaDoc](https://img.shields.io/badge/javadoc-1.10.1-blue.svg)](http://www.javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core/1.2.1)
+[![JavaDoc](https://img.shields.io/badge/javadoc-1.2.1-blue.svg)](http://www.javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core/1.2.1)
 
 ### Introduction
 
