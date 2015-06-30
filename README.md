@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
 
-[![Build Status](https://img.shields.io/travis/vladmihalcea/flexy-pool)](https://travis-ci.org/vladmihalcea/flexy-pool)
+[![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)
 
 ### Introduction
 
