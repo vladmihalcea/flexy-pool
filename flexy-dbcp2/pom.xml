@@ -83,6 +83,22 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <jdk.version>7</jdk.version>
+                <jdk>${env.JAVA_HOME}</jdk>
+            </properties>
+        </profile>
+    </profiles>
+
     <properties>
         <jdk.version>7</jdk.version>
         <jdk>${env.JAVA_HOME_7}</jdk>
