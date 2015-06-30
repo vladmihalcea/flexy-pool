@@ -1,5 +1,8 @@
 <img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
 
+[![License](https://img.shields.io/github/license/vladmihalcea/flexy-pool.svg)](https://raw.githubusercontent.com/vladmihalcea/flexy-pool/master/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](http://search.maven.org/#artifactdetails|com.vladmihalcea.flexy-pool|flexy-pool-parent|1.2.1|pom)
+
 [![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)
 [![Coverage Status](https://coveralls.io/repos/vladmihalcea/flexy-pool/badge.svg?branch=master)](https://coveralls.io/r/vladmihalcea/flexy-pool?branch=master)
 [![JavaDoc](https://img.shields.io/badge/javadoc-1.10.1-blue.svg)](http://www.javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core/1.2.1)
