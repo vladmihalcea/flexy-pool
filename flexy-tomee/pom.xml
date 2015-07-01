@@ -109,6 +109,7 @@
             <properties>
                 <jdk.version>7</jdk.version>
                 <jdk>${env.JAVA_HOME}</jdk>
+                <forkMode>always</forkMode>
             </properties>
         </profile>
     </profiles>

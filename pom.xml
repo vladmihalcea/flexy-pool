@@ -45,6 +45,7 @@
     <modules>
         <module>flexy-pool-core</module>
         <module>flexy-codahale-metrics</module>
+        <module>flexy-dropwizard-metrics</module>
         <module>flexy-common-adapter</module>
         <module>flexy-java-ee</module>
         <module>flexy-btm</module>
@@ -206,7 +207,7 @@
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <jvm>${jdk}/bin/java</jvm>
-                    <forkMode>always</forkMode>
+                    <forkMode>${forkMode}</forkMode>
                 </configuration>
             </plugin>
             <plugin>
@@ -343,6 +344,7 @@
             <properties>
                 <jdk.version>7</jdk.version>
                 <jdk>${env.JAVA_HOME}</jdk>
+                <forkMode>always</forkMode>
             </properties>
         </profile>
     </profiles>
@@ -361,6 +363,7 @@
     <properties>
         <jdk.version>6</jdk.version>
         <jdk>${env.JAVA_HOME_6}</jdk>
+        <forkMode>once</forkMode>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>

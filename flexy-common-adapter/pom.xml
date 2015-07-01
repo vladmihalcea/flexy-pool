@@ -31,6 +31,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-dropwizard-metrics</artifactId>
+            <version>1.2.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
             <version>${codahale.metrics.version}</version>
