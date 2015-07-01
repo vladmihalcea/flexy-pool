@@ -18,6 +18,7 @@ public final class ClassLoaderUtils {
 
     /**
      * Load the available ClassLoader
+     *
      * @return ClassLoader
      */
     public static ClassLoader getClassLoader() {
@@ -27,6 +28,7 @@ public final class ClassLoaderUtils {
 
     /**
      * Load the Class denoted by the given string representation
+     *
      * @param className class string representation
      * @return Class
      * @throws ClassNotFoundException
@@ -37,7 +39,23 @@ public final class ClassLoaderUtils {
     }
 
     /**
+     * Find if Class denoted by the given string representation is loadable
+     *
+     * @param className class string representation
+     * @return Class
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean findClass(String className) {
+        try {
+            return getClassLoader().loadClass(className) != null;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
      * Get the resource URL
+     *
      * @param resourceName resource name
      * @return resource URL
      */
@@ -47,6 +65,7 @@ public final class ClassLoaderUtils {
 
     /**
      * Get the resource InputStream
+     *
      * @param resourceName resource name
      * @return resource InputStream
      */

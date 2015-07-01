@@ -14,7 +14,7 @@ public class JmxMetricReporter implements MetricsLifeCycleCallback {
     private JmxReporter jmxReporter;
 
     /**
-     * The JMX Reporter is actiavated only if the jmxEnabled property is set. If the jmxAutoStart property is enabled,
+     * The JMX Reporter is activated only if the jmxEnabled property is set. If the jmxAutoStart property is enabled,
      * the JMX Reporter will start automatically.
      *
      * @param configurationProperties configuration properties

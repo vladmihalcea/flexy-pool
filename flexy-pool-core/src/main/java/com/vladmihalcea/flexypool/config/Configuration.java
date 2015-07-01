@@ -6,7 +6,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
-import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
+import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 import javax.sql.DataSource;
@@ -34,7 +34,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private final String uniqueName;
         private final T targetDataSource;
         private final PoolAdapterFactory<T> poolAdapterFactory;
-        private MetricsFactory metricsFactory = CodahaleMetrics.FACTORY;
+        private MetricsFactory metricsFactory = MetricsFactoryResolver.INSTANCE.resolve();
         private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
         private boolean jmxEnabled = true;
         private boolean jmxAutoStart = false;
