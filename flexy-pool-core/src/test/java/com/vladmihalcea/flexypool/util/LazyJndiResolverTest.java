@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Vlad Mihalcea
  */
-public class LazyJndiResolverTest {
+public class LazyJndiResolverTest extends AbstractUtilsTest<LazyJndiResolver> {
 
     private JndiTestUtils jndiTestUtils;
 
@@ -47,5 +47,10 @@ public class LazyJndiResolverTest {
         } catch (SQLException e) {
             fail("There should be no exception thrown!");
         }
+    }
+
+    @Override
+    protected Class<LazyJndiResolver> getUtilsClass() {
+        return LazyJndiResolver.class;
     }
 }

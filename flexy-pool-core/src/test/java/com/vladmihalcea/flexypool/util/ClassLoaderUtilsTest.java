@@ -2,15 +2,16 @@ package com.vladmihalcea.flexypool.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 /**
  * ClassLoaderUtilsTest - ClassLoaderUtils Test
  *
  * @author Vlad Mihalcea
  */
-public class ClassLoaderUtilsTest {
+public class ClassLoaderUtilsTest extends AbstractUtilsTest<ClassLoaderUtils> {
 
     @Test
     public void testGetClassLoader() {
@@ -31,20 +32,36 @@ public class ClassLoaderUtilsTest {
         } catch (ClassNotFoundException e) {
             fail(e.getMessage());
         }
+        try {
+            ClassLoaderUtils.loadClass("org.abc.Def");
+            fail("Should throw ClassNotFoundException!");
+        } catch (ClassNotFoundException expected) {
+        }
     }
 
     @Test
     public void testFindClass() {
-
+        assertTrue(ClassLoaderUtils.findClass(ClassLoaderUtilsTest.class.getName()));
+        assertFalse(ClassLoaderUtils.findClass("org.abc.Def"));
     }
 
     @Test
     public void testGetResource() {
-
+        assertNotNull(ClassLoaderUtils.getResource("META-INF/services/com.vladmihalcea.flexypool.metric.MetricsFactoryService"));
+        assertNull(ClassLoaderUtils.getResource("META-INF/no.file"));
     }
 
     @Test
     public void testGetResourceAsStream() {
+        try {
+            ClassLoaderUtils.getResourceAsStream("META-INF/services/com.vladmihalcea.flexypool.metric.MetricsFactoryService").close();
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+    }
 
+    @Override
+    protected Class<ClassLoaderUtils> getUtilsClass() {
+        return ClassLoaderUtils.class;
     }
 }

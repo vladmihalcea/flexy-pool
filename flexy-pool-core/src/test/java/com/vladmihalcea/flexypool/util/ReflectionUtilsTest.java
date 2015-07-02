@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  *
  * @author Vlad Mihalcea
  */
-public class ReflectionUtilsTest {
+public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
 
     @Test
     public void testGetFieldValue() {
@@ -65,5 +65,10 @@ public class ReflectionUtilsTest {
         TestObject testObject = new TestObject();
         ReflectionUtils.invokeSetter(testObject, "version", 12);
         assertEquals(12, ReflectionUtils.getFieldValue(testObject, "version"));
+    }
+
+    @Override
+    protected Class<ReflectionUtils> getUtilsClass() {
+        return ReflectionUtils.class;
     }
 }
