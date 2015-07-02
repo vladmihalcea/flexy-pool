@@ -15,8 +15,24 @@
     <name>flexy-tests</name>
     <description>The flexible pool tests module</description>
 
-    <modules>
-        <module>flexy-test-hikaricp-java8</module>
-    </modules>
+    <profiles>
+        <profile>
+            <id>jdk8</id>
+
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+
+            <modules>
+                <module>flexy-test-hikaricp-java8</module>
+            </modules>
+
+            <properties>
+                <jdk.version>8</jdk.version>
+                <jdk>${env.JAVA_HOME}</jdk>
+                <forkMode>always</forkMode>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
