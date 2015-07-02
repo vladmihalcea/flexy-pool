@@ -137,6 +137,8 @@
     <properties>
         <jdk.version>8</jdk.version>
         <jdk>${env.JAVA_HOME_8}</jdk>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <hikari.version>2.3.8</hikari.version>
         <spring.version>4.1.7.RELEASE</spring.version>
