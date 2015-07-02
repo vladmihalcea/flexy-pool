@@ -34,7 +34,6 @@ public class FlexyPoolConfiguration {
                 poolingDataSource,
                 AtomikosPoolAdapter.FACTORY
         )
-        .setMetricsFactory(CodahaleMetrics.UNIFORM_RESERVOIR_FACTORY)
         .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
         .setJmxEnabled(true)
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))

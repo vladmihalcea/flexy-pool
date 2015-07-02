@@ -244,7 +244,7 @@
             </build>
         </profile>
 		<!--
-        mvn -P release release:clean release:prepare
+        mvn -P release -DignoreSnapshots=true release:clean release:prepare
         mvn -P release release:perform
         -->
         <profile>
