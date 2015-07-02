@@ -19,8 +19,26 @@
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-common-adapter</artifactId>
+            <artifactId>flexy-pool-core</artifactId>
             <version>1.2.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-codahale-metrics</artifactId>
+            <version>1.2.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-dropwizard-metrics</artifactId>
+            <version>1.2.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>${codahale.metrics.version}</version>
         </dependency>
 
         <dependency>
@@ -44,33 +62,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss.spec.javax.transaction</groupId>
-            <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-            <version>1.0.1.Final</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- Test dependencies -->
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-common-adapter</artifactId>
             <version>1.2.2-SNAPSHOT</version>
             <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-codahale-metrics</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>${codahale.metrics.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -107,6 +104,13 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.1_spec</artifactId>
+            <version>1.0.1.Final</version>
             <scope>test</scope>
         </dependency>
 

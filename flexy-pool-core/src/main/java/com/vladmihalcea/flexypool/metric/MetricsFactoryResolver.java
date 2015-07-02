@@ -3,9 +3,10 @@ package com.vladmihalcea.flexypool.metric;
 import java.util.ServiceLoader;
 
 /**
- * MetricsFactoryResolver - MetricsFactory Resolver
+ * <code>MetricsFactoryResolver</code> - MetricsFactory Resolver
  *
  * @author Vlad Mihalcea
+ * @since 1.2.2
  */
 public class MetricsFactoryResolver {
 

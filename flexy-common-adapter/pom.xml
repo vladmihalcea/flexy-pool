@@ -27,14 +27,12 @@
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-codahale-metrics</artifactId>
             <version>1.2.2-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-dropwizard-metrics</artifactId>
             <version>1.2.2-SNAPSHOT</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

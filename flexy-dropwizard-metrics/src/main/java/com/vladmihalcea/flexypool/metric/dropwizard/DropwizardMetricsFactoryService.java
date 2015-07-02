@@ -1,6 +1,5 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.Metric;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryService;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
@@ -13,6 +12,8 @@ import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
  */
 public class DropwizardMetricsFactoryService implements MetricsFactoryService {
 
+    public static final String METRICS_CLASS_NAME = "io.dropwizard.metrics.Metric";
+
     /**
      * Load DropwizardMetrics Factory if the Dropwizard Metrics is available at runtime
      *
@@ -20,6 +21,6 @@ public class DropwizardMetricsFactoryService implements MetricsFactoryService {
      */
     @Override
     public MetricsFactory load() {
-        return ClassLoaderUtils.findClass(Metric.class.getName()) ? DropwizardMetrics.FACTORY : null;
+        return ClassLoaderUtils.findClass(METRICS_CLASS_NAME) ? DropwizardMetrics.FACTORY : null;
     }
 }

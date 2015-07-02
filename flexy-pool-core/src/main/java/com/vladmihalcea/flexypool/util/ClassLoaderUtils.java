@@ -49,6 +49,8 @@ public final class ClassLoaderUtils {
             return getClassLoader().loadClass(className) != null;
         } catch (ClassNotFoundException e) {
             return false;
+        } catch (NoClassDefFoundError e) {
+            return false;
         }
     }
 

@@ -6,6 +6,7 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
  * <code>MetricsFactory</code> - Metrics Configuration based factory
  *
  * @author Vlad Mihalcea
+ * @since 1.0
  */
 public interface MetricsFactory {
 

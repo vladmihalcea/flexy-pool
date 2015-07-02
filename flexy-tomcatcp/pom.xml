@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-common-adapter</artifactId>
+            <artifactId>flexy-pool-core</artifactId>
             <version>1.2.2-SNAPSHOT</version>
         </dependency>
 
@@ -27,14 +27,18 @@
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-codahale-metrics</artifactId>
             <version>1.2.2-SNAPSHOT</version>
-            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-dropwizard-metrics</artifactId>
+            <version>1.2.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
             <version>${codahale.metrics.version}</version>
-            <scope>test</scope>
         </dependency>
 		
         <dependency>
