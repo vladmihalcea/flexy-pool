@@ -5,7 +5,6 @@ package com.vladmihalcea.flexypool.connection;
  * generated during any attempt for getting such connection.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public final class ConnectionRequestContext {

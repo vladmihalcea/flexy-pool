@@ -12,7 +12,6 @@ import java.util.concurrent.Executor;
  * It's used as a Proxy but without the inherent latency penalties.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class ManagedConnection implements Connection {

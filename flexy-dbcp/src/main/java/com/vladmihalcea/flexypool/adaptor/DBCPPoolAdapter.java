@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
  * communicate with the DBCP {@link BasicDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {

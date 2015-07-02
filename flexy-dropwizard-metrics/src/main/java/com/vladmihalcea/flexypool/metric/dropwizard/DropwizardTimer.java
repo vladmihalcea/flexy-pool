@@ -9,8 +9,7 @@ import java.util.concurrent.TimeUnit;
  * delegating calls to {@link io.dropwizard.metrics.Timer}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
- * @since 1.0
+ * @since 1.2.2
  */
 public class DropwizardTimer implements Timer {
 

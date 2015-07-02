@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
  * of the actual order of setting required dependencies.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public final class Configuration<T extends DataSource> extends ConfigurationProperties<T, Metrics, PoolAdapter<T>> {

@@ -6,9 +6,10 @@ import com.vladmihalcea.flexypool.metric.MetricsFactoryService;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 
 /**
- * CodahaleMetricsFactoryService - Codahale MetricsFactoryService
+ * <code>CodahaleMetricsFactoryService</code> - Codahale MetricsFactoryService
  *
  * @author Vlad Mihalcea
+ * @since 1.2.2
  */
 public class CodahaleMetricsFactoryService implements MetricsFactoryService {
 

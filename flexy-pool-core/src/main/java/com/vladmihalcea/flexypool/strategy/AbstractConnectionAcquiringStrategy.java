@@ -12,7 +12,6 @@ import javax.sql.DataSource;
  * the configuration and connectionFactory properties.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {

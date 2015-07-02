@@ -12,7 +12,6 @@ import java.sql.SQLException;
  * communicate with the DBCP2 {@link BasicDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {

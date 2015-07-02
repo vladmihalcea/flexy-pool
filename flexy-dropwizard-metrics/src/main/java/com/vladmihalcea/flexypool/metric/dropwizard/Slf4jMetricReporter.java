@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  * <code>Slf4jMetricReporter</code> - Slf4j Metric Reporter
  *
  * @author Vlad Mihalcea
+ * @since 1.2.2
  */
 public class Slf4jMetricReporter implements MetricsLifeCycleCallback {
 

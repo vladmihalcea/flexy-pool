@@ -6,14 +6,15 @@ import com.vladmihalcea.flexypool.metric.MetricsFactoryService;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 
 /**
- * DropwizardMetricsFactoryService - Dropwizard MetricsFactoryService
+ * <code>DropwizardMetricsFactoryService</code> - Dropwizard MetricsFactoryService
  *
  * @author Vlad Mihalcea
+ * @since 1.2.2
  */
 public class DropwizardMetricsFactoryService implements MetricsFactoryService {
 
     /**
-     * Load DropwizardMetrics Factory if the Codahale Metrics is available at runtime
+     * Load DropwizardMetrics Factory if the Dropwizard Metrics is available at runtime
      *
      * @return DropwizardMetrics Factory
      */

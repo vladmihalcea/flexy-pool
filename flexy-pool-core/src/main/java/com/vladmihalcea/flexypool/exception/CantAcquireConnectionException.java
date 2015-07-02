@@ -7,7 +7,6 @@ import java.sql.SQLException;
  * all possible attempts.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class CantAcquireConnectionException extends SQLException {

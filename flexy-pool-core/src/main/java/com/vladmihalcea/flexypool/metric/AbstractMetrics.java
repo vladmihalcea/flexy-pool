@@ -7,7 +7,6 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
  * adds the Configuration property.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public abstract class AbstractMetrics implements Metrics {

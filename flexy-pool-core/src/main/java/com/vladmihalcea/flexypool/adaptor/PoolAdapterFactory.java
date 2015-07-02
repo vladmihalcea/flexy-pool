@@ -9,7 +9,6 @@ import javax.sql.DataSource;
  * <code>PoolAdapterFactory</code> - Pool Adapter Configuration based factory
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public interface PoolAdapterFactory<T extends DataSource> {

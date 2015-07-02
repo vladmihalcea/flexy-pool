@@ -11,7 +11,6 @@ import javax.naming.NamingException;
  * <code>JndiUtils</code> - JNDI Utilities
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2
  */
 public final class JndiUtils {

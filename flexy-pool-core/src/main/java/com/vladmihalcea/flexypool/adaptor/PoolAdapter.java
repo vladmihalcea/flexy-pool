@@ -17,7 +17,6 @@ import javax.sql.DataSource;
  * <li>retrieving the pool data source
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  * @see com.vladmihalcea.flexypool.connection.ConnectionFactory
  */

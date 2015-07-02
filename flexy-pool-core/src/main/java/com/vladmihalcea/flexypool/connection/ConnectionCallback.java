@@ -4,7 +4,6 @@ package com.vladmihalcea.flexypool.connection;
  * <code>ConnectionCallback</code> defines {@link java.sql.Connection} lifecycle callbacks.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class ConnectionCallback {

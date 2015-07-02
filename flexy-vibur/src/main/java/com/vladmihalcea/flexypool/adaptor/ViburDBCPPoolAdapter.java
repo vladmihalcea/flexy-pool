@@ -3,8 +3,6 @@ package com.vladmihalcea.flexypool.adaptor;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.util.ConfigurationProperties;
-import com.vladmihalcea.flexypool.util.ReflectionUtils;
-import org.vibur.dbcp.DataSourceLifecycle;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 import java.sql.SQLException;
@@ -14,7 +12,6 @@ import java.sql.SQLException;
  * communicate with the Vubur DBCP {@link ViburDBCPDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2.1
  */
 public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSource> {

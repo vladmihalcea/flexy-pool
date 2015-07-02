@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
  * <code>ReflectionUtils</code> defines reflection utilities.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public final class ReflectionUtils {

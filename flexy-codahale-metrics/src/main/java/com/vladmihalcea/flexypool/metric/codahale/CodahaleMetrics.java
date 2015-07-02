@@ -18,7 +18,6 @@ import java.util.LinkedHashSet;
  * start/stop the metrics reports.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class CodahaleMetrics extends AbstractMetrics {

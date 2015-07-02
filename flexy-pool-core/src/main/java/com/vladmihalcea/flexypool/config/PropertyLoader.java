@@ -27,7 +27,6 @@ import java.util.Properties;
  * <code>PropertyLoader</code> - The Property Loader resolves and loads the {@link Properties} configuration file.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.2
  */
 public class PropertyLoader {

@@ -8,6 +8,7 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
  * <code>JmxMetricReporter</code> - Jmx Metric Reporter
  *
  * @author Vlad Mihalcea
+ * @since 1.0
  */
 public class JmxMetricReporter implements MetricsLifeCycleCallback {
 

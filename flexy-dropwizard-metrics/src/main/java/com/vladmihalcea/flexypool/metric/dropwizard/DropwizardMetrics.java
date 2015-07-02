@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 /**
- * <code>DropwizardMetrics</code> extends the {@link AbstractMetrics} class and configures the Codahale
+ * <code>DropwizardMetrics</code> extends the {@link AbstractMetrics} class and configures the Dropwizard
  * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
  * If the Jmx is enabled, a {@link JmxReporter} will also be added.
  * <p/>
@@ -18,8 +18,7 @@ import java.util.LinkedHashSet;
  * start/stop the metrics reports.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
- * @since 1.0
+ * @since 1.2.2
  */
 public class DropwizardMetrics extends AbstractMetrics {
 

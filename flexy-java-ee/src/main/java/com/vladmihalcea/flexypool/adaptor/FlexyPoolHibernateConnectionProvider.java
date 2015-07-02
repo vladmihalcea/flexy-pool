@@ -16,7 +16,6 @@ import java.util.Map;
  * {@link javax.sql.DataSource} defined in the persistence.xml descriptor.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2
  */
 public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionProviderImpl {

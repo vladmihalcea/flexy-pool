@@ -8,7 +8,6 @@ import java.sql.SQLException;
  * It uses a single {@link ConnectionRequestContext} parameter to simplify the acquiring options.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public interface ConnectionFactory {

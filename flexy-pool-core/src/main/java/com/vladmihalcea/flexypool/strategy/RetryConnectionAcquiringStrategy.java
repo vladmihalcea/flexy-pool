@@ -18,7 +18,6 @@ import java.sql.SQLException;
  * and it allows multiple acquiring attempts before giving up by rethrowing the {@link AcquireTimeoutException}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public final class RetryConnectionAcquiringStrategy<T extends DataSource> extends AbstractConnectionAcquiringStrategy {

@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
  * delegating calls to {@link com.codahale.metrics.Timer}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class CodahaleTimer implements Timer {

@@ -13,12 +13,9 @@ import java.sql.SQLException;
  * communicate with the Tomcat CP {@link DataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
-
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
     public static final PoolAdapterFactory<DataSource> FACTORY = new PoolAdapterFactory<DataSource>() {
 

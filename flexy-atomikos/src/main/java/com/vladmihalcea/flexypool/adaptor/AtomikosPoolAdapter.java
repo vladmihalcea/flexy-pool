@@ -13,7 +13,6 @@ import java.sql.SQLException;
  * communicate with the {@link AtomikosDataSourceBean}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2.1
  */
 public class AtomikosPoolAdapter extends AbstractPoolAdapter<AtomikosDataSourceBean> {

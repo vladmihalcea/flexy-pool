@@ -12,7 +12,6 @@ import java.sql.SQLException;
  * communicate with the BoneCP {@link BoneCPDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class BoneCPPoolAdapter extends AbstractPoolAdapter<BoneCPDataSource> {

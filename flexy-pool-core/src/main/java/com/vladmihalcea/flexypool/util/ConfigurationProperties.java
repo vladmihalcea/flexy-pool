@@ -8,7 +8,6 @@ import javax.sql.DataSource;
  * <code>Configuration</code> defines basic properties for a given FlexyPool instance.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public abstract class ConfigurationProperties<T extends DataSource, M, P> {

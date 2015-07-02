@@ -12,7 +12,6 @@ import java.sql.SQLException;
  * communicate with the c3p0 {@link ComboPooledDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> {

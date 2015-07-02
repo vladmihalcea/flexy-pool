@@ -25,7 +25,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * Use this strategy to dynamically adjust the pool size based on the connection acquiring demand.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends DataSource> extends AbstractConnectionAcquiringStrategy {

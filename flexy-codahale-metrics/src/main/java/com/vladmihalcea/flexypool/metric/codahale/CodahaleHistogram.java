@@ -7,7 +7,6 @@ import com.vladmihalcea.flexypool.metric.Histogram;
  * delegating calls to {@link com.codahale.metrics.Histogram}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class CodahaleHistogram implements Histogram {

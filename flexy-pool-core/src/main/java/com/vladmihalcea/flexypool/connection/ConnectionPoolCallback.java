@@ -4,7 +4,6 @@ package com.vladmihalcea.flexypool.connection;
  * <code>ConnectionPoolCallback</code> defines executing callbacks upon connection acquireConnection or releaseConnection.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public interface ConnectionPoolCallback {

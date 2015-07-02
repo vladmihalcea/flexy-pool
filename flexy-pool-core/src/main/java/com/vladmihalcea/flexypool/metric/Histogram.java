@@ -4,7 +4,6 @@ package com.vladmihalcea.flexypool.metric;
  * <code>Histogram</code> defines the basic Histogram behavior..
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public interface Histogram {

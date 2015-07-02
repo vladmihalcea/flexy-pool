@@ -9,7 +9,6 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
  * to Codahale Metrics.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public interface MetricsLifeCycleCallback extends LifeCycleCallback {

@@ -6,7 +6,6 @@ import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
  * <code>Metrics</code> defines the basic Metrics behavior..
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public interface Metrics extends LifeCycleCallback {

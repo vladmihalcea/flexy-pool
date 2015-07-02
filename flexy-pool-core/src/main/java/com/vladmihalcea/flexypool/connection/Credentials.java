@@ -4,7 +4,6 @@ package com.vladmihalcea.flexypool.connection;
  * <code>Credentials</code> stores the connection authentication info.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class Credentials {

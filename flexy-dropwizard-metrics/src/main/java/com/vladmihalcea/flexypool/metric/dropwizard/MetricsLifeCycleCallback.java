@@ -6,11 +6,10 @@ import com.vladmihalcea.flexypool.util.ConfigurationProperties;
 
 /**
  * <code>MetricsLifeCycleCallback</code> allows you to add lifecycle event handlers
- * to Codahale Metrics.
+ * to Dropwizard Metrics.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
- * @since 1.0
+ * @since 1.2.2
  */
 public interface MetricsLifeCycleCallback extends LifeCycleCallback {
 

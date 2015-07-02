@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
  * <p>Make sure you supply the adapting pool specific exception transaction mechanism {@link AbstractPoolAdapter#translateException}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  * @see com.vladmihalcea.flexypool.adaptor.PoolAdapter
  */

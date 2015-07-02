@@ -7,7 +7,6 @@ import java.net.URL;
  * <code>ClassLoaderUtils</code> - Class loading utilities.
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2
  */
 public final class ClassLoaderUtils {

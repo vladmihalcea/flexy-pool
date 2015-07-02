@@ -7,8 +7,7 @@ import com.vladmihalcea.flexypool.metric.Histogram;
  * delegating calls to {@link io.dropwizard.metrics.Histogram}
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
- * @since 1.0
+ * @since 1.2.2
  */
 public class DropwizardHistogram implements Histogram {
 

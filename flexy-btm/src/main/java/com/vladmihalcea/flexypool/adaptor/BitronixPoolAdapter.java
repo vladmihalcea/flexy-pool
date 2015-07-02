@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * communicate with the bitronix {@link PoolingDataSource}
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> {

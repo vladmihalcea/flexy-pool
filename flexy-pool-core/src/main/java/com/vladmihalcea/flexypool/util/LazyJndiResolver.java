@@ -8,7 +8,6 @@ import java.lang.reflect.Proxy;
  * <code>LazyJndiResolver</code> - Resolves Jndi resources lazily
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.2
  */
 public final class LazyJndiResolver implements InvocationHandler {

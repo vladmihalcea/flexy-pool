@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
  * <code>Timer</code> defines the basic Timer behavior..
  *
  * @author Vlad Mihalcea
- * @version %I%, %E%
  * @since 1.0
  */
 public interface Timer {

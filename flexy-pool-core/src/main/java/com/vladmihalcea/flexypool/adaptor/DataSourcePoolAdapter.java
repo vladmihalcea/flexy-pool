@@ -12,7 +12,6 @@ import javax.sql.DataSource;
  * a connection pool.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.2
  * @see com.vladmihalcea.flexypool.adaptor.PoolAdapter
  */

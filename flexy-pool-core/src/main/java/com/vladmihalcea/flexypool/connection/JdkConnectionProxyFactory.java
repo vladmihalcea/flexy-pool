@@ -9,7 +9,6 @@ import java.sql.Connection;
  * <code>JdkConnectionProxyFactory</code> is the Dynamic Proxy {@link java.sql.Connection} factory.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class JdkConnectionProxyFactory extends ConnectionProxyFactory {
@@ -21,7 +20,6 @@ public class JdkConnectionProxyFactory extends ConnectionProxyFactory {
      * It calls the <code>ConnectionCallback</code> on connection acquireConnection or releaseConnection.
      *
      * @author Vlad Mihalcea
-     * @version    %I%, %E%
      * @since 1.0
      */
     private static class ConnectionInvocationHandler implements InvocationHandler {

@@ -7,7 +7,6 @@ import java.sql.SQLException;
  * in less than the pool timeout interval.
  *
  * @author Vlad Mihalcea
- * @version    %I%, %E%
  * @since 1.0
  */
 public class AcquireTimeoutException extends SQLException {
