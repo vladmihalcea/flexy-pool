@@ -59,6 +59,7 @@
         <module>flexy-vibur</module>
         <module>flexy-glassfish</module>
         <module>flexy-tomee</module>
+        <module>flexy-tests</module>
     </modules>
 
     <dependencies>
