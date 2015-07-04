@@ -3,7 +3,6 @@ package com.vladmihalcea.flexypool.connection;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.Timer;
-import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import com.vladmihalcea.flexypool.util.TestUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,40 +14,20 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * ManagedConnectionTest - ManagedConnection Test
+ * ConnectionProxyFactoryPerformanceTest - ConnectionProxyFactory Performance Test
  *
  * @author Vlad Mihalcea
  */
-public class ManagedConnectionTest {
+public class ConnectionProxyFactoryPerformanceTest extends ConnectionDecoratorTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ManagedConnectionTest.class);
-
-    private static Map<Class<?>, Object> classToPrimitives = new HashMap<Class<?>, Object>() {{
-        put(Boolean.TYPE, false);
-        put(Byte.TYPE, 0);
-        put(Short.TYPE, 0);
-        put(Integer.TYPE, 0);
-        put(Long.TYPE, 0L);
-        put(Float.TYPE, 0F);
-        put(Double.TYPE, 0D);
-        put(Void.TYPE, null);
-    }};
-
-    private static Map<Class<?>, Object> classToFinalObjects = new HashMap<Class<?>, Object>() {{
-        put(String.class, "");
-        put(String[].class, new String[]{});
-        put(int[].class, new int[]{});
-        put(Object[].class, new Object[]{});
-        put(Class.class, Object.class);
-    }};
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionProxyFactoryPerformanceTest.class);
 
     private static MetricRegistry metricRegistry = new MetricRegistry();
+
     private static Slf4jReporter logReporter = Slf4jReporter
             .forRegistry(metricRegistry)
             .outputTo(LOGGER)
@@ -62,6 +41,7 @@ public class ManagedConnectionTest {
     }
 
     private final Connection targetConnection = Mockito.mock(Connection.class);
+    private final ConnectionCallback connectionCallback = Mockito.mock(ConnectionCallback.class);
 
     private final InvocationHandler invocationHandler = new InvocationHandler() {
         @Override
@@ -72,12 +52,7 @@ public class ManagedConnectionTest {
     private final Connection proxy = (Connection) Proxy.newProxyInstance(this.getClass().getClassLoader(),
             new Class[]{Connection.class}, invocationHandler);
 
-    private ManagedConnection managedConnection = new ManagedConnection(targetConnection);
-
-    @Test
-    public void testAllMethodsAreInvoked() {
-        invokeAllMethods(managedConnection);
-    }
+    private ConnectionDecorator connectionDecorator = new ConnectionDecorator(targetConnection, connectionCallback);
 
     @Test
     public void testPerformance() {
@@ -86,50 +61,32 @@ public class ManagedConnectionTest {
             timeAllMethodsForDuration(new Callable() {
                 @Override
                 public Object call() throws Exception {
-                    callConnectionMethods(managedConnection, noProxyHistogram);
+                    callConnectionMethods(noProxyHistogram);
                     return null;
                 }
             }, durationMillis);
             timeAllMethodsForDuration(new Callable() {
                 @Override
                 public Object call() throws Exception {
-                    callConnectionMethods(proxy, proxyHistogram);
+                    callConnectionMethods(proxyHistogram);
                     return null;
                 }
             }, durationMillis);
         }
     }
 
-    private void callConnectionMethods(Connection connection, Timer timer) throws SQLException {
+    private void callConnectionMethods(Timer timer) throws SQLException {
         long startNanos = System.nanoTime();
         try {
-            managedConnection.getMetaData();
+            connectionDecorator.getMetaData();
             String javaVersion = System.getProperty("java.version");
             if (javaVersion.contains("1.7") || javaVersion.contains("1.8")) {
-                managedConnection.setSchema("schema");
-                managedConnection.abort(null);
+                connectionDecorator.setSchema("schema");
+                connectionDecorator.abort(null);
             }
         } finally {
             long endNanos = System.nanoTime();
             timer.update((endNanos - startNanos), TimeUnit.NANOSECONDS);
-        }
-    }
-
-    private void invokeAllMethods(Connection connection) {
-        for (Method method : Connection.class.getMethods()) {
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            Object[] parameters = new Object[parameterTypes.length];
-
-            for (int i = 0; i < parameterTypes.length; i++) {
-                Class<?> parameterType = parameterTypes[i];
-                if (!parameterType.isPrimitive()) {
-                    Object finalObject = classToFinalObjects.get(parameterType);
-                    parameters[i] = finalObject != null ? finalObject : Mockito.mock(parameterType);
-                } else {
-                    parameters[i] = classToPrimitives.get(parameterType);
-                }
-            }
-            ReflectionUtils.invoke(connection, ReflectionUtils.getMethod(connection, method.getName(), parameterTypes), parameters);
         }
     }
 

@@ -34,7 +34,6 @@ public class FlexyPoolConfiguration {
                 poolingDataSource,
                 AtomikosPoolAdapter.FACTORY
         )
-        .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
         .setJmxEnabled(true)
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))
         .build();

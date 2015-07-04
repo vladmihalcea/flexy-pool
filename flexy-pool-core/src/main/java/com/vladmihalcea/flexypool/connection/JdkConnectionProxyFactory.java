@@ -27,11 +27,11 @@ public class JdkConnectionProxyFactory extends ConnectionProxyFactory {
         public static final String CLOSE_METHOD_NAME = "close";
 
         private final Connection target;
-        private final ConnectionCallback connectionCallback;
+        private final ConnectionCallback callback;
 
-        public ConnectionInvocationHandler(Connection target, ConnectionCallback connectionCallback) {
+        public ConnectionInvocationHandler(Connection target, ConnectionCallback callback) {
             this.target = target;
-            this.connectionCallback = connectionCallback;
+            this.callback = callback;
         }
 
         /**
@@ -45,7 +45,7 @@ public class JdkConnectionProxyFactory extends ConnectionProxyFactory {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if (CLOSE_METHOD_NAME.equals(method.getName())) {
-                connectionCallback.close();
+                callback.close();
             }
             return method.invoke(target, args);
         }

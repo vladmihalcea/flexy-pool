@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>com.vladmihalcea.flexy-pool</groupId>
+        <artifactId>flexy-pool-parent</artifactId>
+        <version>1.2.3-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>flexy-pool-core-java7</artifactId>
+    <version>1.2.3-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>flexy-pool-core-java7</name>
+    <description>The flexible pool core Java 1.7 adaptor</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-pool-core</artifactId>
+            <version>1.2.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.vladmihalcea.flexy-pool</groupId>
+            <artifactId>flexy-pool-core</artifactId>
+            <version>1.2.3-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>${codahale.metrics.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>travis</id>
+            <activation>
+                <property>
+                    <name>env.TRAVIS</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <jdk.version>7</jdk.version>
+                <jdk>${env.JAVA_HOME}</jdk>
+                <forkMode>always</forkMode>
+            </properties>
+        </profile>
+    </profiles>
+
+    <properties>
+        <jdk.version>7</jdk.version>
+        <jdk>${env.JAVA_HOME_7}</jdk>
+    </properties>
+
+</project>

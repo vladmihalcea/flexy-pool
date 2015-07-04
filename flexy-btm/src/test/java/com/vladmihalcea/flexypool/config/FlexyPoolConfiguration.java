@@ -34,7 +34,6 @@ public class FlexyPoolConfiguration {
                 poolingDataSource,
                 BitronixPoolAdapter.FACTORY
         )
-        .setConnectionProxyFactory(JdkConnectionProxyFactory.INSTANCE)
         .setJmxEnabled(true)
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))
         .build();

@@ -2,8 +2,9 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionDecoratorFactoryResolver;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
-import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionDecoratorFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
@@ -34,7 +35,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private final T targetDataSource;
         private final PoolAdapterFactory<T> poolAdapterFactory;
         private MetricsFactory metricsFactory = MetricsFactoryResolver.INSTANCE.resolve();
-        private ConnectionProxyFactory connectionProxyFactory = JdkConnectionProxyFactory.INSTANCE;
+        private ConnectionProxyFactory connectionProxyFactory = ConnectionDecoratorFactoryResolver.INSTANCE.resolve();
         private boolean jmxEnabled = true;
         private boolean jmxAutoStart = false;
         private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
@@ -54,6 +55,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
         /**
          * Set metrics factory
+         *
          * @param metricsFactory metrics factory
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
@@ -64,6 +66,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
         /**
          * Set connection proxy factory.
+         *
          * @param connectionProxyFactory connection proxy factory
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
@@ -161,6 +164,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
     /**
      * Get the associated {@link com.vladmihalcea.flexypool.connection.ConnectionProxyFactory}
+     *
      * @return {@link com.vladmihalcea.flexypool.connection.ConnectionProxyFactory}
      */
     public ConnectionProxyFactory getConnectionProxyFactory() {

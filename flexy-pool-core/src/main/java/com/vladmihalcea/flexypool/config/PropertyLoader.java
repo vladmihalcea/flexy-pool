@@ -1,6 +1,7 @@
 package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
@@ -47,6 +48,7 @@ public class PropertyLoader {
         DATA_SOURCE_PROPERTY("flexy.pool.data.source.property."),
         POOL_ADAPTER_FACTORY("flexy.pool.adapter.factory"),
         POOL_METRICS_FACTORY("flexy.pool.metrics.factory"),
+        POOL_CONNECTION_PROXY_FACTORY("flexy.pool.connection.proxy.factory"),
         POOL_METRICS_REPORTER_LOG_MILLIS("flexy.pool.metrics.reporter.log.millis"),
         POOL_METRICS_REPORTER_JMX_ENABLE("flexy.pool.metrics.reporter.jmx.enable"),
         POOL_METRICS_REPORTER_JMX_AUTO_START("flexy.pool.metrics.reporter.jmx.auto.start"),
@@ -184,6 +186,15 @@ public class PropertyLoader {
      */
     public MetricsFactory getMetricsFactory() {
         return instantiateClass(PropertyKey.POOL_METRICS_FACTORY);
+    }
+
+    /**
+     * Get the {@link ConnectionProxyFactory}
+     *
+     * @return {@link ConnectionProxyFactory}
+     */
+    public ConnectionProxyFactory getConnectionProxyFactory() {
+        return instantiateClass(PropertyKey.POOL_CONNECTION_PROXY_FACTORY);
     }
 
     /**

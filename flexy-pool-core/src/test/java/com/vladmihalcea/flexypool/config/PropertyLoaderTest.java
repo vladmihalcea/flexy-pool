@@ -2,6 +2,8 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.connection.ConnectionCallback;
+import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
@@ -18,6 +20,7 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Proxy;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -140,6 +143,7 @@ public class PropertyLoaderTest {
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_REPORTER_JMX_AUTO_START.getKey(), "true");
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_REPORTER_JMX_ENABLE.getKey(), "false");
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
+            properties.put(PropertyLoader.PropertyKey.POOL_CONNECTION_PROXY_FACTORY.getKey(), MockConnectionProxyFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
@@ -151,6 +155,7 @@ public class PropertyLoaderTest {
             assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getDataSource());
             assertNotNull(propertyLoader.getMetricsFactory());
+            assertNotNull(propertyLoader.getConnectionProxyFactory());
             assertEquals(123, propertyLoader.getMetricLogReporterMillis().intValue());
             assertTrue(propertyLoader.isJmxAutoStart());
             assertFalse(propertyLoader.isJmxEnabled());
@@ -200,6 +205,14 @@ public class PropertyLoaderTest {
 
         @Override
         public Metrics newInstance(ConfigurationProperties configurationProperties) {
+            return null;
+        }
+    }
+
+    public static class MockConnectionProxyFactory extends ConnectionProxyFactory {
+
+        @Override
+        protected Connection proxyConnection(Connection target, ConnectionCallback callback) {
             return null;
         }
     }

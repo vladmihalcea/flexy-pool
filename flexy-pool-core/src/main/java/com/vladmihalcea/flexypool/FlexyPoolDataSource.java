@@ -116,6 +116,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             String uniqueName = propertyLoader.getUniqueName();
             PoolAdapterFactory<D> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
+            ConnectionProxyFactory connectionProxyFactory = propertyLoader.getConnectionProxyFactory();
             Integer metricLogReporterMillis = propertyLoader.getMetricLogReporterMillis();
             Boolean jmxEnabled = propertyLoader.isJmxEnabled();
             Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
@@ -129,6 +130,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             );
             if (metricsFactory != null) {
                 configurationBuilder.setMetricsFactory(metricsFactory);
+            }
+            if (connectionProxyFactory != null) {
+                configurationBuilder.setConnectionProxyFactory(connectionProxyFactory);
             }
             if (metricLogReporterMillis != null) {
                 configurationBuilder.setMetricLogReporterMillis(metricLogReporterMillis);

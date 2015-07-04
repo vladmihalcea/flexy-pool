@@ -44,6 +44,7 @@
 
     <modules>
         <module>flexy-pool-core</module>
+        <module>flexy-pool-core-java7</module>
         <module>flexy-codahale-metrics</module>
         <module>flexy-dropwizard-metrics</module>
         <module>flexy-common-adapter</module>
