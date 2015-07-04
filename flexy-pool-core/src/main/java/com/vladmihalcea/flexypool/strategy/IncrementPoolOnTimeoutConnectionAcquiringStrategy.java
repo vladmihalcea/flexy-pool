@@ -5,7 +5,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
 
     /**
      * The {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory} class allows
-     * creating this strategy for a given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
+     * creating this strategy for a given {@link ConfigurationProperties}
      */
     public static class Factory<T extends DataSource> implements ConnectionAcquiringStrategyFactory<IncrementPoolOnTimeoutConnectionAcquiringStrategy, T> {
 
@@ -55,7 +55,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
 
         /**
          * Creates a {@link com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy} for a given
-         * {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
+         * {@link ConfigurationProperties}
          *
          * @param configurationProperties configurationProperties
          * @return strategy

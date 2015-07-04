@@ -5,7 +5,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ public final class RetryConnectionAcquiringStrategy<T extends DataSource> extend
 
     /**
      * The {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy.Factory} class allows
-     * creating this strategy for a given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
+     * creating this strategy for a given {@link ConfigurationProperties}
      */
     public static class Factory<T extends DataSource> implements ConnectionAcquiringStrategyFactory<RetryConnectionAcquiringStrategy, T> {
         private final int retryAttempts;
@@ -39,7 +39,7 @@ public final class RetryConnectionAcquiringStrategy<T extends DataSource> extend
 
         /**
          * Creates a {@link com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy} for a given
-         * {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
+         * {@link ConfigurationProperties}
          *
          * @param configurationProperties configurationProperties
          * @return strategy

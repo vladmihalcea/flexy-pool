@@ -4,11 +4,10 @@ import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionDecoratorFactoryResolver;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
-import com.vladmihalcea.flexypool.connection.ConnectionDecoratorFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;

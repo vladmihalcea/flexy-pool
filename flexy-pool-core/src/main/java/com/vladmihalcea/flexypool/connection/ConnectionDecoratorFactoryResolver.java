@@ -8,7 +8,7 @@ import java.util.ServiceLoader;
  * @author Vlad Mihalcea
  * @since 1.2.3
  */
-public class ConnectionDecoratorFactoryResolver {
+public final class ConnectionDecoratorFactoryResolver {
 
     public static final ConnectionDecoratorFactoryResolver INSTANCE = new ConnectionDecoratorFactoryResolver();
 

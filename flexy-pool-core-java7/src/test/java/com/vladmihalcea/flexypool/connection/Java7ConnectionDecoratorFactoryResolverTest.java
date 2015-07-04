@@ -12,6 +12,7 @@ public class Java7ConnectionDecoratorFactoryResolverTest extends ConnectionDecor
      */
     @Override
     protected Class<? extends ConnectionDecoratorFactory> getConnectionDecoratorFactoryClass() {
+        Runtime.class.getPackage().getImplementationVersion();
         return Java7ConnectionDecoratorFactory.class;
     }
 }

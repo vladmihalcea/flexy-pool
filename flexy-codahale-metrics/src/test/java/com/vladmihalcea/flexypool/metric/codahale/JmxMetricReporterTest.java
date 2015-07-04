@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.metric.codahale;
 
 import com.codahale.metrics.MetricRegistry;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

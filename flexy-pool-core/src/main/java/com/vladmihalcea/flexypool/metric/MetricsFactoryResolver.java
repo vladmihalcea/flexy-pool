@@ -8,7 +8,7 @@ import java.util.ServiceLoader;
  * @author Vlad Mihalcea
  * @since 1.2.2
  */
-public class MetricsFactoryResolver {
+public final class MetricsFactoryResolver {
 
     public static final MetricsFactoryResolver INSTANCE = new MetricsFactoryResolver();
 

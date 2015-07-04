@@ -82,6 +82,22 @@ public final class ReflectionUtils {
     }
 
     /**
+     * Check if target class has the given method
+     *
+     * @param targetClass    target class
+     * @param methodName     method name
+     * @param parameterTypes method parameter types
+     * @return method availability
+     */
+    public static boolean hasMethod(Class<?> targetClass, String methodName, Class... parameterTypes) {
+        try {
+            return targetClass.getMethod(methodName, parameterTypes) != null;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    /**
      * Get setter method
      *
      * @param target        target object

@@ -4,7 +4,7 @@ import bitronix.tm.internal.BitronixRuntimeException;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import java.sql.SQLException;
 import java.util.regex.Pattern;

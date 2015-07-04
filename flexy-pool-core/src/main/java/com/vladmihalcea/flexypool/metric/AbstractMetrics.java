@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.metric;
 
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 /**
  * <code>AbstractMetrics</code> implements the {@link com.vladmihalcea.flexypool.metric.Metrics} interface and

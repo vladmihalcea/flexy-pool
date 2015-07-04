@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.strategy;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.connection.ConnectionFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import javax.sql.DataSource;
 
@@ -20,7 +20,7 @@ public abstract class AbstractConnectionAcquiringStrategy implements ConnectionA
     private final ConnectionFactory connectionFactory;
 
     /**
-     * Creates a strategy using the given {@link com.vladmihalcea.flexypool.util.ConfigurationProperties}
+     * Creates a strategy using the given {@link ConfigurationProperties}
      *
      * @param configurationProperties configurationProperties
      */

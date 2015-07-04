@@ -4,7 +4,7 @@ import com.codahale.metrics.*;
 import com.vladmihalcea.flexypool.metric.*;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Timer;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;

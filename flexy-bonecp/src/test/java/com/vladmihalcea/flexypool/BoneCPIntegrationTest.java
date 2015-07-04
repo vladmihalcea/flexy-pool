@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool;
 import com.jolbox.bonecp.BoneCPDataSource;
 import com.vladmihalcea.flexypool.adaptor.BoneCPPoolAdapter;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import javax.sql.DataSource;
 

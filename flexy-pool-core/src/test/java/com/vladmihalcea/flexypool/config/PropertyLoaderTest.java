@@ -9,7 +9,7 @@ import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;

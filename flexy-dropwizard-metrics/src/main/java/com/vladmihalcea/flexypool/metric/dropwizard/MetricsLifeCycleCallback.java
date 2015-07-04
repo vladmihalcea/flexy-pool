@@ -2,7 +2,7 @@ package com.vladmihalcea.flexypool.metric.dropwizard;
 
 import io.dropwizard.metrics.MetricRegistry;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 /**
  * <code>MetricsLifeCycleCallback</code> allows you to add lifecycle event handlers

@@ -2,7 +2,7 @@ package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.adaptor.ViburDBCPPoolAdapter;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;

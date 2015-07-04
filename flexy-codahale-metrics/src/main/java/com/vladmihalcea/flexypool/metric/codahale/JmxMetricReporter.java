@@ -2,7 +2,7 @@ package com.vladmihalcea.flexypool.metric.codahale;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 /**
  * <code>JmxMetricReporter</code> - Jmx Metric Reporter

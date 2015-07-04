@@ -2,7 +2,7 @@ package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 import java.sql.SQLException;

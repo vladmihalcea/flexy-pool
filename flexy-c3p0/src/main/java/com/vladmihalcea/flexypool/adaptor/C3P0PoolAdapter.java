@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.adaptor;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.util.ConfigurationProperties;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import java.sql.SQLException;
 

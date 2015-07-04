@@ -3,13 +3,10 @@ package com.vladmihalcea.flexypool.connection;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ConnectionDecoratorTest - ConnectionDecorator Test
@@ -17,8 +14,6 @@ import java.util.Map;
  * @author Vlad Mihalcea
  */
 public class ConnectionDecoratorTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionDecoratorTest.class);
 
     private static Map<Class<?>, Object> classToPrimitives = new HashMap<Class<?>, Object>() {{
         put(Boolean.TYPE, false);
@@ -39,19 +34,15 @@ public class ConnectionDecoratorTest {
         put(Class.class, Object.class);
     }};
 
-    private final Connection targetConnection = Mockito.mock(Connection.class);
-
-    private final ConnectionCallback connectionCallback = Mockito.mock(ConnectionCallback.class);
-
-    private ConnectionDecorator connectionDecorator = new ConnectionDecorator(targetConnection, connectionCallback);
-
     @Test
     public void testAllMethodsAreInvoked() {
-        invokeAllMethods(connectionDecorator);
+        Connection target = Mockito.mock(Connection.class);
+        ConnectionCallback callback = Mockito.mock(ConnectionCallback.class);
+        invokeAllMethods(getConnectionDecorator(target, callback));
     }
 
-    protected void invokeAllMethods(Connection connection) {
-        for (Method method : Connection.class.getMethods()) {
+    protected void invokeAllMethods(ConnectionDecorator connectionDecorator) {
+        for (Method method : getConnectionMethods(connectionDecorator)) {
             Class<?>[] parameterTypes = method.getParameterTypes();
             Object[] parameters = new Object[parameterTypes.length];
 
@@ -64,7 +55,15 @@ public class ConnectionDecoratorTest {
                     parameters[i] = classToPrimitives.get(parameterType);
                 }
             }
-            ReflectionUtils.invoke(connection, ReflectionUtils.getMethod(connection, method.getName(), parameterTypes), parameters);
+            ReflectionUtils.invoke(connectionDecorator, ReflectionUtils.getMethod(connectionDecorator, method.getName(), parameterTypes), parameters);
         }
+    }
+
+    protected List<Method> getConnectionMethods(ConnectionDecorator connectionDecorator) {
+        return Arrays.asList(Connection.class.getMethods());
+    }
+
+    protected ConnectionDecorator getConnectionDecorator(Connection target, ConnectionCallback callback) {
+        return new ConnectionDecorator(target, callback);
     }
 }
