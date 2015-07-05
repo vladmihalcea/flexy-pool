@@ -1,5 +1,8 @@
 package com.vladmihalcea.flexypool.connection;
 
+import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 /**
@@ -9,6 +12,8 @@ import java.util.ServiceLoader;
  * @since 1.2.3
  */
 public final class ConnectionDecoratorFactoryResolver {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ConnectionDecoratorFactoryResolver.class);
 
     public static final ConnectionDecoratorFactoryResolver INSTANCE = new ConnectionDecoratorFactoryResolver();
 
@@ -24,11 +29,20 @@ public final class ConnectionDecoratorFactoryResolver {
     public ConnectionDecoratorFactory resolve() {
         int loadingIndex = Integer.MIN_VALUE;
         ConnectionDecoratorFactory connectionDecoratorFactory = null;
-        for(ConnectionDecoratorFactoryService connectionDecoratorFactoryService : serviceLoader) {
-            int currentLoadingIndex = connectionDecoratorFactoryService.loadingIndex();
-            if(currentLoadingIndex > loadingIndex) {
-                connectionDecoratorFactory = connectionDecoratorFactoryService.load();
-                loadingIndex = currentLoadingIndex;
+        Iterator<ConnectionDecoratorFactoryService> connectionDecoratorFactoryServiceIterator = serviceLoader.iterator();
+        while (connectionDecoratorFactoryServiceIterator.hasNext()) {
+            try {
+                ConnectionDecoratorFactoryService connectionDecoratorFactoryService = connectionDecoratorFactoryServiceIterator.next();
+                int currentLoadingIndex = connectionDecoratorFactoryService.loadingIndex();
+                if(currentLoadingIndex > loadingIndex) {
+                    ConnectionDecoratorFactory currentConnectionDecoratorFactory = connectionDecoratorFactoryService.load();
+                    if(currentConnectionDecoratorFactory != null) {
+                        connectionDecoratorFactory = currentConnectionDecoratorFactory;
+                        loadingIndex = currentLoadingIndex;
+                    }
+                }
+            } catch (LinkageError e) {
+                LOGGER.info("Couldn't load ConnectionDecoratorFactoryService on the current JVM", e);
             }
         }
         if(connectionDecoratorFactory != null) {
