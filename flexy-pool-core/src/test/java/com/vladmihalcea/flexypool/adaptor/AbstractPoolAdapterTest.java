@@ -45,6 +45,11 @@ public class AbstractPoolAdapterTest {
         public void setMaxPoolSize(int maxPoolSize) {
 
         }
+
+        @Override
+        protected boolean isAcquireTimeoutException(Exception e) {
+            return false;
+        }
     }
 
     @Mock

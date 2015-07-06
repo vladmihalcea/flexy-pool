@@ -1,8 +1,7 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.metric.Metrics;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.SQLException;
@@ -51,10 +50,16 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
      */
     @Override
     protected SQLException translateException(Exception e) {
-        if(SQL_TIMEOUT_EXCEPTION_CLASS_NAME.equals(e.getClass().getName()) ||
-            (e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage()))) {
-            return new AcquireTimeoutException(e);
-        }
+
         return super.translateException(e);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return SQL_TIMEOUT_EXCEPTION_CLASS_NAME.equals(e.getClass().getName()) ||
+            (e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage()));
     }
 }

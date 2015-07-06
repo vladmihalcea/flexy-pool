@@ -1,11 +1,9 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.metric.Metrics;
 import org.apache.commons.dbcp.BasicDataSource;
 
-import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
@@ -43,17 +41,10 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
     }
 
     /**
-     * Translate the DBCP Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
+     * {@inheritDoc}
      */
     @Override
-    protected SQLException translateException(Exception e) {
-        if (e.getMessage() != null &&
-                Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage())) {
-            return new AcquireTimeoutException(e);
-        }
-        return super.translateException(e);
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage());
     }
 }

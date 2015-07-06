@@ -2,6 +2,7 @@ package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
@@ -79,9 +80,18 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      * @return translated exception
      */
     protected SQLException translateException(Exception e) {
-        if (e instanceof SQLException) {
+        if(isAcquireTimeoutException(e)) {
+            return new AcquireTimeoutException(e);
+        } else if (e instanceof SQLException) {
             return (SQLException) e;
         }
         return new SQLException(e);
     }
+
+    /**
+     * Check if the caught exception is due to a connection acquire failure
+     * @param e exception to be checked
+     * @return the exception is due to a connection acquire failure
+     */
+    protected abstract boolean isAcquireTimeoutException(Exception e);
 }

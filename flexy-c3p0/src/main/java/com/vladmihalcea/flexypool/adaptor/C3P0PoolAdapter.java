@@ -1,11 +1,8 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-
-import java.sql.SQLException;
+import com.vladmihalcea.flexypool.metric.Metrics;
 
 /**
  * <code>C3P0PoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
@@ -42,17 +39,10 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
     }
 
     /**
-     * Translate the c3p0 Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
+     * {@inheritDoc}
      */
     @Override
-    protected SQLException translateException(Exception e) {
-        if (e.getMessage() != null &&
-                ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage())) {
-            return new AcquireTimeoutException(e);
-        }
-        return super.translateException(e);
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return e.getMessage() != null && ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage());
     }
 }

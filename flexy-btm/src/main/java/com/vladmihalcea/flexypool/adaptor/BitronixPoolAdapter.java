@@ -60,4 +60,17 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
         }
         return super.translateException(e);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isAcquireTimeoutException(Exception e) {
+        if (e.getCause() instanceof BitronixRuntimeException) {
+            BitronixRuntimeException cause = (BitronixRuntimeException) e.getCause();
+            return cause.getMessage() != null &&
+                Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, cause.getMessage());
+        }
+        return false;
+    }
 }

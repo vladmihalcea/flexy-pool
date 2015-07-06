@@ -1,11 +1,8 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.jolbox.bonecp.BoneCPDataSource;
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-
-import java.sql.SQLException;
+import com.vladmihalcea.flexypool.metric.Metrics;
 
 /**
  * <code>BoneCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
@@ -51,17 +48,10 @@ public class BoneCPPoolAdapter extends AbstractPoolAdapter<BoneCPDataSource> {
     }
 
     /**
-     * Translate the BonCP Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
+     * {@inheritDoc}
      */
     @Override
-    protected SQLException translateException(Exception e) {
-        if (e.getMessage() != null &&
-                ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage())) {
-            return new AcquireTimeoutException(e);
-        }
-        return super.translateException(e);
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return e.getMessage() != null && ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage());
     }
 }

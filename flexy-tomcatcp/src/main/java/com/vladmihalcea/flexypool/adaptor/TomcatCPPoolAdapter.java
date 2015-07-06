@@ -1,12 +1,9 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.metric.Metrics;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolExhaustedException;
-
-import java.sql.SQLException;
 
 /**
  * <code>TomcatCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
@@ -41,16 +38,10 @@ public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
     }
 
     /**
-     * Translate the TomcatCP Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
+     * {@inheritDoc}
      */
     @Override
-    protected SQLException translateException(Exception e) {
-        if (e instanceof PoolExhaustedException) {
-            return new AcquireTimeoutException(e);
-        }
-        return super.translateException(e);
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return e instanceof PoolExhaustedException;
     }
 }

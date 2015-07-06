@@ -51,4 +51,12 @@ public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
     public void setMaxPoolSize(int maxPoolSize) {
         throw new UnsupportedOperationException("The DataSourcePoolAdapter cannot write the max pool size");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean isAcquireTimeoutException(Exception e) {
+        return false;
+    }
 }
