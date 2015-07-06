@@ -9,7 +9,10 @@ import com.vladmihalcea.flexypool.connection.ConnectionPoolCallback;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeThresholdExceededEvent;
+import com.vladmihalcea.flexypool.event.ConnectionLeaseTimeThresholdExceededEvent;
 import com.vladmihalcea.flexypool.event.EventListenerResolver;
+import com.vladmihalcea.flexypool.event.EventPublisher;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
@@ -122,6 +125,8 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             Boolean jmxEnabled = propertyLoader.isJmxEnabled();
             Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
             EventListenerResolver eventListenerResolver = propertyLoader.getEventListenerResolver();
+            Long connectionAcquireTimeThresholdMillis = propertyLoader.getConnectionAcquireTimeThresholdMillis();
+            Long connectionLeaseTimeThresholdMillis = propertyLoader.getConnectionLeaseTimeThresholdMillis();
 
             if (poolAdapterFactory == null) {
                 poolAdapterFactory = (PoolAdapterFactory<D>) DataSourcePoolAdapter.FACTORY;
@@ -148,6 +153,12 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             if (eventListenerResolver != null) {
                 configurationBuilder.setEventListenerResolver(eventListenerResolver);
             }
+            if (connectionAcquireTimeThresholdMillis != null) {
+                configurationBuilder.setConnectionAcquireTimeThresholdMillis(connectionAcquireTimeThresholdMillis);
+            }
+            if (connectionLeaseTimeThresholdMillis != null) {
+                configurationBuilder.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
+            }
             return configurationBuilder.build();
         }
 
@@ -166,6 +177,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     public static final String CONCURRENT_CONNECTION_REQUESTS_HISTOGRAM = "concurrentConnectionRequestsHistogram";
     public static final String CONNECTION_LEASE_MILLIS = "connectionLeaseMillis";
 
+    private final String uniqueName;
     private final PoolAdapter<T> poolAdapter;
     private final T targetDataSource;
     private final Metrics metrics;
@@ -179,6 +191,11 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     private AtomicLong concurrentConnectionCount = new AtomicLong();
     private AtomicLong concurrentConnectionRequestCount = new AtomicLong();
+
+    private final EventPublisher eventPublisher;
+
+    private final long connectionAcquireTimeThresholdMillis;
+    private final long connectionLeaseTimeThresholdMillis;
 
     /**
      * Initialize <code>FlexyPoolDataSource</code> from {@link Configuration} and the array of {@link ConnectionAcquiringStrategyFactory}
@@ -216,6 +233,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      */
     private FlexyPoolDataSource(final Configuration<T> configuration,
                                 List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> connectionAcquiringStrategyFactories) {
+        this.uniqueName = configuration.getUniqueName();
         this.poolAdapter = configuration.getPoolAdapter();
         this.targetDataSource = poolAdapter.getTargetDataSource();
         this.metrics = configuration.getMetrics();
@@ -231,6 +249,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
                 connectionAcquiringStrategyFactory : connectionAcquiringStrategyFactories) {
             connectionAcquiringStrategies.add(connectionAcquiringStrategyFactory.newInstance(configuration));
         }
+        eventPublisher = configuration.getEventPublisher();
+        connectionAcquireTimeThresholdMillis = configuration.getConnectionAcquireTimeThresholdMillis();
+        connectionLeaseTimeThresholdMillis = configuration.getConnectionLeaseTimeThresholdMillis();
     }
 
     /**
@@ -293,8 +314,16 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             }
         } finally {
             long endNanos = System.nanoTime();
-            connectionAcquireTotalTimer.update(TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos), TimeUnit.MILLISECONDS);
+            long acquireDurationMillis = TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos);
+            connectionAcquireTotalTimer.update(acquireDurationMillis, TimeUnit.MILLISECONDS);
             concurrentConnectionRequestCountHistogram.update(concurrentConnectionRequestCount.decrementAndGet());
+            if(acquireDurationMillis > connectionAcquireTimeThresholdMillis) {
+                eventPublisher.publish(new ConnectionAcquireTimeThresholdExceededEvent(
+                    uniqueName, connectionAcquireTimeThresholdMillis, acquireDurationMillis
+                ));
+                LOGGER.info("Connection acquired in {} millis, while threshold is set to {} in {} FlexyPoolDataSource",
+                    acquireDurationMillis, connectionAcquireTimeThresholdMillis, uniqueName);
+            }
         }
     }
 
@@ -312,7 +341,15 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     @Override
     public void releaseConnection(long leaseDurationNanos) {
         concurrentConnectionCountHistogram.update(concurrentConnectionCount.decrementAndGet());
-        connectionLeaseTimer.update(TimeUnit.NANOSECONDS.toMillis(leaseDurationNanos), TimeUnit.MILLISECONDS);
+        long leaseDurationMillis = TimeUnit.NANOSECONDS.toMillis(leaseDurationNanos);
+        connectionLeaseTimer.update(leaseDurationMillis, TimeUnit.MILLISECONDS);
+        if(leaseDurationMillis > connectionLeaseTimeThresholdMillis) {
+            eventPublisher.publish(new ConnectionLeaseTimeThresholdExceededEvent(
+                uniqueName, connectionLeaseTimeThresholdMillis, leaseDurationMillis
+            ));
+            LOGGER.info("Connection leased for {} millis, while threshold is set to {} in {} FlexyPoolDataSource",
+                    leaseDurationMillis, connectionLeaseTimeThresholdMillis, uniqueName);
+        }
     }
 
     /**

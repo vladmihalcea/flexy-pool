@@ -23,6 +23,10 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private long metricLogReporterMillis;
 
+    private long connectionAcquireTimeThresholdMillis = Long.MAX_VALUE;
+
+    private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
+
     public ConfigurationProperties(String uniqueName, EventPublisher eventPublisher) {
         this.uniqueName = uniqueName;
         this.eventPublisher = eventPublisher;
@@ -97,6 +101,38 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      */
     protected void setMetricLogReporterMillis(long metricLogReporterMillis) {
         this.metricLogReporterMillis = metricLogReporterMillis;
+    }
+
+    /**
+     * Get the connection acquire time threshold millis
+     * @return connection acquire time threshold millis
+     */
+    public long getConnectionAcquireTimeThresholdMillis() {
+        return connectionAcquireTimeThresholdMillis;
+    }
+
+    /**
+     * Set the connection acquire time threshold millis
+     * @param connectionAcquireTimeThresholdMillis connection acquire time threshold millis
+     */
+    public void setConnectionAcquireTimeThresholdMillis(long connectionAcquireTimeThresholdMillis) {
+        this.connectionAcquireTimeThresholdMillis = connectionAcquireTimeThresholdMillis;
+    }
+
+    /**
+     * Get the connection lease time threshold millis
+     * @return connection lease time threshold millis
+     */
+    public long getConnectionLeaseTimeThresholdMillis() {
+        return connectionLeaseTimeThresholdMillis;
+    }
+
+    /**
+     * Set the connection lease time threshold millis
+     * @param connectionLeaseTimeThresholdMillis connection lease time threshold millis
+     */
+    public void setConnectionLeaseTimeThresholdMillis(long connectionLeaseTimeThresholdMillis) {
+        this.connectionLeaseTimeThresholdMillis = connectionLeaseTimeThresholdMillis;
     }
 
     /**

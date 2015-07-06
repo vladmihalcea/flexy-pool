@@ -150,6 +150,8 @@ public class PropertyLoaderTest {
             properties.put(PropertyLoader.PropertyKey.POOL_CONNECTION_PROXY_FACTORY.getKey(), MockConnectionProxyFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_EVENT_LISTENER_RESOLVER.getKey(), MockEventListenerResolver.class.getName());
+            properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE.getKey(), "120");
+            properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE.getKey(), "240");
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
             assertNotNull(propertyLoader.getDataSource());
@@ -167,6 +169,8 @@ public class PropertyLoaderTest {
             assertNotNull(propertyLoader.getPoolAdapterFactory());
             assertEquals(1, propertyLoader.getConnectionAcquiringStrategyFactories().size());
             assertEquals(MockEventListenerResolver.MockEventListener.class, propertyLoader.getEventListenerResolver().resolveListeners().get(0).getClass());
+            assertEquals(Long.valueOf(120), propertyLoader.getConnectionAcquireTimeThresholdMillis());
+            assertEquals(Long.valueOf(240), propertyLoader.getConnectionLeaseTimeThresholdMillis());
         } catch (IOException e) {
             fail("Can't save/load properties");
         }

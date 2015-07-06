@@ -41,6 +41,8 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private boolean jmxAutoStart = false;
         private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
         private EventListenerResolver eventListenerResolver;
+        private long connectionAcquireTimeThresholdMillis = Long.MAX_VALUE;
+        private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
 
         /**
          * Construct the builder with the mandatory associations.
@@ -121,6 +123,30 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         }
 
         /**
+         * Set the connection acquire time threshold millis
+         * @param connectionAcquireTimeThresholdMillis connection acquire time threshold millis
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setConnectionAcquireTimeThresholdMillis(Long connectionAcquireTimeThresholdMillis) {
+            if (connectionAcquireTimeThresholdMillis != null) {
+                this.connectionAcquireTimeThresholdMillis = connectionAcquireTimeThresholdMillis;
+            }
+            return this;
+        }
+
+        /**
+         * Set the connection lease time threshold millis
+         * @param connectionLeaseTimeThresholdMillis connection lease time threshold millis
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setConnectionLeaseTimeThresholdMillis(Long connectionLeaseTimeThresholdMillis) {
+            if (connectionLeaseTimeThresholdMillis != null) {
+                this.connectionLeaseTimeThresholdMillis = connectionLeaseTimeThresholdMillis;
+            }
+            return this;
+        }
+
+        /**
          * Build the configuration object.
          *
          * @return configuration
@@ -131,6 +157,8 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             configuration.setJmxEnabled(jmxEnabled);
             configuration.setJmxAutoStart(jmxAutoStart);
             configuration.setMetricLogReporterMillis(metricLogReporterMillis);
+            configuration.setConnectionAcquireTimeThresholdMillis(connectionAcquireTimeThresholdMillis);
+            configuration.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             configuration.connectionProxyFactory = connectionProxyFactory;

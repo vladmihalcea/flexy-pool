@@ -91,7 +91,8 @@ public final class ReflectionUtils {
      */
     public static boolean hasMethod(Class<?> targetClass, String methodName, Class... parameterTypes) {
         try {
-            return targetClass.getMethod(methodName, parameterTypes) != null;
+            targetClass.getMethod(methodName, parameterTypes);
+            return true;
         } catch (NoSuchMethodException e) {
             return false;
         }

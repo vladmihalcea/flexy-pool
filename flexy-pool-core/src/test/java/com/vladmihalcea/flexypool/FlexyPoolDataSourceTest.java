@@ -334,6 +334,8 @@ public class FlexyPoolDataSourceTest {
         Properties properties = new Properties();
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
+        properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE.getKey(), "-1");
+        properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE.getKey(), "-1");
         PropertiesTestUtils.setProperties(properties);
         FlexyPoolDataSource<DataSource> flexyPoolDataSource = new FlexyPoolDataSource<DataSource>();
         DataSource dataSource = ((PoolAdapter) ReflectionTestUtils.getField(flexyPoolDataSource, "poolAdapter")).getTargetDataSource();

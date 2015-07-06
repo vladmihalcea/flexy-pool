@@ -54,7 +54,9 @@ public class PropertyLoader {
         POOL_METRICS_REPORTER_JMX_ENABLE("flexy.pool.metrics.reporter.jmx.enable"),
         POOL_METRICS_REPORTER_JMX_AUTO_START("flexy.pool.metrics.reporter.jmx.auto.start"),
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver"),
-        POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver");
+        POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver"),
+        POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE("flexy.pool.time.threshold.connection.acquire"),
+        POOL_TIME_THRESHOLD_CONNECTION_LEASE("flexy.pool.time.threshold.connection.lease"),;
 
         private final String key;
 
@@ -256,6 +258,22 @@ public class PropertyLoader {
     }
 
     /**
+     * Get the connection acquire time threshold millis
+     * @return connection acquire time threshold millis
+     */
+    public Long getConnectionAcquireTimeThresholdMillis() {
+        return longProperty(PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE);
+    }
+
+    /**
+     * Get the connection lease time threshold millis
+     * @return connection lease time threshold millis
+     */
+    public Long getConnectionLeaseTimeThresholdMillis() {
+        return longProperty(PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE);
+    }
+
+    /**
      * Instantiate class associated to the given property key
      *
      * @param propertyKey property key
@@ -292,6 +310,21 @@ public class PropertyLoader {
         String property = properties.getProperty(propertyKey.getKey());
         if (property != null) {
             value = Integer.valueOf(property);
+        }
+        return value;
+    }
+
+    /**
+     * Get Long property value
+     *
+     * @param propertyKey property key
+     * @return Long property value
+     */
+    private Long longProperty(PropertyKey propertyKey) {
+        Long value = null;
+        String property = properties.getProperty(propertyKey.getKey());
+        if (property != null) {
+            value = Long.valueOf(property);
         }
         return value;
     }
