@@ -4,7 +4,6 @@ import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
@@ -40,18 +39,6 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaximumPoolSize(maxPoolSize);
-    }
-
-    /**
-     * Translate the HikariCP Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
-     */
-    @Override
-    protected SQLException translateException(Exception e) {
-
-        return super.translateException(e);
     }
 
     /**

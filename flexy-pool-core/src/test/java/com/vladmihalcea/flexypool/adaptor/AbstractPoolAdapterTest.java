@@ -1,12 +1,16 @@
 package com.vladmihalcea.flexypool.adaptor;
 
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
+import com.vladmihalcea.flexypool.event.Event;
+import com.vladmihalcea.flexypool.event.EventListener;
+import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.Timer;
-import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,10 +19,11 @@ import org.mockito.MockitoAnnotations;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -29,6 +34,24 @@ import static org.mockito.Mockito.*;
  * @author Vlad Mihalcea
  */
 public class AbstractPoolAdapterTest {
+
+    public static class ConnectionTimedOutException extends SQLException {
+
+    }
+
+    public static class ConnectionTimedOutExceptionEventListener extends EventListener<ConnectionAcquireTimeoutEvent> {
+
+        private ConnectionAcquireTimeoutEvent event;
+
+        public ConnectionTimedOutExceptionEventListener() {
+            super(ConnectionAcquireTimeoutEvent.class);
+        }
+
+        @Override
+        public void on(ConnectionAcquireTimeoutEvent event) {
+            this.event = event;
+        }
+    }
 
     public static class TestPoolAdapter extends AbstractPoolAdapter<DataSource> {
 
@@ -48,7 +71,7 @@ public class AbstractPoolAdapterTest {
 
         @Override
         protected boolean isAcquireTimeoutException(Exception e) {
-            return false;
+            return e instanceof ConnectionTimedOutException;
         }
     }
 
@@ -64,12 +87,17 @@ public class AbstractPoolAdapterTest {
     @Mock
     private Timer timer;
 
+    private ConnectionTimedOutExceptionEventListener eventListener = new ConnectionTimedOutExceptionEventListener();
+
     private AbstractPoolAdapter<DataSource> poolAdapter;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
         when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
+
+
+
         Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
@@ -80,13 +108,19 @@ public class AbstractPoolAdapterTest {
                     }
                 }
         )
-                .setMetricsFactory(new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return metrics;
-                    }
-                })
-                .build();
+        .setMetricsFactory(new MetricsFactory() {
+            @Override
+            public Metrics newInstance(ConfigurationProperties configurationProperties) {
+                return metrics;
+            }
+        })
+        .setEventListenerResolver(new EventListenerResolver() {
+            @Override
+            public List<? extends EventListener<? extends Event>> resolveListeners() {
+                return (List<? extends EventListener<? extends Event>>) Collections.singletonList(eventListener);
+            }
+        })
+        .build();
         poolAdapter = newPoolAdapter(configuration);
     }
 
@@ -131,11 +165,32 @@ public class AbstractPoolAdapterTest {
         }
     }
 
+    @Test
+    public void testGetConnectionThrowsTimeoutException() throws SQLException {
+        ConnectionRequestContext connectionRequestContext = new ConnectionRequestContext.Builder().build();
+        when(dataSource.getConnection()).thenThrow(new ConnectionTimedOutException());
+        try {
+            poolAdapter.getConnection(connectionRequestContext);
+            fail("Should have thrown SQLException");
+        } catch (SQLException e) {
+            verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+            if (supportsTimeoutExceptionTranslation()) {
+                ConnectionAcquireTimeoutEvent connectionAcquireTimeoutEvent = eventListener.event;
+                assertNotNull(connectionAcquireTimeoutEvent);
+                assertEquals(getClass().getName(), connectionAcquireTimeoutEvent.getUniqueName());
+            }
+        }
+    }
+
     protected AbstractPoolAdapter<DataSource> newPoolAdapter(Configuration<DataSource> configuration) {
         return new TestPoolAdapter(configuration);
     }
 
     protected AbstractPoolAdapter<DataSource> getPoolAdapter() {
         return poolAdapter;
+    }
+
+    protected boolean supportsTimeoutExceptionTranslation() {
+        return true;
     }
 }

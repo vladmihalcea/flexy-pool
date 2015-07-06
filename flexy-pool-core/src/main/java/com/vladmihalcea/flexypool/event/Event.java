@@ -6,6 +6,7 @@ import java.io.Serializable;
  * <code>Event</code> - Base abstraction for all FlexyPool events
  *
  * @author Vlad Mihalcea
+ * @since 1.2.3
  */
 public abstract class Event implements Serializable {
 

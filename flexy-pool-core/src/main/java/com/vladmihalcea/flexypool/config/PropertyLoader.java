@@ -2,6 +2,7 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
+import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
@@ -52,7 +53,8 @@ public class PropertyLoader {
         POOL_METRICS_REPORTER_LOG_MILLIS("flexy.pool.metrics.reporter.log.millis"),
         POOL_METRICS_REPORTER_JMX_ENABLE("flexy.pool.metrics.reporter.jmx.enable"),
         POOL_METRICS_REPORTER_JMX_AUTO_START("flexy.pool.metrics.reporter.jmx.auto.start"),
-        POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver");
+        POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver"),
+        POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver");
 
         private final String key;
 
@@ -243,6 +245,14 @@ public class PropertyLoader {
 
         }
         return Collections.emptyList();
+    }
+
+    /**
+     * Get the event listener resolver
+     * @return event listener resolver
+     */
+    public EventListenerResolver getEventListenerResolver() {
+        return instantiateClass(PropertyKey.POOL_EVENT_LISTENER_RESOLVER);
     }
 
     /**

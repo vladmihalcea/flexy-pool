@@ -2,11 +2,9 @@ package com.vladmihalcea.flexypool.adaptor;
 
 import bitronix.tm.internal.BitronixRuntimeException;
 import bitronix.tm.resource.jdbc.PoolingDataSource;
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.metric.Metrics;
 
-import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 /**
@@ -41,24 +39,6 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxPoolSize(maxPoolSize);
-    }
-
-    /**
-     * Translate the Bitronix Exception to AcquireTimeoutException.
-     *
-     * @param e exception
-     * @return translated exception
-     */
-    @Override
-    protected SQLException translateException(Exception e) {
-        if (e.getCause() instanceof BitronixRuntimeException) {
-            BitronixRuntimeException cause = (BitronixRuntimeException) e.getCause();
-            if (cause.getMessage() != null &&
-                    Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, cause.getMessage())) {
-                return new AcquireTimeoutException(e);
-            }
-        }
-        return super.translateException(e);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.vladmihalcea.flexypool.connection.ConnectionPoolCallback;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
@@ -120,6 +121,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             Integer metricLogReporterMillis = propertyLoader.getMetricLogReporterMillis();
             Boolean jmxEnabled = propertyLoader.isJmxEnabled();
             Boolean jmxAutoStart = propertyLoader.isJmxAutoStart();
+            EventListenerResolver eventListenerResolver = propertyLoader.getEventListenerResolver();
 
             if (poolAdapterFactory == null) {
                 poolAdapterFactory = (PoolAdapterFactory<D>) DataSourcePoolAdapter.FACTORY;
@@ -142,6 +144,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             }
             if (jmxAutoStart != null) {
                 configurationBuilder.setJmxAutoStart(jmxAutoStart);
+            }
+            if (eventListenerResolver != null) {
+                configurationBuilder.setEventListenerResolver(eventListenerResolver);
             }
             return configurationBuilder.build();
         }

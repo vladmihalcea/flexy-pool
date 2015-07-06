@@ -4,6 +4,10 @@ import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionCallback;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
+import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
+import com.vladmihalcea.flexypool.event.Event;
+import com.vladmihalcea.flexypool.event.EventListener;
+import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
@@ -145,6 +149,7 @@ public class PropertyLoaderTest {
             properties.put(PropertyLoader.PropertyKey.POOL_METRICS_FACTORY.getKey(), MockMetricsFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_CONNECTION_PROXY_FACTORY.getKey(), MockConnectionProxyFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
+            properties.put(PropertyLoader.PropertyKey.POOL_EVENT_LISTENER_RESOLVER.getKey(), MockEventListenerResolver.class.getName());
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
             assertNotNull(propertyLoader.getDataSource());
@@ -161,6 +166,7 @@ public class PropertyLoaderTest {
             assertFalse(propertyLoader.isJmxEnabled());
             assertNotNull(propertyLoader.getPoolAdapterFactory());
             assertEquals(1, propertyLoader.getConnectionAcquiringStrategyFactories().size());
+            assertEquals(MockEventListenerResolver.MockEventListener.class, propertyLoader.getEventListenerResolver().resolveListeners().get(0).getClass());
         } catch (IOException e) {
             fail("Can't save/load properties");
         }
@@ -232,6 +238,28 @@ public class PropertyLoaderTest {
             List<ConnectionAcquiringStrategyFactory> factories = new ArrayList<ConnectionAcquiringStrategyFactory>();
             factories.add(new MockConnectionAcquiringStrategyFactory());
             return factories;
+        }
+    }
+
+    public static class MockEventListenerResolver implements EventListenerResolver {
+
+        private static class MockEventListener extends EventListener<ConnectionAcquireTimeoutEvent> {
+
+            protected MockEventListener() {
+                super(ConnectionAcquireTimeoutEvent.class);
+            }
+
+            @Override
+            public void on(ConnectionAcquireTimeoutEvent event) {
+
+            }
+        }
+
+        @Override
+        public List<? extends EventListener<? extends Event>> resolveListeners() {
+            List<MockEventListener> listeners = new ArrayList<MockEventListener>();
+            listeners.add(new MockEventListener());
+            return listeners;
         }
     }
 }

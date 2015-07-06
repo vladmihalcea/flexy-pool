@@ -1,6 +1,7 @@
 package com.vladmihalcea.flexypool.common;
 
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
+import com.vladmihalcea.flexypool.event.EventPublisher;
 
 import javax.sql.DataSource;
 
@@ -13,12 +14,18 @@ import javax.sql.DataSource;
 public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private final String uniqueName;
+
+    private final EventPublisher eventPublisher;
+
     private boolean jmxEnabled;
+
     private boolean jmxAutoStart;
+
     private long metricLogReporterMillis;
 
-    public ConfigurationProperties(String uniqueName) {
+    public ConfigurationProperties(String uniqueName, EventPublisher eventPublisher) {
         this.uniqueName = uniqueName;
+        this.eventPublisher = eventPublisher;
     }
 
     /**
@@ -28,6 +35,14 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      */
     public String getUniqueName() {
         return uniqueName;
+    }
+
+    /**
+     * Get event publisher
+     * @return event publisher
+     */
+    public EventPublisher getEventPublisher() {
+        return eventPublisher;
     }
 
     /**

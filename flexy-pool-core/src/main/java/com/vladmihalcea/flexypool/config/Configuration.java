@@ -2,12 +2,14 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.connection.ConnectionDecoratorFactoryResolver;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
+import com.vladmihalcea.flexypool.event.EventListenerResolver;
+import com.vladmihalcea.flexypool.event.EventPublisher;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
-import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +40,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private boolean jmxEnabled = true;
         private boolean jmxAutoStart = false;
         private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
+        private EventListenerResolver eventListenerResolver;
 
         /**
          * Construct the builder with the mandatory associations.
@@ -108,12 +111,23 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         }
 
         /**
+         * Set the event listener resolver
+         * @param eventListenerResolver event listener resolver
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setEventListenerResolver(EventListenerResolver eventListenerResolver) {
+            this.eventListenerResolver = eventListenerResolver;
+            return this;
+        }
+
+        /**
          * Build the configuration object.
          *
          * @return configuration
          */
         public Configuration<T> build() {
-            Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource);
+            EventPublisher eventPublisher = EventPublisher.newInstance(eventListenerResolver);
+            Configuration<T> configuration = new Configuration<T>(uniqueName, targetDataSource, eventPublisher);
             configuration.setJmxEnabled(jmxEnabled);
             configuration.setJmxAutoStart(jmxAutoStart);
             configuration.setMetricLogReporterMillis(metricLogReporterMillis);
@@ -129,8 +143,8 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
     private PoolAdapter<T> poolAdapter;
     private ConnectionProxyFactory connectionProxyFactory;
 
-    private Configuration(String uniqueName, T targetDataSource) {
-        super(uniqueName);
+    private Configuration(String uniqueName, T targetDataSource, EventPublisher eventPublisher) {
+        super(uniqueName, eventPublisher);
         this.targetDataSource = targetDataSource;
     }
 

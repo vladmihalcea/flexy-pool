@@ -26,4 +26,8 @@ public class DataSourcePoolAdapterTest extends AbstractPoolAdapterTest {
     public void testSetMaxPoolSize() {
         getPoolAdapter().setMaxPoolSize(10);
     }
+
+    protected boolean supportsTimeoutExceptionTranslation() {
+        return false;
+    }
 }

@@ -2,6 +2,8 @@ package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
+import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
+import com.vladmihalcea.flexypool.event.EventPublisher;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
@@ -28,13 +30,19 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
 
     public static final String CONNECTION_ACQUIRE_MILLIS = "connectionAcquireMillis";
 
+    private final ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties;
+
     private final T targetDataSource;
 
     private final Timer connectionAcquireTimer;
 
+    private final EventPublisher eventPublisher;
+
     public AbstractPoolAdapter(ConfigurationProperties<T, Metrics, PoolAdapter<T>> configurationProperties) {
+        this.configurationProperties = configurationProperties;
         this.targetDataSource = configurationProperties.getTargetDataSource();
         this.connectionAcquireTimer = configurationProperties.getMetrics().timer(CONNECTION_ACQUIRE_MILLIS);
+        this.eventPublisher = configurationProperties.getEventPublisher();
     }
 
     /**
@@ -81,6 +89,7 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      */
     protected SQLException translateException(Exception e) {
         if(isAcquireTimeoutException(e)) {
+            eventPublisher.publish(new ConnectionAcquireTimeoutEvent(configurationProperties.getUniqueName()));
             return new AcquireTimeoutException(e);
         } else if (e instanceof SQLException) {
             return (SQLException) e;
