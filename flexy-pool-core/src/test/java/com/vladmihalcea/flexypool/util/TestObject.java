@@ -17,6 +17,9 @@ public class TestObject {
     public void setVersion(Integer version) {
         this.version = version;
     }
+    public void setFails() {
+        throw new IllegalArgumentException();
+    }
 
     public void start() {
     }

@@ -51,6 +51,6 @@ public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
         if (e instanceof PoolExhaustedException) {
             return new AcquireTimeoutException(e);
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

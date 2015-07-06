@@ -16,7 +16,7 @@ import static org.junit.Assert.fail;
  *
  * @author Vlad Mihalcea
  */
-public class JndiUtilsTest {
+public class JndiUtilsTest extends AbstractUtilsTest<JndiUtils> {
 
     private SimpleNamingContextBuilder namingContext;
 
@@ -45,5 +45,10 @@ public class JndiUtilsTest {
     public void testLookupSuccess() {
         namingContext.bind("abc", "def");
         assertEquals("def", JndiUtils.lookup("abc"));
+    }
+
+    @Override
+    protected Class<JndiUtils> getUtilsClass() {
+        return JndiUtils.class;
     }
 }

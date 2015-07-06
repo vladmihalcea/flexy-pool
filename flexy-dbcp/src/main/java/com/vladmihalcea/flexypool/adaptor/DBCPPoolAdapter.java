@@ -54,6 +54,6 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
                 Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage())) {
             return new AcquireTimeoutException(e);
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

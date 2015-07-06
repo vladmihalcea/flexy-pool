@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 /**
@@ -37,6 +38,7 @@ public class CodahaleMetricsTest {
     @Test
     public void testHistogram() {
         CodahaleMetrics codahaleMetrics = new CodahaleMetrics(configurationProperties, reservoirFactory);
+        assertSame(configurationProperties, codahaleMetrics.getConfigurationProperties());
         when(reservoirFactory.newInstance(com.codahale.metrics.Histogram.class, "histo")).thenReturn(reservoir);
         Histogram histogram = codahaleMetrics.histogram("histo");
         verify(reservoirFactory, times(1)).newInstance(com.codahale.metrics.Histogram.class, "histo");

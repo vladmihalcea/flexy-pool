@@ -62,6 +62,6 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
                 e.getMessage().startsWith(ACQUIRE_TIMEOUT_MESSAGE)) {
             return new AcquireTimeoutException(e);
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

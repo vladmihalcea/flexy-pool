@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
 
 /**
@@ -37,6 +38,7 @@ public class DropwizardMetricsTest {
     @Test
     public void testHistogram() {
         DropwizardMetrics dropwizardMetrics = new DropwizardMetrics(configurationProperties, reservoirFactory);
+        assertSame(configurationProperties, dropwizardMetrics.getConfigurationProperties());
         when(reservoirFactory.newInstance(io.dropwizard.metrics.Histogram.class, "histo")).thenReturn(reservoir);
         Histogram histogram = dropwizardMetrics.histogram("histo");
         verify(reservoirFactory, times(1)).newInstance(io.dropwizard.metrics.Histogram.class, "histo");

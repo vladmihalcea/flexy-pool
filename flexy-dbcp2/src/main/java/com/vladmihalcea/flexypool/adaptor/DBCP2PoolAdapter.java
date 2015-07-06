@@ -53,6 +53,6 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
                 ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage())) {
             return new AcquireTimeoutException(e);
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

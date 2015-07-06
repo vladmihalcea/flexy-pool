@@ -56,9 +56,7 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AtomikosDataSourceB
                     ACQUIRE_TIMEOUT_MESSAGE.equals(atomikosSQLException.getMessage())) {
                 return new AcquireTimeoutException(e);
             }
-        } else if (e instanceof SQLException) {
-            return (SQLException) e;
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

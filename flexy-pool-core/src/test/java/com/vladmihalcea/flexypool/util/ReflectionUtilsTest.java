@@ -3,6 +3,8 @@ package com.vladmihalcea.flexypool.util;
 import com.vladmihalcea.flexypool.exception.ReflectionException;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -40,12 +42,39 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
     }
 
     @Test
+    public void testGetMethod() {
+        assertNotNull(ReflectionUtils.getMethod(new TestObject(), "getName"));
+    }
+
+    @Test(expected = ReflectionException.class)
+    public void testGetMethodThrowsReflectionException() {
+        ReflectionUtils.getMethod(new TestObject(), "unknown");
+    }
+
+    @Test
+    public void testHasMethod() {
+        assertTrue(ReflectionUtils.hasMethod(TestObject.class, "getName"));
+    }
+
+    @Test
+    public void testHasMethodThrowsReflectionException() {
+        assertFalse(ReflectionUtils.hasMethod(TestObject.class, "unknown"));
+    }
+
+    @Test
     public void testInvoke() {
         TestObject testObject = new TestObject();
         assertEquals("testObject", ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "getName")));
         ReflectionUtils.setFieldValue(testObject, "name", "testObjectNameChanged");
         assertEquals("testObjectNameChanged", ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "getName")));
         assertNull(ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "start")));
+        try {
+            ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "setFails"));
+            fail("Should have failed!");
+        } catch (ReflectionException e) {
+            assertEquals(InvocationTargetException.class, e.getCause().getClass());
+            assertEquals(IllegalArgumentException.class, e.getCause().getCause().getClass());
+        }
     }
 
     @Test
@@ -58,6 +87,13 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
             assertEquals(NoSuchMethodException.class, expected.getCause().getClass());
         }
         assertNotNull(ReflectionUtils.getSetter(testObject, "version", Integer.class));
+        try {
+            ReflectionUtils.invoke(testObject, ReflectionUtils.getMethod(testObject, "setFails"));
+            fail("Should have failed!");
+        } catch (ReflectionException e) {
+            assertEquals(InvocationTargetException.class, e.getCause().getClass());
+            assertEquals(IllegalArgumentException.class, e.getCause().getCause().getClass());
+        }
     }
 
     @Test

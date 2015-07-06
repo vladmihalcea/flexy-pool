@@ -79,6 +79,9 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      * @return translated exception
      */
     protected SQLException translateException(Exception e) {
+        if (e instanceof SQLException) {
+            return (SQLException) e;
+        }
         return new SQLException(e);
     }
 }

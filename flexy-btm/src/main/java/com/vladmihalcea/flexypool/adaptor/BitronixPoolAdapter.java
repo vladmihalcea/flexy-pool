@@ -57,9 +57,7 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
                     Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, cause.getMessage())) {
                 return new AcquireTimeoutException(e);
             }
-        } else if (e instanceof SQLException) {
-            return (SQLException) e;
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }

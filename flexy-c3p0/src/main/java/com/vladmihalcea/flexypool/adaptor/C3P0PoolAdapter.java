@@ -53,6 +53,6 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
                 ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage())) {
             return new AcquireTimeoutException(e);
         }
-        return new SQLException(e);
+        return super.translateException(e);
     }
 }
