@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.connection;
 import java.sql.Connection;
 
 /**
- * <code>ConnectionDecoratorFactory</code> is  {@link ConnectionDecorator} factory.
+ * <code>ConnectionDecoratorFactory</code> creates {@link ConnectionDecorator} instances.
  *
  * @author Vlad Mihalcea
  * @since 1.2.3
@@ -14,7 +14,8 @@ public class ConnectionDecoratorFactory extends ConnectionProxyFactory {
 
     /**
      * Create a {@link ConnectionDecorator} delegate to the actual target {@link Connection}
-     * @param target connection to proxy
+     *
+     * @param target   connection to proxy
      * @param callback attaching connection lifecycle listener
      * @return {@link Connection} delegate
      */

@@ -317,12 +317,12 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             long acquireDurationMillis = TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos);
             connectionAcquireTotalTimer.update(acquireDurationMillis, TimeUnit.MILLISECONDS);
             concurrentConnectionRequestCountHistogram.update(concurrentConnectionRequestCount.decrementAndGet());
-            if(acquireDurationMillis > connectionAcquireTimeThresholdMillis) {
+            if (acquireDurationMillis > connectionAcquireTimeThresholdMillis) {
                 eventPublisher.publish(new ConnectionAcquireTimeThresholdExceededEvent(
-                    uniqueName, connectionAcquireTimeThresholdMillis, acquireDurationMillis
+                        uniqueName, connectionAcquireTimeThresholdMillis, acquireDurationMillis
                 ));
                 LOGGER.info("Connection acquired in {} millis, while threshold is set to {} in {} FlexyPoolDataSource",
-                    acquireDurationMillis, connectionAcquireTimeThresholdMillis, uniqueName);
+                        acquireDurationMillis, connectionAcquireTimeThresholdMillis, uniqueName);
             }
         }
     }
@@ -343,9 +343,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
         concurrentConnectionCountHistogram.update(concurrentConnectionCount.decrementAndGet());
         long leaseDurationMillis = TimeUnit.NANOSECONDS.toMillis(leaseDurationNanos);
         connectionLeaseTimer.update(leaseDurationMillis, TimeUnit.MILLISECONDS);
-        if(leaseDurationMillis > connectionLeaseTimeThresholdMillis) {
+        if (leaseDurationMillis > connectionLeaseTimeThresholdMillis) {
             eventPublisher.publish(new ConnectionLeaseTimeThresholdExceededEvent(
-                uniqueName, connectionLeaseTimeThresholdMillis, leaseDurationMillis
+                    uniqueName, connectionLeaseTimeThresholdMillis, leaseDurationMillis
             ));
             LOGGER.info("Connection leased for {} millis, while threshold is set to {} in {} FlexyPoolDataSource",
                     leaseDurationMillis, connectionLeaseTimeThresholdMillis, uniqueName);

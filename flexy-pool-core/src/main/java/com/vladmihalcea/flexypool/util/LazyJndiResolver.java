@@ -22,6 +22,7 @@ public final class LazyJndiResolver implements InvocationHandler {
 
     /**
      * The JNDI name of the associated object
+     *
      * @param name JNDI name of the associated object
      */
     private LazyJndiResolver(String name) {
@@ -30,15 +31,16 @@ public final class LazyJndiResolver implements InvocationHandler {
 
     /**
      * Resolves the JNDI object upon invoking any method on the associated Proxy
-     * @param proxy proxy
+     *
+     * @param proxy  proxy
      * @param method method
-     * @param args arguments
+     * @param args   arguments
      * @return return value
      * @throws Throwable in case of failures
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if(target == null) {
+        if (target == null) {
             target = JndiUtils.lookup(name);
         }
         return method.invoke(target, args);
@@ -46,9 +48,10 @@ public final class LazyJndiResolver implements InvocationHandler {
 
     /**
      * Creates a new Proxy instance
-     * @param name JNDI name of the object to be lazily looked up
+     *
+     * @param name       JNDI name of the object to be lazily looked up
      * @param objectType object type
-     * @param <T> typed parameter
+     * @param <T>        typed parameter
      * @return Proxy object
      */
     @SuppressWarnings("unchecked")

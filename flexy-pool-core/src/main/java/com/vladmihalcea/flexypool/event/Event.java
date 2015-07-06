@@ -16,6 +16,7 @@ public abstract class Event implements Serializable {
 
     /**
      * Init constructor
+     *
      * @param uniqueName FlexyPool unique name
      */
     protected Event(String uniqueName) {
@@ -24,6 +25,7 @@ public abstract class Event implements Serializable {
 
     /**
      * Get FlexyPool unique name this event has originated from
+     *
      * @return FlexyPool unique name
      */
     public String getUniqueName() {

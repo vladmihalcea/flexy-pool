@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 /**
- * <code>ConnectionDecoratorFactoryResolver</code> - ConnectionDecoratorFactory Resolver
+ * <code>ConnectionDecoratorFactoryResolver</code> - Resolves the current available {@link ConnectionDecoratorFactory}.
+ * The SPI will load each available {@link ConnectionDecoratorFactoryService} and based on the loading index the newer
+ * loaders can override older ones.
  *
  * @author Vlad Mihalcea
  * @since 1.2.3
@@ -24,6 +26,7 @@ public final class ConnectionDecoratorFactoryResolver {
 
     /**
      * Resolve ConnectionDecoratorFactory from the Service Provider Interface configuration
+     *
      * @return ConnectionDecoratorFactory
      */
     public ConnectionDecoratorFactory resolve() {
@@ -34,9 +37,9 @@ public final class ConnectionDecoratorFactoryResolver {
             try {
                 ConnectionDecoratorFactoryService connectionDecoratorFactoryService = connectionDecoratorFactoryServiceIterator.next();
                 int currentLoadingIndex = connectionDecoratorFactoryService.loadingIndex();
-                if(currentLoadingIndex > loadingIndex) {
+                if (currentLoadingIndex > loadingIndex) {
                     ConnectionDecoratorFactory currentConnectionDecoratorFactory = connectionDecoratorFactoryService.load();
-                    if(currentConnectionDecoratorFactory != null) {
+                    if (currentConnectionDecoratorFactory != null) {
                         connectionDecoratorFactory = currentConnectionDecoratorFactory;
                         loadingIndex = currentLoadingIndex;
                     }
@@ -45,7 +48,7 @@ public final class ConnectionDecoratorFactoryResolver {
                 LOGGER.info("Couldn't load ConnectionDecoratorFactoryService on the current JVM", e);
             }
         }
-        if(connectionDecoratorFactory != null) {
+        if (connectionDecoratorFactory != null) {
             return connectionDecoratorFactory;
         }
         throw new IllegalStateException("No ConnectionDecoratorFactory could be loaded!");

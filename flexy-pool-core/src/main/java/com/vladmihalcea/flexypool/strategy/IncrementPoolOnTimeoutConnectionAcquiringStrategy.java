@@ -1,11 +1,11 @@
 package com.vladmihalcea.flexypool.strategy;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
-import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <code>IncrementPoolOnTimeoutConnectionAcquiringStrategy</code> extends the {@link AbstractConnectionAcquiringStrategy}
  * and it allows the pool size to grow beyond its {@link com.vladmihalcea.flexypool.adaptor.PoolAdapter#getMaxPoolSize()}
  * up to reaching the {@link IncrementPoolOnTimeoutConnectionAcquiringStrategy#maxOverflowPoolSize} limit.
- * <p/>
+ * <p>
  * Use this strategy to dynamically adjust the pool size based on the connection acquiring demand.
  *
  * @author Vlad Mihalcea
@@ -110,12 +110,12 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
                 Connection connection = getConnectionFactory().getConnection(requestContext);
                 long endNanos = System.nanoTime();
                 long connectionAcquireDurationMillis = TimeUnit.NANOSECONDS.toMillis(endNanos - startNanos);
-                if(connectionAcquireDurationMillis > timeoutMillis) {
+                if (connectionAcquireDurationMillis > timeoutMillis) {
                     LOGGER.warn("Connection was acquired in {} millis, timeoutMillis is set to {}",
                             connectionAcquireDurationMillis, timeoutMillis);
                     int maxPoolSize = poolAdapter.getMaxPoolSize();
-                    if(maxPoolSize < maxOverflowPoolSize) {
-                        if(!incrementPoolSize(expectingMaxSize)) {
+                    if (maxPoolSize < maxOverflowPoolSize) {
+                        if (!incrementPoolSize(expectingMaxSize)) {
                             LOGGER.warn("Can't acquire connection, pool size has already overflown to its max size.");
                         }
                     } else {

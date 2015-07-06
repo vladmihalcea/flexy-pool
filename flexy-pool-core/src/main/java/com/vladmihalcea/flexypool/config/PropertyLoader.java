@@ -26,7 +26,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * <code>PropertyLoader</code> - The Property Loader resolves and loads the {@link Properties} configuration file.
+ * <code>PropertyLoader</code> - The Property Loader allows declarative configuration through the <code>flexy-pool.properties</code> file.
+ * It loads the {@link Properties} configuration file and it's then used to create a {@link Configuration} object.
  *
  * @author Vlad Mihalcea
  * @since 1.2
@@ -82,7 +83,7 @@ public class PropertyLoader {
         InputStream propertiesInputStream = null;
         try {
             propertiesInputStream = propertiesInputStream();
-            if(propertiesInputStream == null) {
+            if (propertiesInputStream == null) {
                 throw new IllegalArgumentException("The properties file could not be loaded!");
             }
             properties.load(propertiesInputStream);
@@ -101,6 +102,7 @@ public class PropertyLoader {
 
     /**
      * Get {@link Properties} file {@link InputStream}
+     *
      * @return {@link Properties} file {@link InputStream}
      * @throws IOException the file couldn't be loaded properly
      */
@@ -123,7 +125,7 @@ public class PropertyLoader {
                     }
                 }
             }
-            if(propertiesFileUrl != null) {
+            if (propertiesFileUrl != null) {
                 return propertiesFileUrl.openStream();
             }
         }
@@ -147,12 +149,12 @@ public class PropertyLoader {
      */
     public <T extends DataSource> T getDataSource() {
         T dataSource = jndiLookup(PropertyKey.DATA_SOURCE_JNDI_NAME);
-        if(dataSource != null) {
+        if (dataSource != null) {
             return dataSource;
         }
         dataSource = instantiateClass(PropertyKey.DATA_SOURCE_CLASS_NAME);
-        if(dataSource == null) {
-            throw new IllegalArgumentException("The " +  PropertyKey.DATA_SOURCE_CLASS_NAME+ " property is mandatory!");
+        if (dataSource == null) {
+            throw new IllegalArgumentException("The " + PropertyKey.DATA_SOURCE_CLASS_NAME + " property is mandatory!");
         }
         return applyDataSourceProperties(dataSource);
     }
@@ -161,12 +163,12 @@ public class PropertyLoader {
      * Apply DataSource specific properties
      */
     private <T extends DataSource> T applyDataSourceProperties(T dataSource) {
-        for(Map.Entry<Object, Object> entry : properties.entrySet()) {
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             String key = entry.getKey().toString();
             String value = entry.getValue().toString();
 
             String propertyKey = PropertyKey.DATA_SOURCE_PROPERTY.getKey();
-            if(key.startsWith(propertyKey)) {
+            if (key.startsWith(propertyKey)) {
                 String dataSourceProperty = key.substring(propertyKey.length());
                 ReflectionUtils.invokeSetter(dataSource, dataSourceProperty, value);
             }
@@ -203,6 +205,7 @@ public class PropertyLoader {
 
     /**
      * Get log reporter millis
+     *
      * @return log reporter millis
      */
     public Integer getMetricLogReporterMillis() {
@@ -211,6 +214,7 @@ public class PropertyLoader {
 
     /**
      * Is JMX Reporter enabled
+     *
      * @return JMX Reporter enabled
      */
     public Boolean isJmxEnabled() {
@@ -219,6 +223,7 @@ public class PropertyLoader {
 
     /**
      * Is JMX Reporter auto-started
+     *
      * @return JMX Reporter auto-started
      */
     public Boolean isJmxAutoStart() {
@@ -227,6 +232,7 @@ public class PropertyLoader {
 
     /**
      * Is JNDI lazy lookup
+     *
      * @return JNDI lazy lookup
      */
     public boolean isJndiLazyLookup() {
@@ -251,6 +257,7 @@ public class PropertyLoader {
 
     /**
      * Get the event listener resolver
+     *
      * @return event listener resolver
      */
     public EventListenerResolver getEventListenerResolver() {
@@ -259,6 +266,7 @@ public class PropertyLoader {
 
     /**
      * Get the connection acquire time threshold millis
+     *
      * @return connection acquire time threshold millis
      */
     public Long getConnectionAcquireTimeThresholdMillis() {
@@ -267,6 +275,7 @@ public class PropertyLoader {
 
     /**
      * Get the connection lease time threshold millis
+     *
      * @return connection lease time threshold millis
      */
     public Long getConnectionLeaseTimeThresholdMillis() {
@@ -354,10 +363,10 @@ public class PropertyLoader {
     @SuppressWarnings("unchecked")
     private <T> T jndiLookup(PropertyKey propertyKey) {
         String property = properties.getProperty(propertyKey.getKey());
-        if(property != null) {
+        if (property != null) {
             return isJndiLazyLookup() ?
-                (T) LazyJndiResolver.newInstance(property, DataSource.class) :
-                (T) JndiUtils.lookup(property);
+                    (T) LazyJndiResolver.newInstance(property, DataSource.class) :
+                    (T) JndiUtils.lookup(property);
         }
         return null;
     }

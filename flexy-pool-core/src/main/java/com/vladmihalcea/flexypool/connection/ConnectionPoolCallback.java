@@ -15,6 +15,7 @@ public interface ConnectionPoolCallback {
 
     /**
      * Connection release callback.
+     *
      * @param leaseDurationNanos lease duration nanos
      */
     void releaseConnection(long leaseDurationNanos);

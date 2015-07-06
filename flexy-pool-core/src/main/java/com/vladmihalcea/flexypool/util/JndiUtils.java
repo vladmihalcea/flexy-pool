@@ -23,8 +23,9 @@ public final class JndiUtils {
 
     /**
      * Lookup object in JNDI
+     *
      * @param name object name
-     * @param <T> object class parameter type
+     * @param <T>  object class parameter type
      * @return object
      */
     public static <T> T lookup(String name) {
@@ -47,6 +48,7 @@ public final class JndiUtils {
 
     /**
      * Create InitialContext
+     *
      * @return InitialContext
      */
     protected static InitialContext initialContext() {
@@ -59,14 +61,14 @@ public final class JndiUtils {
 
     /**
      * Close InitialContext
+     *
      * @param initialContext initial context
      */
     protected static void closeContext(InitialContext initialContext) {
         if (initialContext != null) {
             try {
                 initialContext.close();
-            }
-            catch (NamingException e) {
+            } catch (NamingException e) {
                 LOGGER.debug("Can't close InitialContext", e);
             }
         }

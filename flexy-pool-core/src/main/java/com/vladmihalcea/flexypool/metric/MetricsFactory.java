@@ -12,6 +12,7 @@ public interface MetricsFactory {
 
     /**
      * Creates a new metrics instance for the given configuration.
+     *
      * @param configurationProperties configuration
      * @return metrics instance
      */

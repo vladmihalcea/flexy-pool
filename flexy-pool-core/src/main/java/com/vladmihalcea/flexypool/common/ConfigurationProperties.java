@@ -6,7 +6,8 @@ import com.vladmihalcea.flexypool.event.EventPublisher;
 import javax.sql.DataSource;
 
 /**
- * <code>Configuration</code> defines basic properties for a given FlexyPool instance.
+ * <code>ConfigurationProperties</code> defines common properties that are shared amongst all FlexyPool components.
+ * This class is decoupled from the main Configuration object to avoid dependency cycles.
  *
  * @author Vlad Mihalcea
  * @since 1.0
@@ -43,6 +44,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Get event publisher
+     *
      * @return event publisher
      */
     public EventPublisher getEventPublisher() {
@@ -105,6 +107,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Get the connection acquire time threshold millis
+     *
      * @return connection acquire time threshold millis
      */
     public long getConnectionAcquireTimeThresholdMillis() {
@@ -113,6 +116,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Set the connection acquire time threshold millis
+     *
      * @param connectionAcquireTimeThresholdMillis connection acquire time threshold millis
      */
     public void setConnectionAcquireTimeThresholdMillis(long connectionAcquireTimeThresholdMillis) {
@@ -121,6 +125,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Get the connection lease time threshold millis
+     *
      * @return connection lease time threshold millis
      */
     public long getConnectionLeaseTimeThresholdMillis() {
@@ -129,6 +134,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Set the connection lease time threshold millis
+     *
      * @param connectionLeaseTimeThresholdMillis connection lease time threshold millis
      */
     public void setConnectionLeaseTimeThresholdMillis(long connectionLeaseTimeThresholdMillis) {
@@ -158,6 +164,7 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     /**
      * Get connection proxy factory.
+     *
      * @return connection proxy factory
      */
     public abstract ConnectionProxyFactory getConnectionProxyFactory();

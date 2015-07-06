@@ -15,6 +15,7 @@ public class CantAcquireConnectionException extends SQLException {
 
     /**
      * Couldn't acquire connection
+     *
      * @param reason connection acquire failing reason
      */
     public CantAcquireConnectionException(String reason) {

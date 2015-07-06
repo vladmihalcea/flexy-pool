@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexypool.adaptor;
 
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
 import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
@@ -7,7 +8,6 @@ import com.vladmihalcea.flexypool.event.EventPublisher;
 import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
-import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
  * <code>AbstractPoolAdapter</code> defines the base behavior for obtaining a target connection.
  * The connection acquiring timing statistics is stored within the {@link AbstractPoolAdapter#connectionAcquireTimer}
  * This class is meant to be extended by specific pool adapter providers {DBCP, C3PO, Bitronix Transaction Manager}
- * <p/>
+ * <p>
  * <p>Make sure you supply the adapting pool specific exception transaction mechanism {@link AbstractPoolAdapter#translateException}
  *
  * @author Vlad Mihalcea
- * @since 1.0
  * @see com.vladmihalcea.flexypool.adaptor.PoolAdapter
+ * @since 1.0
  */
 public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolAdapter<T> {
 
@@ -88,7 +88,7 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      * @return translated exception
      */
     protected SQLException translateException(Exception e) {
-        if(isAcquireTimeoutException(e)) {
+        if (isAcquireTimeoutException(e)) {
             eventPublisher.publish(new ConnectionAcquireTimeoutEvent(configurationProperties.getUniqueName()));
             return new AcquireTimeoutException(e);
         } else if (e instanceof SQLException) {
@@ -99,6 +99,7 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
 
     /**
      * Check if the caught exception is due to a connection acquire failure
+     *
      * @param e exception to be checked
      * @return the exception is due to a connection acquire failure
      */

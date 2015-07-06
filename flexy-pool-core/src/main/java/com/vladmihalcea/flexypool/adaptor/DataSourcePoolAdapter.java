@@ -1,19 +1,19 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.metric.Metrics;
 
 import javax.sql.DataSource;
 
 /**
  * <code>DataSourcePoolAdapter</code> is an {@link AbstractPoolAdapter} that's compatible with any {@link DataSource}
- *
+ * <p>
  * Because it's a generic PoolAdapter, it cannot read or write the pool size, since the DataSource might not even be
  * a connection pool.
  *
  * @author Vlad Mihalcea
- * @since 1.2
  * @see com.vladmihalcea.flexypool.adaptor.PoolAdapter
+ * @since 1.2
  */
 public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
 
@@ -22,7 +22,7 @@ public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
         @Override
         public PoolAdapter<DataSource> newInstance(
                 ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
-        return new DataSourcePoolAdapter(configurationProperties);
+            return new DataSourcePoolAdapter(configurationProperties);
         }
     };
 

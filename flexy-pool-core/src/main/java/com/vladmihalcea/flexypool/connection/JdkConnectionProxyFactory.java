@@ -36,9 +36,10 @@ public class JdkConnectionProxyFactory extends ConnectionProxyFactory {
 
         /**
          * Intercepts all {@link java.sql.Connection} method calls.
-         * @param proxy originating proxy
+         *
+         * @param proxy  originating proxy
          * @param method called method
-         * @param args called method arguments
+         * @param args   called method arguments
          * @return returned object
          * @throws Throwable in case any error occurred
          */

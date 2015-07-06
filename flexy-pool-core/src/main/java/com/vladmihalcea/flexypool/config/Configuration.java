@@ -16,8 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <code>Configuration</code> defines all required external associations for a given FlexyPool instance.
- * An instance is retrieved through the {@link com.vladmihalcea.flexypool.config.Configuration.Builder} which takes care
- * of the actual order of setting required dependencies.
+ * An instance is retrieved through the {@link com.vladmihalcea.flexypool.config.Configuration.Builder} which takes care of the actual order of setting required dependencies.
  *
  * @author Vlad Mihalcea
  * @since 1.0
@@ -114,6 +113,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
         /**
          * Set the event listener resolver
+         *
          * @param eventListenerResolver event listener resolver
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
@@ -124,6 +124,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
         /**
          * Set the connection acquire time threshold millis
+         *
          * @param connectionAcquireTimeThresholdMillis connection acquire time threshold millis
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */
@@ -136,6 +137,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
 
         /**
          * Set the connection lease time threshold millis
+         *
          * @param connectionLeaseTimeThresholdMillis connection lease time threshold millis
          * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
          */

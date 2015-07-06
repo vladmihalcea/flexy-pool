@@ -3,7 +3,10 @@ package com.vladmihalcea.flexypool.connection;
 import java.sql.Connection;
 
 /**
- * <code>ConnectionProxyFactory</code> - Builds Connection Proxies
+ * <code>ConnectionProxyFactory</code> - There are several ways to create a Connection Decorator/Proxy. The main goal is
+ * to intercept the close() method calls so that we can inject our metrics logic. The Decorator approach requires more
+ * manual coding but delivers better performance than a Dynamic Proxy. The Proxy is much more flexible, but it has an
+ * additional execution overhead.
  *
  * @author Vlad Mihalcea
  */
@@ -12,7 +15,8 @@ public abstract class ConnectionProxyFactory {
     /**
      * Creates a ConnectionProxy for the specified target and attaching the
      * following callback.
-     * @param target connection to proxy
+     *
+     * @param target                 connection to proxy
      * @param connectionPoolCallback attaching connection lifecycle listener
      * @return ConnectionProxy
      */
@@ -22,7 +26,8 @@ public abstract class ConnectionProxyFactory {
 
     /**
      * Proxy the given connection
-     * @param target connection to proxy
+     *
+     * @param target   connection to proxy
      * @param callback attaching connection lifecycle listener
      * @return proxy connection
      */

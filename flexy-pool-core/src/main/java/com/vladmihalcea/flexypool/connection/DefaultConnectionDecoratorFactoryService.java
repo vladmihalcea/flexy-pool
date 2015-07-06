@@ -1,7 +1,8 @@
 package com.vladmihalcea.flexypool.connection;
 
 /**
- * <code>DefaultConnectionDecoratorFactoryService</code> - Default ConnectionDecoratorFactory Service
+ * <code>DefaultConnectionDecoratorFactoryService</code> - The default {@link ConnectionDecoratorFactory} Service is using the
+ * JDK 1.6 {@link Connection} interface version.
  *
  * @author Vlad Mihalcea
  * @version 1.2.3

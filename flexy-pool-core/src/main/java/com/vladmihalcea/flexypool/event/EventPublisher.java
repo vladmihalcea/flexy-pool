@@ -1,6 +1,9 @@
 package com.vladmihalcea.flexypool.event;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <code>EventPublisher</code> - This class associates events to their listeners
@@ -11,15 +14,16 @@ public class EventPublisher {
 
     /**
      * Create a new {@link EventPublisher} instance using the current configured listeners
+     *
      * @param eventListenerResolver event listener resolver
      * @return {@link EventPublisher}
      */
     public static EventPublisher newInstance(EventListenerResolver eventListenerResolver) {
         List<? extends EventListener<? extends Event>> eventListeners = eventListenerResolver != null ?
-            eventListenerResolver.resolveListeners() : null;
+                eventListenerResolver.resolveListeners() : null;
         return eventListeners != null && !eventListeners.isEmpty() ?
-            new EventPublisher(eventListeners) :
-            new EventPublisher();
+                new EventPublisher(eventListeners) :
+                new EventPublisher();
     }
 
     private Map<Class<? extends Event>, EventListener<? extends Event>> eventListenerMap =
@@ -27,6 +31,7 @@ public class EventPublisher {
 
     /**
      * Init constructor
+     *
      * @param eventListeners event listeners
      */
     public EventPublisher(List<? extends EventListener<? extends Event>> eventListeners) {
@@ -52,7 +57,7 @@ public class EventPublisher {
     public <E extends Event> void publish(E event) {
         if (!eventListenerMap.isEmpty()) {
             EventListener<E> eventListener = getEventListener(event);
-            if(eventListener != null) {
+            if (eventListener != null) {
                 eventListener.on(event);
             }
         }
@@ -60,8 +65,9 @@ public class EventPublisher {
 
     /**
      * Get associated {@link EventListener}
+     *
      * @param event event
-     * @param <E> event type
+     * @param <E>   event type
      * @return associated {@link EventListener}
      */
     private <E extends Event> EventListener<E> getEventListener(E event) {

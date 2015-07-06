@@ -19,12 +19,13 @@ public final class MetricsFactoryResolver {
 
     /**
      * Resolve MetricsFactory from the Service Provider Interface configuration
+     *
      * @return MetricsFactory
      */
     public MetricsFactory resolve() {
-        for(MetricsFactoryService metricsFactoryService : serviceLoader) {
+        for (MetricsFactoryService metricsFactoryService : serviceLoader) {
             MetricsFactory metricsFactory = metricsFactoryService.load();
-            if(metricsFactory != null) {
+            if (metricsFactory != null) {
                 return metricsFactory;
             }
         }

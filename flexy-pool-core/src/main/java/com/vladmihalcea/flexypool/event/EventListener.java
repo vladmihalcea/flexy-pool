@@ -3,9 +3,9 @@ package com.vladmihalcea.flexypool.event;
 /**
  * EventListener - Event Handler
  *
+ * @param <E> Event type
  * @author Vlad Mihalcea
  * @since 1.2.3
- * @param <E> Event type
  */
 public abstract class EventListener<E extends Event> {
 

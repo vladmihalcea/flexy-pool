@@ -15,9 +15,10 @@ public abstract class TimeThresholdExceededEvent extends Event {
 
     /**
      * Init constructor
-     * @param uniqueName FlexyPool unique name
+     *
+     * @param uniqueName          FlexyPool unique name
      * @param timeThresholdMillis time threshold millis
-     * @param actualTimeMillis actual time millis
+     * @param actualTimeMillis    actual time millis
      */
     public TimeThresholdExceededEvent(String uniqueName, long timeThresholdMillis, long actualTimeMillis) {
         super(uniqueName);
