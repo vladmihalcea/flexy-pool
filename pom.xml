@@ -247,7 +247,7 @@
 		<!--
         mvn -P release -DignoreSnapshots=true release:clean release:prepare
         mvn -P release release:perform
-        mvn versions:set -DnewVersion=1.2.3-SNAPSHOT -DgenerateBackupPoms=false
+        mvn versions:set -DnewVersion=1.2.4-SNAPSHOT -DgenerateBackupPoms=false
         -->
         <profile>
             <id>release</id>
