@@ -8,7 +8,7 @@ import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
 /**
- * <code>JndiUtils</code> - JNDI Utilities
+ * <code>JndiUtils</code> - JNDI utilities holder
  *
  * @author Vlad Mihalcea
  * @since 1.2

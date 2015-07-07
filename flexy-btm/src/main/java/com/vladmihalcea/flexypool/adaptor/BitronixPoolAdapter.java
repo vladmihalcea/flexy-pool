@@ -18,24 +18,36 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "XA pool of resource .*? still empty after .*?s wait time";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<PoolingDataSource> FACTORY = new PoolAdapterFactory<PoolingDataSource>() {
 
         @Override
         public PoolAdapter<PoolingDataSource> newInstance(
                 ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
-            return new BitronixPoolAdapter(configurationProperties);
+        return new BitronixPoolAdapter(configurationProperties);
         }
     };
 
+    /**
+     * Init constructor
+     */
     public BitronixPoolAdapter(ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxPoolSize();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxPoolSize(maxPoolSize);

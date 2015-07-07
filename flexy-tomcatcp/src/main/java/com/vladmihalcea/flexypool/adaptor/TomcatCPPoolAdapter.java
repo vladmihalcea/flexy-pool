@@ -10,10 +10,13 @@ import org.apache.tomcat.jdbc.pool.PoolExhaustedException;
  * communicate with the Tomcat CP {@link DataSource}
  *
  * @author Vlad Mihalcea
- * @since 1.0
+ * @since 1.1.0
  */
 public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<DataSource> FACTORY = new PoolAdapterFactory<DataSource>() {
 
         @Override
@@ -23,15 +26,24 @@ public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
         }
     };
 
+    /**
+     * Init constructor
+     */
     public TomcatCPPoolAdapter(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxActive();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxActive(maxPoolSize);

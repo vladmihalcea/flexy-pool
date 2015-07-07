@@ -17,6 +17,9 @@ import javax.sql.DataSource;
  */
 public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<DataSource> FACTORY = new PoolAdapterFactory<DataSource>() {
 
         @Override
@@ -26,6 +29,9 @@ public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
         }
     };
 
+    /**
+     * Init constructor
+     */
     public DataSourcePoolAdapter(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
         super(configurationProperties);
     }

@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * <code>ReflectionUtils</code> defines reflection utilities.
+ * <code>ReflectionUtils</code> - Reflection utilities holder.
  *
  * @author Vlad Mihalcea
  * @since 1.0

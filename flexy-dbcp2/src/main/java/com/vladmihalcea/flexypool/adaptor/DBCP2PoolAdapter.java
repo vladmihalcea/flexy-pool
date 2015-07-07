@@ -15,24 +15,36 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<BasicDataSource> FACTORY = new PoolAdapterFactory<BasicDataSource>() {
 
         @Override
         public PoolAdapter<BasicDataSource> newInstance(
                 ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
-            return new DBCP2PoolAdapter(configurationProperties);
+        return new DBCP2PoolAdapter(configurationProperties);
         }
     };
 
+    /**
+     * Init constructor
+     */
     public DBCP2PoolAdapter(ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxTotal();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxTotal(maxPoolSize);

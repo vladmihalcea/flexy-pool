@@ -16,6 +16,9 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AtomikosDataSourceB
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Connection pool exhausted - try increasing 'maxPoolSize' and/or 'borrowConnectionTimeout' on the DataSourceBean.";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<AtomikosDataSourceBean> FACTORY = new PoolAdapterFactory<AtomikosDataSourceBean>() {
 
         @Override
@@ -25,15 +28,24 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AtomikosDataSourceB
         }
     };
 
+    /**
+     * Init constructor
+     */
     public AtomikosPoolAdapter(ConfigurationProperties<AtomikosDataSourceBean, Metrics, PoolAdapter<AtomikosDataSourceBean>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxPoolSize();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxPoolSize(maxPoolSize);

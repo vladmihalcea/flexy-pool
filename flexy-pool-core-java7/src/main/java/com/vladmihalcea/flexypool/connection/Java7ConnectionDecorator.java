@@ -6,7 +6,7 @@ import java.util.concurrent.Executor;
 
 /**
  * <code>Java7ManagedConnection</code> wraps a given {@link Connection} and delegates all calls to it.
- * It extends {@link ConnectionDecorator} and adds the Java 7 new methods.
+ * It extends {@link ConnectionDecorator} and adds the Java 1.7 new methods.
  *
  * @author Vlad Mihalcea
  * @since 1.2.3

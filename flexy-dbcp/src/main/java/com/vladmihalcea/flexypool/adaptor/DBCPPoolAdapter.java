@@ -17,6 +17,9 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<BasicDataSource> FACTORY = new PoolAdapterFactory<BasicDataSource>() {
 
         @Override
@@ -26,15 +29,24 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
         }
     };
 
+    /**
+     * Init constructor
+     */
     public DBCPPoolAdapter(ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxActive();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxActive(maxPoolSize);

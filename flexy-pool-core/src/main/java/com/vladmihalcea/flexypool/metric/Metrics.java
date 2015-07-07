@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.metric;
 import com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback;
 
 /**
- * <code>Metrics</code> defines the basic Metrics behavior..
+ * <code>Metrics</code> defines the basic Metrics behavior.
  *
  * @author Vlad Mihalcea
  * @since 1.0

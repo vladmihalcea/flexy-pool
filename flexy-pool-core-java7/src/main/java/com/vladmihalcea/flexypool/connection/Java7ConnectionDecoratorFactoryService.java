@@ -13,6 +13,7 @@ import java.sql.Connection;
 public class Java7ConnectionDecoratorFactoryService extends DefaultConnectionDecoratorFactoryService {
 
     public static final int LOADING_INDEX = 0x17;
+
     public static final String AVAILABLE_METHOD = "getSchema";
 
     /**

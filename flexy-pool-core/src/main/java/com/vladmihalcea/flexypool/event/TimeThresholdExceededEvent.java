@@ -4,6 +4,7 @@ package com.vladmihalcea.flexypool.event;
  * <code>TimeThresholdExceededEvent</code> - Event generated when a time threshold is exceeded
  *
  * @author Vlad Mihalcea
+ * @since 1.2.3
  */
 public abstract class TimeThresholdExceededEvent extends Event {
 
@@ -26,10 +27,18 @@ public abstract class TimeThresholdExceededEvent extends Event {
         this.actualTimeMillis = actualTimeMillis;
     }
 
+    /**
+     * Get time threshold millis
+     * @return time threshold millis
+     */
     public long getTimeThresholdMillis() {
         return timeThresholdMillis;
     }
 
+    /**
+     * Get actual time millis
+     * @return actual time millis
+     */
     public long getActualTimeMillis() {
         return actualTimeMillis;
     }

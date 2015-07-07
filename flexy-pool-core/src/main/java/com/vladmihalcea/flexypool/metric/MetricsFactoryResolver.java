@@ -12,7 +12,8 @@ public final class MetricsFactoryResolver {
 
     public static final MetricsFactoryResolver INSTANCE = new MetricsFactoryResolver();
 
-    private ServiceLoader<MetricsFactoryService> serviceLoader = ServiceLoader.load(MetricsFactoryService.class);
+    private ServiceLoader<MetricsFactoryService> serviceLoader =
+            ServiceLoader.load(MetricsFactoryService.class);
 
     private MetricsFactoryResolver() {
     }

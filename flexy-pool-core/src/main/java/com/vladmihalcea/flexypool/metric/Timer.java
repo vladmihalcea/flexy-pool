@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.metric;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <code>Timer</code> defines the basic Timer behavior..
+ * <code>Timer</code> defines the basic Timer behavior.
  *
  * @author Vlad Mihalcea
  * @since 1.0

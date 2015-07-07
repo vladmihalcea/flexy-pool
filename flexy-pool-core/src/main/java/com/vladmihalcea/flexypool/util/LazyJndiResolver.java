@@ -5,7 +5,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * <code>LazyJndiResolver</code> - Resolves Jndi resources lazily
+ * <code>LazyJndiResolver</code> - This class permits fetching a JNDI resource lazily so that the JNDI DataSource is
+ * retrieved on demand as opposed to the default loading option (when FlexyPool gets initialized). This is useful in
+ * certain environments where both the actual DataSource and FlexyPoolDataSource are configured as JNDI resources and
+ * the actual DataSource is not available when the FlexyPoolDataSource is injected by the CDI mechanism.
  *
  * @author Vlad Mihalcea
  * @since 1.2

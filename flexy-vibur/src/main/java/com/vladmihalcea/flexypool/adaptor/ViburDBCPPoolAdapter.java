@@ -15,6 +15,9 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Couldn't obtain SQL connection from pool";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<ViburDBCPDataSource> FACTORY = new PoolAdapterFactory<ViburDBCPDataSource>() {
 
         @Override
@@ -24,10 +27,16 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
         }
     };
 
+    /**
+     * Init constructor
+     */
     public ViburDBCPPoolAdapter(ConfigurationProperties<ViburDBCPDataSource, Metrics, PoolAdapter<ViburDBCPDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getPoolMaxSize();

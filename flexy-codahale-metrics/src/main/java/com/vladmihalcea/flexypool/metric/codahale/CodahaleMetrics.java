@@ -22,31 +22,44 @@ import java.util.LinkedHashSet;
  */
 public class CodahaleMetrics extends AbstractMetrics {
 
+    /**
+     * The ReservoirMetricsFactory takes a {@link ReservoirFactory} and supplies it to the CodahaleMetrics instance.
+     */
     public static class ReservoirMetricsFactory implements MetricsFactory {
 
         private final ReservoirFactory reservoirFactory;
 
+        /**
+         * Init constructor
+         * @param reservoirFactory reservoir factory
+         */
         public ReservoirMetricsFactory(ReservoirFactory reservoirFactory) {
             this.reservoirFactory = reservoirFactory;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Metrics newInstance(ConfigurationProperties configurationProperties) {
             return new CodahaleMetrics(configurationProperties, reservoirFactory);
         }
     }
 
+    /**
+     * Singleton factory object reference
+     */
     public static final MetricsFactory FACTORY = new ReservoirMetricsFactory(new ReservoirFactory() {
         @Override
         public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
-            return new ExponentiallyDecayingReservoir();
+        return new ExponentiallyDecayingReservoir();
         }
     });
 
     public static final MetricsFactory UNIFORM_RESERVOIR_FACTORY = new ReservoirMetricsFactory(new ReservoirFactory() {
         @Override
         public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
-            return new UniformReservoir();
+        return new UniformReservoir();
         }
     });
 
@@ -56,6 +69,12 @@ public class CodahaleMetrics extends AbstractMetrics {
 
     private final Collection<MetricsLifeCycleCallback> callbacks = new LinkedHashSet<MetricsLifeCycleCallback>();
 
+    /**
+     * Init constructor
+     * @param configurationProperties configuration properties
+     * @param reservoirFactory reservoir factory
+     * @param callbacks life cycle callbacks
+     */
     public CodahaleMetrics(ConfigurationProperties configurationProperties,
                            ReservoirFactory reservoirFactory,
                            MetricsLifeCycleCallback... callbacks) {

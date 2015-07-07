@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 /**
- * <code>ClassLoaderUtils</code> - Class loading utilities.
+ * <code>ClassLoaderUtils</code> - Class loading related utilities holder.
  *
  * @author Vlad Mihalcea
  * @since 1.2

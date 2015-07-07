@@ -17,6 +17,7 @@ import javax.sql.DataSource;
 public abstract class AbstractConnectionAcquiringStrategy implements ConnectionAcquiringStrategy {
 
     private final ConfigurationProperties configurationProperties;
+
     private final ConnectionFactory connectionFactory;
 
     /**
@@ -24,7 +25,8 @@ public abstract class AbstractConnectionAcquiringStrategy implements ConnectionA
      *
      * @param configurationProperties configurationProperties
      */
-    protected AbstractConnectionAcquiringStrategy(ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties) {
+    protected AbstractConnectionAcquiringStrategy(
+            ConfigurationProperties<? extends DataSource, Metrics, PoolAdapter> configurationProperties) {
         this.configurationProperties = configurationProperties;
         this.connectionFactory = configurationProperties.getPoolAdapter();
     }

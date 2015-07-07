@@ -22,20 +22,33 @@ import java.util.LinkedHashSet;
  */
 public class DropwizardMetrics extends AbstractMetrics {
 
+    /**
+     * The ReservoirMetricsFactory takes a {@link ReservoirFactory} and supplies it to the DropwizardMetrics instance.
+     */
     public static class ReservoirMetricsFactory implements MetricsFactory {
 
         private final ReservoirFactory reservoirFactory;
 
+        /**
+         * Init constructor
+         * @param reservoirFactory reservoir factory
+         */
         public ReservoirMetricsFactory(ReservoirFactory reservoirFactory) {
             this.reservoirFactory = reservoirFactory;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Metrics newInstance(ConfigurationProperties configurationProperties) {
             return new DropwizardMetrics(configurationProperties, reservoirFactory);
         }
     }
 
+    /**
+     * Singleton factory object reference
+     */
     public static final MetricsFactory FACTORY = new ReservoirMetricsFactory(new ReservoirFactory() {
         @Override
         public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
@@ -56,6 +69,12 @@ public class DropwizardMetrics extends AbstractMetrics {
 
     private final Collection<MetricsLifeCycleCallback> callbacks = new LinkedHashSet<MetricsLifeCycleCallback>();
 
+    /**
+     * Init constructor
+     * @param configurationProperties configuration properties
+     * @param reservoirFactory reservoir factory
+     * @param callbacks life cycle callbacks
+     */
     public DropwizardMetrics(ConfigurationProperties configurationProperties,
                              ReservoirFactory reservoirFactory,
                              MetricsLifeCycleCallback... callbacks) {

@@ -16,26 +16,39 @@ import java.util.regex.Pattern;
 public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
 
     public static final String SQL_TIMEOUT_EXCEPTION_CLASS_NAME = "java.sql.SQLTimeoutException";
+
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<HikariDataSource> FACTORY = new PoolAdapterFactory<HikariDataSource>() {
 
         @Override
         public PoolAdapter<HikariDataSource> newInstance(
                 ConfigurationProperties<HikariDataSource, Metrics, PoolAdapter<HikariDataSource>> configurationProperties) {
-            return new HikariCPPoolAdapter(configurationProperties);
+        return new HikariCPPoolAdapter(configurationProperties);
         }
     };
 
+    /**
+     * Init constructor
+     */
     public HikariCPPoolAdapter(ConfigurationProperties<HikariDataSource, Metrics, PoolAdapter<HikariDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaximumPoolSize();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaximumPoolSize(maxPoolSize);

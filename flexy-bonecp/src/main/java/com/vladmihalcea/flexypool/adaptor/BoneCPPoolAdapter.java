@@ -6,7 +6,9 @@ import com.vladmihalcea.flexypool.metric.Metrics;
 
 /**
  * <code>BoneCPPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the BoneCP {@link BoneCPDataSource}
+ * communicate with the BoneCP {@link BoneCPDataSource}. BoneCp doesn't support pool resizing like other
+ * connection pools, so we can't set the max pool size. We can get the pool size (which can shrink or
+ * grow based on the BoneCP adaptive pool settings) and we can translate connection acquire timeout exceptions.
  *
  * @author Vlad Mihalcea
  * @since 1.0
@@ -15,19 +17,28 @@ public class BoneCPPoolAdapter extends AbstractPoolAdapter<BoneCPDataSource> {
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timed out waiting for a free available connection.";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<BoneCPDataSource> FACTORY = new PoolAdapterFactory<BoneCPDataSource>() {
 
         @Override
         public PoolAdapter<BoneCPDataSource> newInstance(
                 ConfigurationProperties<BoneCPDataSource, Metrics, PoolAdapter<BoneCPDataSource>> configurationProperties) {
-            return new BoneCPPoolAdapter(configurationProperties);
+        return new BoneCPPoolAdapter(configurationProperties);
         }
     };
 
+    /**
+     * Init constructor
+     */
     public BoneCPPoolAdapter(ConfigurationProperties<BoneCPDataSource, Metrics, PoolAdapter<BoneCPDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxConnectionsPerPartition();

@@ -15,24 +15,36 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "An attempt by a client to checkout a Connection has timed out.";
 
+    /**
+     * Singleton factory object reference
+     */
     public static final PoolAdapterFactory<ComboPooledDataSource> FACTORY = new PoolAdapterFactory<ComboPooledDataSource>() {
 
         @Override
         public PoolAdapter<ComboPooledDataSource> newInstance(
                 ConfigurationProperties<ComboPooledDataSource, Metrics, PoolAdapter<ComboPooledDataSource>> configurationProperties) {
-            return new C3P0PoolAdapter(configurationProperties);
+        return new C3P0PoolAdapter(configurationProperties);
         }
     };
 
+    /**
+     * {@inheritDoc}
+     */
     public C3P0PoolAdapter(ConfigurationProperties<ComboPooledDataSource, Metrics, PoolAdapter<ComboPooledDataSource>> configurationProperties) {
         super(configurationProperties);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getMaxPoolSize() {
         return getTargetDataSource().getMaxPoolSize();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
         getTargetDataSource().setMaxPoolSize(maxPoolSize);

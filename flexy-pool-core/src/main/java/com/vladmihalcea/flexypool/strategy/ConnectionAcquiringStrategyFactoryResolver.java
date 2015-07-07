@@ -4,7 +4,9 @@ import javax.sql.DataSource;
 import java.util.List;
 
 /**
- * <code>ConnectionAcquiringStrategyFactoryResolver</code> - {@link ConnectionAcquiringStrategyFactory} Resolver
+ * <code>ConnectionAcquiringStrategyFactoryResolver</code> - The resolver is used to provide a
+ * List of {@link ConnectionAcquiringStrategyFactory} for the declarative configuration support.
+ * This way we can only provide a class name and FlexyPool can retrieve all associated strategies.
  *
  * @author Vlad Mihalcea
  * @since 1.2

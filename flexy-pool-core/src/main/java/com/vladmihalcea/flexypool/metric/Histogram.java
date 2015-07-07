@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.metric;
 
 /**
- * <code>Histogram</code> defines the basic Histogram behavior..
+ * <code>Histogram</code> defines the basic Histogram behavior.
  *
  * @author Vlad Mihalcea
  * @since 1.0

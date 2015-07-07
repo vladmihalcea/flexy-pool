@@ -9,6 +9,7 @@ import java.util.Map;
  * <code>EventPublisher</code> - This class associates events to their listeners
  *
  * @author Vlad Mihalcea
+ * @since 1.2.3
  */
 public class EventPublisher {
 
@@ -50,7 +51,7 @@ public class EventPublisher {
     }
 
     /**
-     * Publish {@link Event}
+     * Publish an {@link Event} to all listeners
      *
      * @param event event
      */
