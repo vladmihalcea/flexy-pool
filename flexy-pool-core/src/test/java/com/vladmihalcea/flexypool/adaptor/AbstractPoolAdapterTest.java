@@ -116,8 +116,8 @@ public class AbstractPoolAdapterTest {
         })
         .setEventListenerResolver(new EventListenerResolver() {
             @Override
-            public List<? extends EventListener<? extends Event>> resolveListeners() {
-                return (List<? extends EventListener<? extends Event>>) Collections.singletonList(eventListener);
+            public List<EventListener<? extends Event>> resolveListeners() {
+                return Collections.<EventListener<? extends Event>>singletonList(eventListener);
             }
         })
         .build();

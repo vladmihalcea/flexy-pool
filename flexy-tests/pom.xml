@@ -33,6 +33,13 @@
                 <forkMode>always</forkMode>
             </properties>
         </profile>
+        <profile>
+            <id>release</id>
+
+            <modules>
+                <module>flexy-test-hikaricp-java8</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>

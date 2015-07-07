@@ -260,8 +260,8 @@ public class PropertyLoaderTest {
         }
 
         @Override
-        public List<? extends EventListener<? extends Event>> resolveListeners() {
-            List<MockEventListener> listeners = new ArrayList<MockEventListener>();
+        public List<EventListener<? extends Event>> resolveListeners() {
+            List<EventListener<? extends Event>> listeners = new ArrayList<EventListener<? extends Event>>();
             listeners.add(new MockEventListener());
             return listeners;
         }
