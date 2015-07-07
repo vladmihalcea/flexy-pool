@@ -102,7 +102,7 @@ public class FlexyPoolConfiguration {
                 return Arrays.<EventListener<? extends Event>>asList(
                     new ConnectionAcquireTimeoutEventListener(),
                     new ConnectionAcquireTimeThresholdExceededEventListener(),
-                    new ConnectionAcquireTimeoutEventListener()
+                    new ConnectionLeaseTimeThresholdExceededEventListener()
                 );
             }
         })
