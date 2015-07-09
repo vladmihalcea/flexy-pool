@@ -43,6 +43,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 1. [Installation Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide)
 2. [User Guide](https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide)
+3. [Developer Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Developer-Guide)
 
 ### In the Press
 
