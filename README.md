@@ -64,6 +64,13 @@ This is very handy since most connection pools offer a limited set of dynamic co
 >
 > -- <cite>Antti Koivisto, Software Architect, Etuovi.com</cite>
 
+<a href="http://www.mitchandmates.com/"><img src="http://www.mitchandmates.com/uploads/images/logo_mitchandmates.png" height="19" width="127"/></a> software company specializing in products and services for health care.
+
+> Mitch&Mates uses FlexyPool in all it's environments. It gives us the ability to measure performance and scalability, detect potential flaws and improve intensive loads.
+> Additionally, we compared several connection pool libraries which decided us to switch to another provider.
+>
+> -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
+
 ### Requirements
 
 * Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
