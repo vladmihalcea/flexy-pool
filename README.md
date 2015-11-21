@@ -47,6 +47,12 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### In the Press
 
+FlexyPool is explained in great details in the "High-Performance Java Persistence" book:
+
+<a href="https://leanpub.com/high-performance-java-persistence">
+<img src="https://vladmihalcea.files.wordpress.com/2015/10/highperformancejavapersistencesmall.jpg" alt="High-Performance Java Persistence">
+</a>
+
 1. [The anatomy of Connection Pooling](http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling)
 2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
 3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
