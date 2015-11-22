@@ -80,5 +80,5 @@ FlexyPool is explained in great details in the "High-Performance Java Persistenc
 
 ### Requirements
 
-* Java 1.6 and above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
+* Java 1.6 or above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
 * SLF4J
