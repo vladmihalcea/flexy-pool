@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/vladmihalcea/flexy-pool.svg)](https://raw.githubusercontent.com/vladmihalcea/flexy-pool/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](https://maven-badges.herokuapp.com/maven-central/com.vladmihalcea.flexy-pool/flexy-pool-parent)
-[![JavaDoc](https://javadocbadge-valery1707.rhcloud.com/doc/com.vladmihalcea.flexy-pool/flexy-pool-core/badge.svg?color=blue)](http://www.javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core)
+[![JavaDoc](https://javadoc-emblem.rhcloud.com/doc/com.vladmihalcea.flexy-pool/flexy-pool-core/badge.svg?color=blue)](http://www.javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core)
 
 [![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)
 [![Coverage Status](https://coveralls.io/repos/vladmihalcea/flexy-pool/badge.svg?branch=master)](https://coveralls.io/r/vladmihalcea/flexy-pool?branch=master)
