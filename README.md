@@ -47,12 +47,6 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### In the Press
 
-FlexyPool is explained in great details in the "High-Performance Java Persistence" book:
-
-<a href="https://leanpub.com/high-performance-java-persistence">
-<img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
-</a>
-
 1. [The anatomy of Connection Pooling](http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling)
 2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
 3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
@@ -60,6 +54,20 @@ FlexyPool is explained in great details in the "High-Performance Java Persistenc
 5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/2015/06/18/how-to-monitor-a-java-ee-datasource/)
 6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/2015/07/02/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
 7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/2015/08/25/how-does-flexypool-support-both-connection-proxies-and-decorators/)
+
+### Win a copy of my book! 
+
+<a href="https://leanpub.com/high-performance-java-persistence">
+<img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
+</a>
+
+If you want a free copy of my book, [High-Performance Java Persistence](https://leanpub.com/high-performance-java-persistence), you have to do the following:
+
+1. Give FlexyPool a try
+2. Use it in production to configure the connection pool size
+3. Write a testimonial of your FlexyPool usage
+
+**For the moment, there are two testimonials, so the next three ones will win a free copy of my book.**
 
 ### Who uses FlexyPool
 
