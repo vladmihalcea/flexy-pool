@@ -8,3 +8,4 @@
 target/
 *.epoch
 *.log
+.idea/
