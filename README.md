@@ -67,7 +67,7 @@ If you want a free copy of my book, [High-Performance Java Persistence](https://
 2. Use it in production to configure the connection pool size
 3. Write a testimonial of your FlexyPool usage
 
-**For the moment, there are two testimonials, so the next three ones will win a free copy of my book.**
+**For the moment, there are three testimonials, so the next two will win a free copy of my book.**
 
 ### Who uses FlexyPool
 
@@ -85,6 +85,12 @@ If you want a free copy of my book, [High-Performance Java Persistence](https://
 > Additionally, we compared several connection pool libraries which decided us to switch to another provider.
 >
 > -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
+
+<a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg" height="34" width="127"/></a> is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.
+
+> We have tried FlexyPool in Scentbird, after one week of intensive testing we decided switch it to FlexyPool + HikariCP in production mode, and everything works very robust and fast, we so happy about that! Thank you for this library.
+>
+> -- <cite>Andrey Rebrov, CTO, Scentbird</cite>
 
 ### Requirements
 
