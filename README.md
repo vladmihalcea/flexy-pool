@@ -86,7 +86,7 @@ If you want a free copy of my book, [High-Performance Java Persistence](https://
 >
 > -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
 
-<a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg" height="34" width="127"/></a> is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.
+<a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg"/></a> is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.
 
 > We have tried FlexyPool in Scentbird, after one week of intensive testing we decided switch it to FlexyPool + HikariCP in production mode, and everything works very robust and fast, we so happy about that! Thank you for this library.
 >
