@@ -1,12 +1,19 @@
 package com.vladmihalcea.flexypool.metric.codahale;
 
+import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
+import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import javax.sql.DataSource;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
 /**
  * CodahaleMetricsFactoryServiceTest - CodahaleMetricsFactoryService Test
@@ -40,5 +47,23 @@ public class CodahaleMetricsFactoryServiceTest {
         } finally {
             Thread.currentThread().setContextClassLoader(currentClassLoader);
         }
+    }
+
+    @Test
+    public void testExistingCodahaleMetricsFactory() {
+        DataSource dataSource = Mockito.mock(DataSource.class);
+        PoolAdapterFactory<DataSource> poolAdapterFactory = Mockito.mock(PoolAdapterFactory.class);
+
+        PoolAdapter poolAdapter = Mockito.mock(PoolAdapter.class);
+        when(poolAdapterFactory.newInstance(any(ConfigurationProperties.class))).thenReturn(poolAdapter);
+
+        ReservoirFactory reservoirFactory = Mockito.mock(ReservoirFactory.class);
+
+        Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
+                "unique", dataSource, poolAdapterFactory)
+                .setMetricsFactory(new CodahaleMetrics.ReservoirMetricsFactory(reservoirFactory))
+                .build();
+
+        assertEquals(CodahaleHistogram.class, configuration.getMetrics().histogram("test").getClass());
     }
 }
