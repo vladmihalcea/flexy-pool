@@ -72,20 +72,34 @@ public class DropwizardMetrics extends AbstractMetrics {
     /**
      * Init constructor
      * @param configurationProperties configuration properties
+     * @param metricRegistry metric registry
      * @param reservoirFactory reservoir factory
      * @param callbacks life cycle callbacks
      */
     public DropwizardMetrics(ConfigurationProperties configurationProperties,
+                             MetricRegistry metricRegistry,
                              ReservoirFactory reservoirFactory,
                              MetricsLifeCycleCallback... callbacks) {
         super(configurationProperties);
-        this.metricRegistry = new MetricRegistry();
+        this.metricRegistry = metricRegistry;
         this.reservoirFactory = reservoirFactory;
         this.callbacks.add(new Slf4jMetricReporter().init(configurationProperties, metricRegistry));
         this.callbacks.add(new JmxMetricReporter().init(configurationProperties, metricRegistry));
         for (MetricsLifeCycleCallback callback : callbacks) {
             this.callbacks.add(callback.init(configurationProperties, metricRegistry));
         }
+    }
+
+    /**
+     * Init constructor
+     * @param configurationProperties configuration properties
+     * @param reservoirFactory reservoir factory
+     * @param callbacks life cycle callbacks
+     */
+    public DropwizardMetrics(ConfigurationProperties configurationProperties,
+                             ReservoirFactory reservoirFactory,
+                             MetricsLifeCycleCallback... callbacks) {
+        this(configurationProperties, new MetricRegistry(), reservoirFactory, callbacks);
     }
 
     /**

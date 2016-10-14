@@ -1,10 +1,12 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.Reservoir;
+import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
-import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.util.ReflectionUtils;
+import io.dropwizard.metrics.MetricRegistry;
+import io.dropwizard.metrics.Reservoir;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,6 +27,9 @@ public class DropwizardMetricsTest {
     private ConfigurationProperties configurationProperties;
 
     @Mock
+    private MetricRegistry metricRegistry;
+
+    @Mock
     private ReservoirFactory reservoirFactory;
 
     @Mock
@@ -33,6 +38,12 @@ public class DropwizardMetricsTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testMetricRegistry() {
+        DropwizardMetrics dropwizardMetrics = new DropwizardMetrics(configurationProperties, metricRegistry, reservoirFactory);
+        assertSame(metricRegistry, ReflectionUtils.getFieldValue(dropwizardMetrics, "metricRegistry"));
     }
 
     @Test
