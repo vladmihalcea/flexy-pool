@@ -13,6 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HikarCPJava8IntegrationTest extends HikarCPIntegrationTest {
+public class HikariCPJava8IntegrationTest extends HikarCPIntegrationTest {
 
 }

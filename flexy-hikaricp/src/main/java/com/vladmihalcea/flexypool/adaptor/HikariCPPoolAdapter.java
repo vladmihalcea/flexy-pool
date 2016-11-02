@@ -4,6 +4,8 @@ import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.sql.SQLTimeoutException;
+import java.sql.SQLTransientConnectionException;
 import java.util.regex.Pattern;
 
 /**
@@ -15,9 +17,9 @@ import java.util.regex.Pattern;
  */
 public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
 
-    public static final String SQL_TIMEOUT_EXCEPTION_CLASS_NAME = "java.sql.SQLTimeoutException";
+    public static final String SQL_TIMEOUT_EXCEPTION_CLASS_NAME = SQLTimeoutException.class.getName();
     
-    public static final String SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME = "java.sql.SQLTransientConnectionException";
+    public static final String SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME = SQLTransientConnectionException.class.getName();
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
