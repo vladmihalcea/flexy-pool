@@ -16,6 +16,8 @@ import java.util.regex.Pattern;
 public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
 
     public static final String SQL_TIMEOUT_EXCEPTION_CLASS_NAME = "java.sql.SQLTimeoutException";
+    
+    public static final String SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME = "java.sql.SQLTransientConnectionException";
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
@@ -60,6 +62,7 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
     @Override
     protected boolean isAcquireTimeoutException(Exception e) {
         return SQL_TIMEOUT_EXCEPTION_CLASS_NAME.equals(e.getClass().getName()) ||
+            SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME.equals(e.getClass().getName()) ||
             (e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage()));
     }
 }
