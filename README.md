@@ -55,6 +55,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/2015/07/02/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
 7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/2015/08/25/how-does-flexypool-support-both-connection-proxies-and-decorators/)
 8. [Applying Queueing Theory to Dynamic Connection Pool Sizing with FlexyPool](https://blog.jooq.org/2016/11/02/applying-queueing-theory-to-dynamic-connection-pool-sizing-with-flexypool/)
+9. [Java Performance Tuning - November 2016](http://javaperformancetuning.com/news/news192.shtml)
 
 ### Win a copy of my book! 
 
