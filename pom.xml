@@ -291,6 +291,7 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>${maven-gpg-plugin.version}</version>
                         <configuration>
+						    <keyname>mih_vlad@yahoo.com</>
                             <passphrase>${gpg.passphrase}</passphrase>
                         </configuration>
                         <executions>
