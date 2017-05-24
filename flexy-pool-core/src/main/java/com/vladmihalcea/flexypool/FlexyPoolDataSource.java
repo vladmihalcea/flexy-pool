@@ -25,6 +25,9 @@ import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+
+import java.io.Closeable;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -66,7 +69,7 @@ import java.util.logging.Logger;
  * @author Vlad Mihalcea
  * @since 1.0
  */
-public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleCallback, ConnectionPoolCallback {
+public class FlexyPoolDataSource<T extends DataSource> implements DataSource, LifeCycleCallback, ConnectionPoolCallback, Closeable {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FlexyPoolDataSource.class);
 
@@ -422,5 +425,13 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
     public void stop() {
         metrics.stop();
     }
+
+	@Override
+	public void close() throws IOException {
+        metrics.stop();
+        if (targetDataSource instanceof Closeable) {
+        	((Closeable)targetDataSource).close();
+        }
+	}
 
 }
