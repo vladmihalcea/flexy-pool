@@ -18,6 +18,8 @@ import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +37,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -342,5 +345,23 @@ public class FlexyPoolDataSourceTest {
         Connection connection = Mockito.mock(Connection.class);
         when(dataSource.getConnection()).thenReturn(connection);
         flexyPoolDataSource.getConnection().close();
+    }
+    
+    @Test
+    public void testNonCloseableDataSource() throws IOException {
+    	// test that we do not fail even when targetDataSource is not closeable
+    	assertThat(dataSource, CoreMatchers.not(instanceOf(java.io.Closeable.class)));
+    	flexyPoolDataSource.close();
+    }
+    
+    @Test
+    public void testCloseableDataSource() throws IOException {
+    	DataSource ds = mock(DataSource.class, withSettings().extraInterfaces(java.io.Closeable.class));
+    	
+    	FlexyPoolDataSource<DataSource> fpds = new FlexyPoolDataSource<DataSource>(ds);
+    	fpds.close();
+    	
+    	verify((java.io.Closeable)ds, times(1)).close();
+    	
     }
 }
