@@ -1,5 +1,6 @@
 package com.vladmihalcea.flexypool.config;
 
+import com.atomikos.jdbc.AbstractDataSourceBean;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.AtomikosPoolAdapter;
@@ -22,14 +23,14 @@ import java.util.concurrent.TimeUnit;
 public class FlexyPoolConfiguration {
 
     @Autowired
-    private AtomikosDataSourceBean poolingDataSource;
+    private AbstractDataSourceBean poolingDataSource;
 
     @Value("${flexy.pool.uniqueId}")
     private String uniqueId;
 
     @Bean
-    public Configuration<AtomikosDataSourceBean> configuration() {
-        return new Configuration.Builder<AtomikosDataSourceBean>(
+    public Configuration<AbstractDataSourceBean> configuration() {
+        return new Configuration.Builder<AbstractDataSourceBean>(
                 uniqueId,
                 poolingDataSource,
                 AtomikosPoolAdapter.FACTORY
@@ -41,8 +42,8 @@ public class FlexyPoolConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FlexyPoolDataSource dataSource() {
-        Configuration<AtomikosDataSourceBean> configuration = configuration();
-        return new FlexyPoolDataSource<AtomikosDataSourceBean>(configuration,
+        Configuration<AbstractDataSourceBean> configuration = configuration();
+        return new FlexyPoolDataSource<AbstractDataSourceBean>(configuration,
                 new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
                 new RetryConnectionAcquiringStrategy.Factory(2)
         );

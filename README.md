@@ -54,14 +54,16 @@ This is very handy since most connection pools offer a limited set of dynamic co
 5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/2015/06/18/how-to-monitor-a-java-ee-datasource/)
 6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/2015/07/02/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
 7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/2015/08/25/how-does-flexypool-support-both-connection-proxies-and-decorators/)
+8. [Applying Queueing Theory to Dynamic Connection Pool Sizing with FlexyPool](https://blog.jooq.org/2016/11/02/applying-queueing-theory-to-dynamic-connection-pool-sizing-with-flexypool/)
+9. [Java Performance Tuning - November 2016](http://javaperformancetuning.com/news/news192.shtml)
 
 ### Win a copy of my book! 
 
-<a href="https://leanpub.com/high-performance-java-persistence">
+<a href="https://leanpub.com/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
 <img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
 </a>
 
-If you want a free copy of my book, [High-Performance Java Persistence](https://leanpub.com/high-performance-java-persistence), you have to do the following:
+If you want a free copy of my book, [High-Performance Java Persistence](https://leanpub.com/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool), you have to do the following:
 
 1. Give FlexyPool a try
 2. Use it in production to configure the connection pool size

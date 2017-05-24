@@ -6,13 +6,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * HikarCPJava8IntegrationTest - BasicDataSource HikariCP Java8 Integration Test
+ * AtomikosIntegrationTest - Atomikos Integration Test
  *
  * @author Vlad Mihalcea
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
+@ContextConfiguration(locations = "classpath:spring/applicationContext-non-xa-test.xml")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-public class HikarCPJava8IntegrationTest extends HikarCPIntegrationTest {
-
+public class AtomikosNonXaIntegrationTest extends AbstractPoolAdapterIntegrationTest {
 }
