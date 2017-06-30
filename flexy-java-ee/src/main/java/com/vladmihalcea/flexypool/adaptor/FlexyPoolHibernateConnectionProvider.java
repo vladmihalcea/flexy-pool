@@ -35,7 +35,7 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
     public void configure(Map props) {
         super.configure(props);
         LOGGER.debug("Hibernate switched to using FlexyPoolDataSource");
-        flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(getDataSource());
+        flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(getDataSource(), props);
     }
 
     /**
