@@ -33,6 +33,14 @@ public abstract class AbstractFlexyPoolHibernateConnectionProviderIntegrationTes
     @Autowired
     private MockMetricsFactory metricsFactory;
 
+    protected EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    protected TransactionTemplate getTransactionTemplate() {
+        return transactionTemplate;
+    }
+
     @Before
     public void init() {
         transactionTemplate.execute(new TransactionCallback<Void>() {

@@ -23,6 +23,8 @@
             <property name="hibernate.connection.provider_class"
                       value="com.vladmihalcea.flexypool.adaptor.FlexyPoolHibernateConnectionProvider"/>
 
+            <property name="flexy.pool.data.source.unique.name" value="abcd1234"/>
+
         </properties>
     </persistence-unit>
 </persistence>

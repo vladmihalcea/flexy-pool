@@ -76,6 +76,11 @@ public class PropertyLoader {
         load();
     }
 
+    public PropertyLoader(Properties overridingProperties) {
+        this();
+        properties.putAll( overridingProperties );
+    }
+
     /**
      * Load {@link Properties} from the resolved {@link InputStream}
      */

@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * <code>FlexyPoolHibernateConnectionProvider</code> - This is the Hibernate custom {@link DataSource} adapter.
@@ -26,6 +27,8 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
 
     private transient FlexyPoolDataSource<DataSource> flexyPoolDataSource;
 
+    public static final String FLEXY_POOL_PROPERTY_PREFIX = "flexy.pool";
+
     /**
      * Substitute the already configured {@link DataSource} with the {@link FlexyPoolDataSource}
      *
@@ -35,7 +38,17 @@ public class FlexyPoolHibernateConnectionProvider extends DatasourceConnectionPr
     public void configure(Map props) {
         super.configure(props);
         LOGGER.debug("Hibernate switched to using FlexyPoolDataSource");
-        flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(getDataSource());
+        Properties overridingProperties = new Properties();
+        for(Map.Entry<String, Object> propsEntry : ((Map<String, Object>) props).entrySet()) {
+            if(propsEntry.getKey().startsWith( FLEXY_POOL_PROPERTY_PREFIX ) &&
+                propsEntry.getValue() instanceof String) {
+                overridingProperties.setProperty(
+                    propsEntry.getKey(),
+                    (String) propsEntry.getValue()
+                );
+            }
+        }
+        flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(getDataSource(), overridingProperties);
     }
 
     /**

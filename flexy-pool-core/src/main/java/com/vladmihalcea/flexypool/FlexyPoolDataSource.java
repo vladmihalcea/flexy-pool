@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
@@ -97,17 +98,24 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
 
     private static class ConfigurationLoader<D extends DataSource> {
 
-        private final PropertyLoader propertyLoader = new PropertyLoader();
+        private final PropertyLoader propertyLoader;
 
         private final FlexyPoolDataSourceConfiguration<D> flexyPoolDataSourceConfiguration;
 
         @SuppressWarnings("unchecked")
         public ConfigurationLoader() {
+            this.propertyLoader = new PropertyLoader();
             D dataSource = propertyLoader.getDataSource();
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
         public ConfigurationLoader(D dataSource) {
+            this.propertyLoader = new PropertyLoader();
+            flexyPoolDataSourceConfiguration = init(dataSource);
+        }
+
+        public ConfigurationLoader(D dataSource, Properties overridingProperties) {
+            this.propertyLoader = new PropertyLoader(overridingProperties);
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
@@ -226,6 +234,17 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      */
     public FlexyPoolDataSource(T targetDataSource) {
         this(new ConfigurationLoader<T>(targetDataSource).getFlexyPoolDataSourceConfiguration());
+    }
+
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from declarative properties configuration and using the given
+     * target {@link DataSource}
+     *
+     * @param targetDataSource target {@link DataSource}
+     * @param overridingProperties overriding properties {@link Properties}
+     */
+    public FlexyPoolDataSource(T targetDataSource, Properties overridingProperties) {
+        this(new ConfigurationLoader<T>(targetDataSource, overridingProperties).getFlexyPoolDataSourceConfiguration());
     }
 
     /**

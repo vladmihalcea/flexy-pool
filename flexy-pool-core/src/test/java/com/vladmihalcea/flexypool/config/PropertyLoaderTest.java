@@ -186,6 +186,26 @@ public class PropertyLoaderTest {
         testDataSourceJndiLookup(false);
     }
 
+    @Test
+    public void testOverrideProperties() {
+        try {
+            Properties properties = new Properties();
+            properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
+            File propertiesFile = PropertiesTestUtils.setProperties(properties);
+            try {
+                System.setProperty(PropertyLoader.PROPERTIES_FILE_PATH, propertiesFile.toURI().toURL().toString());
+                Properties overridingProperties = new Properties();
+                overridingProperties.setProperty( PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jta/DS" );
+                PropertyLoader propertyLoader = new PropertyLoader(overridingProperties);
+                assertEquals("jta/DS", propertyLoader.getUniqueName());
+            } finally {
+                System.clearProperty(PropertyLoader.PROPERTIES_FILE_PATH);
+            }
+        } catch (IOException e) {
+            fail("Can't save/load properties");
+        }
+    }
+
     private void testDataSourceJndiLookup(boolean lazy) {
         try {
             DataSource mockDataSource = new MockDataSource();
