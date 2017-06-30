@@ -71,6 +71,7 @@ public class PropertyLoader {
     }
 
     private final Properties properties = new Properties();
+    private Map globalProperties = null;
 
     public PropertyLoader() {
         load();
@@ -138,7 +139,7 @@ public class PropertyLoader {
      * @return {@link DataSource} unique name
      */
     public String getUniqueName() {
-        return properties.getProperty(PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey());
+        return getProperty(PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey());
     }
 
     /**
@@ -291,7 +292,7 @@ public class PropertyLoader {
      */
     private <T> T instantiateClass(PropertyKey propertyKey) {
         T object = null;
-        String property = properties.getProperty(propertyKey.getKey());
+        String property = getProperty(propertyKey.getKey());
         if (property != null) {
             try {
                 Class<T> clazz = ClassLoaderUtils.loadClass(property);
@@ -316,7 +317,7 @@ public class PropertyLoader {
      */
     private Integer integerProperty(PropertyKey propertyKey) {
         Integer value = null;
-        String property = properties.getProperty(propertyKey.getKey());
+        String property = getProperty(propertyKey.getKey());
         if (property != null) {
             value = Integer.valueOf(property);
         }
@@ -331,7 +332,7 @@ public class PropertyLoader {
      */
     private Long longProperty(PropertyKey propertyKey) {
         Long value = null;
-        String property = properties.getProperty(propertyKey.getKey());
+        String property = getProperty(propertyKey.getKey());
         if (property != null) {
             value = Long.valueOf(property);
         }
@@ -346,7 +347,7 @@ public class PropertyLoader {
      */
     private Boolean booleanProperty(PropertyKey propertyKey) {
         Boolean value = null;
-        String property = properties.getProperty(propertyKey.getKey());
+        String property = getProperty(propertyKey.getKey());
         if (property != null) {
             value = Boolean.valueOf(property);
         }
@@ -362,12 +363,25 @@ public class PropertyLoader {
      */
     @SuppressWarnings("unchecked")
     private <T> T jndiLookup(PropertyKey propertyKey) {
-        String property = properties.getProperty(propertyKey.getKey());
+        String property = getProperty(propertyKey.getKey());
         if (property != null) {
             return isJndiLazyLookup() ?
                     (T) LazyJndiResolver.newInstance(property, DataSource.class) :
                     (T) JndiUtils.lookup(property);
         }
         return null;
+    }
+
+    public void setGlobalProperties(Map props) {
+        this.globalProperties = props;
+    }
+
+    private String getProperty(String key) {
+        if(null != this.globalProperties) {
+            if(this.globalProperties.containsKey(key)) {
+                return (String) this.globalProperties.get(key);
+            }
+        }
+        return properties.getProperty(key);
     }
 }

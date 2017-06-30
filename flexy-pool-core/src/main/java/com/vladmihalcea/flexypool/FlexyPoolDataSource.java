@@ -32,10 +32,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
@@ -107,19 +104,27 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             flexyPoolDataSourceConfiguration = init(dataSource);
         }
 
-        public ConfigurationLoader(D dataSource) {
-            flexyPoolDataSourceConfiguration = init(dataSource);
+        public ConfigurationLoader(D dataSource, Map props) {
+            flexyPoolDataSourceConfiguration = init(dataSource, props);
         }
 
         private FlexyPoolDataSourceConfiguration<D> init(D dataSource) {
             return new FlexyPoolDataSourceConfiguration<D>(
-                    configuration(dataSource),
+                    configuration(dataSource, null),
+                    connectionAcquiringStrategyFactories()
+            );
+        }
+
+        private FlexyPoolDataSourceConfiguration<D> init(D dataSource, Map props) {
+            return new FlexyPoolDataSourceConfiguration<D>(
+                    configuration(dataSource, props),
                     connectionAcquiringStrategyFactories()
             );
         }
 
         @SuppressWarnings("unchecked")
-        private Configuration<D> configuration(D dataSource) {
+        private Configuration<D> configuration(D dataSource, Map globalProps) {
+            propertyLoader.setGlobalProperties(globalProps);
             String uniqueName = propertyLoader.getUniqueName();
             PoolAdapterFactory<D> poolAdapterFactory = propertyLoader.getPoolAdapterFactory();
             MetricsFactory metricsFactory = propertyLoader.getMetricsFactory();
@@ -225,8 +230,21 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
      * @param targetDataSource target {@link DataSource}
      */
     public FlexyPoolDataSource(T targetDataSource) {
-        this(new ConfigurationLoader<T>(targetDataSource).getFlexyPoolDataSourceConfiguration());
+        this(new ConfigurationLoader<T>(targetDataSource, null).getFlexyPoolDataSourceConfiguration());
     }
+
+    /**
+     * Initialize <code>FlexyPoolDataSource</code> from declarative properties configuration and using the given
+     * target {@link DataSource}. Will pick first properties passed in props. These are
+     * typically properties defined in JPA persistence.xml file.
+     *
+     * @param targetDataSource target {@link DataSource}
+     */
+    public FlexyPoolDataSource(T targetDataSource, Map props) {
+        this(new ConfigurationLoader<T>(targetDataSource, props).getFlexyPoolDataSourceConfiguration());
+    }
+
+
 
     /**
      * Initialize <code>FlexyPoolDataSource</code> from {@link Configuration} and the associated list of {@link ConnectionAcquiringStrategyFactory}
