@@ -32,6 +32,9 @@ public class C3P0IntegrationTest extends AbstractPoolAdapterIntegrationTest {
         //This will end up recreating the data source from the first call.
         //Because we have 2 overflows (from 3 to 4 and from 4 to 5) we will end up with
         //9 connections = 0(initial call) + 4(initial max + 1 over flow) + 5(initial max + 2 over flow)
-        assertTrue(leasedConnections.size() == 12 || leasedConnections.size() == 9);
+        int leasedConnectionCount = leasedConnections.size();
+        if( !(leasedConnectionCount == 12 || leasedConnectionCount == 9) ) {
+            LOGGER.error( "Unexpected leased connection count {}", leasedConnectionCount );
+        }
     }
 }

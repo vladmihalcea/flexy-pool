@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractPoolAdapterIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPoolAdapterIntegrationTest.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractPoolAdapterIntegrationTest.class);
 
     @Resource
     private FlexyPoolDataSource dataSource;
