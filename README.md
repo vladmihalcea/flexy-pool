@@ -56,6 +56,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/2015/08/25/how-does-flexypool-support-both-connection-proxies-and-decorators/)
 8. [Applying Queueing Theory to Dynamic Connection Pool Sizing with FlexyPool](https://blog.jooq.org/2016/11/02/applying-queueing-theory-to-dynamic-connection-pool-sizing-with-flexypool/)
 9. [Java Performance Tuning - November 2016](http://javaperformancetuning.com/news/news192.shtml)
+10. [Brett Wooldridge Shows What it Takes to Write the Fastest Java Connection Pool](https://blog.jooq.org/2017/02/21/jooq-tuesdays-brett-wooldridge-shows-what-it-takes-to-write-the-fastest-java-connection-pool/)
 
 ### Win a copy of my book! 
 
