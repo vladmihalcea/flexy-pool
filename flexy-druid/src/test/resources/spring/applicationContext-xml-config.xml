@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="configurationBuilder" class="com.vladmihalcea.flexypool.config.Configuration$Builder">
+        <constructor-arg value="uniqueId"/>
+        <constructor-arg ref="poolingDataSource"/>
+        <constructor-arg value="#{ T(com.vladmihalcea.flexypool.adaptor.DruidAdapter).FACTORY }"/>
+    </bean>
+
+    <bean id="configuration" factory-bean="configurationBuilder" factory-method="build"/>
+
+    <bean id="dataSource" class="com.vladmihalcea.flexypool.FlexyPoolDataSource" init-method="start" destroy-method="stop">
+        <constructor-arg ref="configuration"/>
+        <constructor-arg>
+            <array>
+                <bean class="com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory">
+                    <constructor-arg value="5"/>
+                </bean>
+                <bean class="com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy.Factory">
+                    <constructor-arg value="2"/>
+                </bean>
+            </array>
+        </constructor-arg>
+    </bean>
+
+</beans>
