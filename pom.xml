@@ -62,6 +62,7 @@
         <module>flexy-glassfish</module>
         <module>flexy-tomee</module>
         <module>flexy-tests</module>
+        <module>flexy-druid</module>
     </modules>
 
     <dependencies>
