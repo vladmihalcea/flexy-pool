@@ -27,6 +27,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * [HikariCP](http://brettwooldridge.github.io/HikariCP/)
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
  * [Vibur DBCP](http://www.vibur.org/)
+ * [Druid](https://github.com/alibaba/druid/)
  * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Atomikos TransactionsEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
 * statistics support
