@@ -48,13 +48,13 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### In the Press
 
-1. [The anatomy of Connection Pooling](http://vladmihalcea.com/2014/04/17/the-anatomy-of-connection-pooling)
-2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/2014/04/25/flexy-pool-reactive-connection-pooling)
-3. [Professional connection pool sizing](http://vladmihalcea.com/2014/04/30/professional-connection-pool-sizing)
-4. [The simple scalability equation](http://vladmihalcea.com/2014/05/20/the-simple-scalability-equation)
-5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/2015/06/18/how-to-monitor-a-java-ee-datasource/)
-6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/2015/07/02/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
-7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/2015/08/25/how-does-flexypool-support-both-connection-proxies-and-decorators/)
+1. [The anatomy of Connection Pooling](http://vladmihalcea.com/the-anatomy-of-connection-pooling)
+2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/flexy-pool-reactive-connection-pooling)
+3. [Professional connection pool sizing](http://vladmihalcea.com/professional-connection-pool-sizing)
+4. [The simple scalability equation](http://vladmihalcea.com/the-simple-scalability-equation)
+5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/how-to-monitor-a-java-ee-datasource/)
+6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
+7. [How does FlexyPool support both Connection proxies and decorators](http://vladmihalcea.com/how-does-flexypool-support-both-connection-proxies-and-decorators/)
 8. [Applying Queueing Theory to Dynamic Connection Pool Sizing with FlexyPool](https://blog.jooq.org/2016/11/02/applying-queueing-theory-to-dynamic-connection-pool-sizing-with-flexypool/)
 9. [Java Performance Tuning - November 2016](http://javaperformancetuning.com/news/news192.shtml)
 10. [Brett Wooldridge Shows What it Takes to Write the Fastest Java Connection Pool](https://blog.jooq.org/2017/02/21/jooq-tuesdays-brett-wooldridge-shows-what-it-takes-to-write-the-fastest-java-connection-pool/)
