@@ -54,6 +54,7 @@ public class EventPublisher {
      * Publish an {@link Event} to all listeners
      *
      * @param event event
+     * @param <E> Event generic type
      */
     public <E extends Event> void publish(E event) {
         if (!eventListenerMap.isEmpty()) {

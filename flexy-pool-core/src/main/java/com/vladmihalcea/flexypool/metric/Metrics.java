@@ -14,6 +14,7 @@ public interface Metrics extends LifeCycleCallback {
      * Get histogram
      *
      * @param name histogram name
+     * @return Histogram
      */
     Histogram histogram(String name);
 
@@ -21,6 +22,7 @@ public interface Metrics extends LifeCycleCallback {
      * Get timer
      *
      * @param name timer name
+     * @return Timer
      */
     Timer timer(String name);
 }

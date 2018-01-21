@@ -12,8 +12,8 @@ import java.util.LinkedHashSet;
 /**
  * <code>DropwizardMetrics</code> extends the {@link AbstractMetrics} class and configures the Dropwizard
  * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
- * If the Jmx is enabled, a {@link JmxReporter} will also be added.
- * <p/>
+ * If the Jmx is enabled, a {@link com.codahale.metrics.jmx.JmxReporter} will also be added.
+ * <br>
  * This class implements the {@link com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback} interface so it can
  * start/stop the metrics reports.
  *

@@ -31,6 +31,7 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public ViburDBCPPoolAdapter(ConfigurationProperties<ViburDBCPDataSource, Metrics, PoolAdapter<ViburDBCPDataSource>> configurationProperties) {
         super(configurationProperties);

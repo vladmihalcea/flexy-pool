@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * <code>IncrementPoolOnTimeoutConnectionAcquiringStrategy</code> extends the {@link AbstractConnectionAcquiringStrategy}
  * and it allows the pool size to grow beyond its {@link com.vladmihalcea.flexypool.adaptor.PoolAdapter#getMaxPoolSize()}
  * up to reaching the {@link IncrementPoolOnTimeoutConnectionAcquiringStrategy#maxOverflowPoolSize} limit.
- * <p>
+ * <br>
  * Use this strategy to dynamically adjust the pool size based on the connection acquiring demand.
  *
  * @author Vlad Mihalcea
@@ -135,6 +135,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquiringStrategy<T extends D
     /**
      * Attempt to increment the pool size. If the maxSize changes, it skips the incrementing process.
      *
+     * @param expectingMaxSize expecting maximum pool size
      * @return if it succeeded changing the pool size
      */
     protected boolean incrementPoolSize(int expectingMaxSize) {

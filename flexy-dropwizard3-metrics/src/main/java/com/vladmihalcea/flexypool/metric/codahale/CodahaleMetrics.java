@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  * <code>CodahaleMetrics</code> extends the {@link AbstractMetrics} class and configures the Codahale
  * {@link MetricRegistry}. By default, the {@link Slf4jReporter} is used for logging metrics data.
  * If the Jmx is enabled, a {@link JmxReporter} will also be added.
- * <p/>
+ * <br>
  * This class implements the {@link com.vladmihalcea.flexypool.lifecycle.LifeCycleCallback} interface so it can
  * start/stop the metrics reports.
  *

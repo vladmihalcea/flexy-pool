@@ -34,7 +34,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private final String uniqueName;
         private final T targetDataSource;
         private final PoolAdapterFactory<T> poolAdapterFactory;
-        private MetricsFactory metricsFactory = MetricsFactoryResolver.INSTANCE.resolve();
+        private MetricsFactory metricsFactory;
         private ConnectionProxyFactory connectionProxyFactory = ConnectionDecoratorFactoryResolver.INSTANCE.resolve();
         private boolean jmxEnabled = true;
         private boolean jmxAutoStart = false;
@@ -161,6 +161,9 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             configuration.setMetricLogReporterMillis(metricLogReporterMillis);
             configuration.setConnectionAcquireTimeThresholdMillis(connectionAcquireTimeThresholdMillis);
             configuration.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
+            if(metricsFactory == null) {
+                metricsFactory = MetricsFactoryResolver.INSTANCE.resolve();
+            }
             configuration.metrics = metricsFactory.newInstance(configuration);
             configuration.poolAdapter = poolAdapterFactory.newInstance(configuration);
             configuration.connectionProxyFactory = connectionProxyFactory;

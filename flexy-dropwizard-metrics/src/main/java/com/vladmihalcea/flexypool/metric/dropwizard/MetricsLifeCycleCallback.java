@@ -15,8 +15,11 @@ public interface MetricsLifeCycleCallback extends LifeCycleCallback {
 
     /**
      * Init callback for the given metric registry.
+     *
      * @param configurationProperties configuration properties
      * @param metricRegistry metric registry
+     *
+     * @return MetricsLifeCycleCallback
      */
     MetricsLifeCycleCallback init(ConfigurationProperties configurationProperties, MetricRegistry metricRegistry);
 }

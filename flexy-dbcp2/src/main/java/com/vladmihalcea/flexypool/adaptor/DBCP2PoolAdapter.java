@@ -29,6 +29,7 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public DBCP2PoolAdapter(ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
         super(configurationProperties);

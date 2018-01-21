@@ -32,6 +32,7 @@ public class BitronixPoolAdapter extends AbstractPoolAdapter<PoolingDataSource> 
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public BitronixPoolAdapter(ConfigurationProperties<PoolingDataSource, Metrics, PoolAdapter<PoolingDataSource>> configurationProperties) {
         super(configurationProperties);

@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * <code>AbstractPoolAdapter</code> defines the base behavior for obtaining a target connection.
  * The connection acquiring timing statistics is stored within the {@link AbstractPoolAdapter#connectionAcquireTimer}
  * This class is meant to be extended by specific pool adapter providers {DBCP, C3PO, Bitronix Transaction Manager}
- * <p>
+ * <br>
  * <p>Make sure you supply the adapting pool specific exception transaction mechanism {@link AbstractPoolAdapter#translateException}
  *
  * @author Vlad Mihalcea

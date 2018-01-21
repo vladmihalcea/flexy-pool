@@ -35,6 +35,7 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public HikariCPPoolAdapter(ConfigurationProperties<HikariDataSource, Metrics, PoolAdapter<HikariDataSource>> configurationProperties) {
         super(configurationProperties);

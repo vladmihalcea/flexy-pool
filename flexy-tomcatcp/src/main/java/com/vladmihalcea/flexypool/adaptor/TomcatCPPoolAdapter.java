@@ -28,6 +28,7 @@ public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public TomcatCPPoolAdapter(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
         super(configurationProperties);

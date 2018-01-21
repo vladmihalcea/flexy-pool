@@ -6,15 +6,16 @@ import javax.sql.DataSource;
 
 /**
  * <code>PoolAdapter</code> provides an abstraction layer for external connection pools.
- * <p>
+ * <br>
  * <p>Every supported connection pool must have an associated PoolAdapter defining methods for:
- * <p>
+ * <br>
  * <ul>
  * <li>retrieving the pool max size {@link com.vladmihalcea.flexypool.adaptor.PoolAdapter#getMaxPoolSize()}
- * <p>
+ * <br>
  * <li>setting the pool max size {@link com.vladmihalcea.flexypool.adaptor.PoolAdapter#setMaxPoolSize(int maxPoolSize)} ()}
- * <p>
+ * <br>
  * <li>retrieving the pool data source
+ * </ul>
  *
  * @author Vlad Mihalcea
  * @see com.vladmihalcea.flexypool.connection.ConnectionFactory

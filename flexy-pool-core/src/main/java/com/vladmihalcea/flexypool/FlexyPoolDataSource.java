@@ -44,28 +44,6 @@ import java.util.logging.Logger;
 /**
  * <code>FlexyPoolDataSource</code> is a {@link DataSource} wrapper that allows multiple
  * {@link ConnectionAcquiringStrategy} to be applied when trying to acquireConnection a database {@link java.sql.Connection}.
- * This is how you'd configure it suing Spring JavaConfig:
- * <p>
- * <pre>
- *
- * {@code @Autowired} private PoolingDataSource poolingDataSource;
- *
- * {@code @Bean} public Configuration configuration() {
- * return new Configuration.Factory<PoolingDataSource>(
- * UUID.randomUUID().toString(),
- * poolingDataSource,
- * BitronixPoolAdapter.FACTORY
- * ).build();
- * }
- *
- * {@code @Bean} public FlexyPoolDataSource dataSource() {
- * Configuration configuration = configuration();
- * return new FlexyPoolDataSource(configuration,
- * new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
- * new RetryConnectionAcquiringStrategy.Factory(2)
- * );
- * }
- * </pre>
  *
  * @author Vlad Mihalcea
  * @since 1.0

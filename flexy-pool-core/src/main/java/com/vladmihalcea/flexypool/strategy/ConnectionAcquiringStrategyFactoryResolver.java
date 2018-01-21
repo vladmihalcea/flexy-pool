@@ -15,6 +15,8 @@ public interface ConnectionAcquiringStrategyFactoryResolver<T extends DataSource
 
     /**
      * Resolve the list of {@link ConnectionAcquiringStrategyFactory}
+     *
+     * @return list of {@link ConnectionAcquiringStrategyFactory}
      */
     List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> resolveFactories();
 }

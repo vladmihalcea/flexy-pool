@@ -31,6 +31,7 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public DBCPPoolAdapter(ConfigurationProperties<BasicDataSource, Metrics, PoolAdapter<BasicDataSource>> configurationProperties) {
         super(configurationProperties);

@@ -12,6 +12,8 @@ public interface EventListenerResolver {
 
     /**
      * Resolve the list of {@link EventListener}
+     *
+     * @return EventListener instance
      */
     List<EventListener<? extends Event>> resolveListeners();
 }

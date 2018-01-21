@@ -114,8 +114,10 @@ public final class ReflectionUtils {
     /**
      * Invoke target method
      *
+     * @param target     Object target
      * @param method     method to invoke
      * @param parameters method parameters
+     * @param <T> Object generic type
      * @return return value
      */
     public static <T> T invoke(Object target, Method method, Object... parameters) {

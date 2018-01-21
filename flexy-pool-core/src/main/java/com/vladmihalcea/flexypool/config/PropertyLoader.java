@@ -150,6 +150,7 @@ public class PropertyLoader {
      * Get associated {@link DataSource}. The {@link DataSource} can either be looked up in JNDI or instantiated
      * from the configuration meta-data.
      *
+     * @param <T> DataSource generic type
      * @return {@link DataSource}
      */
     public <T extends DataSource> T getDataSource() {
@@ -184,6 +185,7 @@ public class PropertyLoader {
     /**
      * Get the {@link PoolAdapterFactory}
      *
+     * @param <T> DataSource generic type
      * @return {@link PoolAdapterFactory}
      */
     public <T extends DataSource> PoolAdapterFactory<T> getPoolAdapterFactory() {
@@ -247,6 +249,7 @@ public class PropertyLoader {
     /**
      * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link com.vladmihalcea.flexypool.FlexyPoolDataSource}
      *
+     * @param <T> DataSource generic type
      * @return the array of {@link ConnectionAcquiringStrategyFactory}
      */
     @SuppressWarnings("unchecked")

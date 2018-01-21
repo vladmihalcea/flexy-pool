@@ -29,8 +29,9 @@ public final class ClassLoaderUtils {
      * Load the Class denoted by the given string representation
      *
      * @param className class string representation
+     * @param <T> Class generic type
      * @return Class
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException in case of failure
      */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> loadClass(String className) throws ClassNotFoundException {

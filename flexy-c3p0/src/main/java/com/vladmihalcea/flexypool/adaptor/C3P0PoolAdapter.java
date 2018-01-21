@@ -28,7 +28,8 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
     };
 
     /**
-     * {@inheritDoc}
+     * Init constructor
+     * @param configurationProperties configuration properties
      */
     public C3P0PoolAdapter(ConfigurationProperties<ComboPooledDataSource, Metrics, PoolAdapter<ComboPooledDataSource>> configurationProperties) {
         super(configurationProperties);

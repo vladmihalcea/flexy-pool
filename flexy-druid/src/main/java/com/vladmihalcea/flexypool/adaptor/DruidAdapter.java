@@ -26,6 +26,7 @@ public class DruidAdapter extends AbstractPoolAdapter<DruidDataSource> {
 
     /**
      * Init constructor
+     * @param configurationProperties configuration properties
      */
     public DruidAdapter(ConfigurationProperties<DruidDataSource, Metrics, PoolAdapter<DruidDataSource>> configurationProperties) {
         super(configurationProperties);
