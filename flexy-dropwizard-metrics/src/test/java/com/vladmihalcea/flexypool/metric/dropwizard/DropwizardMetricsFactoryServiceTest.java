@@ -4,6 +4,7 @@ import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import org.junit.Test;
 
+import static com.vladmihalcea.flexypool.metric.dropwizard.DropwizardMetricsFactoryService.METRICS_CLASS_NAME;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -29,7 +30,7 @@ public class DropwizardMetricsFactoryServiceTest {
             Thread.currentThread().setContextClassLoader(new ClassLoader() {
                 @Override
                 protected Class loadClass(String class_name, boolean resolve) throws ClassNotFoundException {
-                    if(class_name.equals("io.dropwizard.metrics.Metric")) {
+                    if(class_name.equals(METRICS_CLASS_NAME)) {
                         return null;
                     }
                     return super.loadClass(class_name, resolve);

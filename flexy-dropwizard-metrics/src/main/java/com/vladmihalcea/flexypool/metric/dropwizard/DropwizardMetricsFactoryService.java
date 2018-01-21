@@ -12,7 +12,7 @@ import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
  */
 public class DropwizardMetricsFactoryService implements MetricsFactoryService {
 
-    public static final String METRICS_CLASS_NAME = "com.codahale.jmx.JmxReporter";
+    public static final String METRICS_CLASS_NAME = "com.codahale.metrics.jmx.JmxReporter";
 
     /**
      * Load DropwizardMetrics Factory if the Dropwizard Metrics is available at runtime

@@ -435,48 +435,40 @@ public class ConnectionDecorator implements Connection {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setSchema(String schema) throws SQLException {
-        ReflectionUtils.invoke(
-                target,
-                ReflectionUtils.getMethod(target, "setSchema", String.class),
-                schema);
+        getTarget().setSchema(schema);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSchema() throws SQLException {
-        return ReflectionUtils.invoke(
-                target,
-                ReflectionUtils.getMethod(target, "getSchema"));
+        return getTarget().getSchema();
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void abort(Executor executor) throws SQLException {
-        ReflectionUtils.invoke(
-                target,
-                ReflectionUtils.getMethod(target, "abort", Executor.class),
-                executor);
+        getTarget().abort(executor);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-        ReflectionUtils.invoke(
-                target,
-                ReflectionUtils.getMethod(target, "setNetworkTimeout", Executor.class, int.class),
-                executor, milliseconds);
+        getTarget().setNetworkTimeout(executor, milliseconds);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getNetworkTimeout() throws SQLException {
-        return (Integer) ReflectionUtils.invoke(
-                target,
-                ReflectionUtils.getMethod(target, "getNetworkTimeout"));
+        return getTarget().getNetworkTimeout();
     }
 }

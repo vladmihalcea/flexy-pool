@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.*;
+import com.codahale.metrics.*;
 import com.vladmihalcea.flexypool.metric.*;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Timer;
@@ -107,8 +107,8 @@ public class DropwizardMetrics extends AbstractMetrics {
      */
     @Override
     public Histogram histogram(String name) {
-        io.dropwizard.metrics.Histogram histogram = new io.dropwizard.metrics.Histogram(
-                reservoirFactory.newInstance(io.dropwizard.metrics.Histogram.class, name)
+        com.codahale.metrics.Histogram histogram = new com.codahale.metrics.Histogram(
+                reservoirFactory.newInstance(com.codahale.metrics.Histogram.class, name)
         );
         return new DropwizardHistogram(metricRegistry.register(name, histogram));
     }
@@ -118,8 +118,8 @@ public class DropwizardMetrics extends AbstractMetrics {
      */
     @Override
     public Timer timer(String name) {
-        io.dropwizard.metrics.Timer timer = new io.dropwizard.metrics.Timer(
-                reservoirFactory.newInstance(io.dropwizard.metrics.Timer.class, name)
+        com.codahale.metrics.Timer timer = new com.codahale.metrics.Timer(
+                reservoirFactory.newInstance(com.codahale.metrics.Timer.class, name)
         );
         return new DropwizardTimer(metricRegistry.register(name, timer));
     }

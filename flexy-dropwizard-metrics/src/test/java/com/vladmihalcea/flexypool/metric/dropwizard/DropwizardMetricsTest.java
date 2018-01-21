@@ -5,8 +5,8 @@ import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
-import io.dropwizard.metrics.MetricRegistry;
-import io.dropwizard.metrics.Reservoir;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Reservoir;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -50,18 +50,18 @@ public class DropwizardMetricsTest {
     public void testHistogram() {
         DropwizardMetrics dropwizardMetrics = new DropwizardMetrics(configurationProperties, reservoirFactory);
         assertSame(configurationProperties, dropwizardMetrics.getConfigurationProperties());
-        when(reservoirFactory.newInstance(io.dropwizard.metrics.Histogram.class, "histo")).thenReturn(reservoir);
+        when(reservoirFactory.newInstance(com.codahale.metrics.Histogram.class, "histo")).thenReturn(reservoir);
         Histogram histogram = dropwizardMetrics.histogram("histo");
-        verify(reservoirFactory, times(1)).newInstance(io.dropwizard.metrics.Histogram.class, "histo");
+        verify(reservoirFactory, times(1)).newInstance(com.codahale.metrics.Histogram.class, "histo");
         assertNotNull(histogram);
     }
 
     @Test
     public void testTimer() {
         DropwizardMetrics dropwizardMetrics = new DropwizardMetrics(configurationProperties, reservoirFactory);
-        when(reservoirFactory.newInstance(io.dropwizard.metrics.Timer.class, "timer")).thenReturn(reservoir);
+        when(reservoirFactory.newInstance(com.codahale.metrics.Timer.class, "timer")).thenReturn(reservoir);
         Timer timer = dropwizardMetrics.timer("timer");
-        verify(reservoirFactory, times(1)).newInstance(io.dropwizard.metrics.Timer.class, "timer");
+        verify(reservoirFactory, times(1)).newInstance(com.codahale.metrics.Timer.class, "timer");
         assertNotNull(timer);
     }
 

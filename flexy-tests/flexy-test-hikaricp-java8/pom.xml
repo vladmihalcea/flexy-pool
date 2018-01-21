@@ -24,19 +24,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-pool-core-java7</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>${dropwizard.metrics.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
@@ -134,9 +121,6 @@
     </profiles>
 
     <properties>
-        <jdk.version>7</jdk.version>
-        <jdk>${env.JAVA_HOME_8}</jdk>
-
         <hikari.version>2.4.1</hikari.version>
         <spring.version>4.1.7.RELEASE</spring.version>
         <junit.version>4.12</junit.version>

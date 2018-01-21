@@ -101,7 +101,7 @@ public abstract class AbstractGlassfishIntegrationTest {
 
     private MBeanInfo connectionLeaseMillisMBean() {
         try {
-            ObjectName objectName = new ObjectName("com.vladmihalcea.flexypool.metric.codahale.JmxMetricReporter.unique-name:name=connectionLeaseMillis");
+            ObjectName objectName = new ObjectName("com.vladmihalcea.flexypool.metric.dropwizard.JmxMetricReporter.unique-name:name=connectionLeaseMillis");
             return ManagementFactory.getPlatformMBeanServer().getMBeanInfo(objectName);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);

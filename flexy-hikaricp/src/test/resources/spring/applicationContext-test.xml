@@ -21,9 +21,9 @@
                 <prop key="password">${jdbc.password}</prop>
             </props>
         </property>
-        <property name="minimumPoolSize" value="1"/>
+        <property name="minimumIdle" value="1"/>
         <property name="maximumPoolSize" value="3"/>
-        <property name="connectionTimeout" value="100"/>
+        <property name="connectionTimeout" value="300"/>
     </bean>
 
 </beans>

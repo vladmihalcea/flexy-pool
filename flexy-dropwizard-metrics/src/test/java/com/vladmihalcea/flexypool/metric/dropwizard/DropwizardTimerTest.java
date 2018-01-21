@@ -14,13 +14,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class DropwizardTimerTest {
 
-    private io.dropwizard.metrics.Timer timer;
+    private com.codahale.metrics.Timer timer;
 
     private DropwizardTimer timerWrapper;
 
     @Before
     public void before() {
-        timer = new io.dropwizard.metrics.Timer();
+        timer = new com.codahale.metrics.Timer();
         timerWrapper = new DropwizardTimer(timer);
     }
 

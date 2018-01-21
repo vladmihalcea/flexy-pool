@@ -2,14 +2,14 @@ package com.vladmihalcea.flexypool.connection;
 
 /**
  * <code>DefaultConnectionDecoratorFactoryService</code> - The default {@link ConnectionDecoratorFactory} Service is using the
- * JDK 1.6 {@link Connection} interface version.
+ * JDK 1.8 {@link java.sql.Connection} interface version.
  *
  * @author Vlad Mihalcea
  * @version 1.2.3
  */
 public class DefaultConnectionDecoratorFactoryService implements ConnectionDecoratorFactoryService {
 
-    public static final int LOADING_INDEX = 0x16;
+    public static final int LOADING_INDEX = 0x18;
 
     /**
      * {@inheritDoc}

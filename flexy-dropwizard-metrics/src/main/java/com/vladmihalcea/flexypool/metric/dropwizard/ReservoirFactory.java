@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.Metric;
-import io.dropwizard.metrics.Reservoir;
+import com.codahale.metrics.Metric;
+import com.codahale.metrics.Reservoir;
 
 /**
  * <code>ReservoirFactory</code> defines how a Dropwizard reservoir is allocated to a specific Metric.

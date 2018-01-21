@@ -45,8 +45,7 @@
 
     <modules>
         <module>flexy-pool-core</module>
-        <module>flexy-pool-core-java7</module>
-        <module>flexy-codahale-metrics</module>
+        <module>flexy-dropwizard3-metrics</module>
         <module>flexy-dropwizard-metrics</module>
         <module>flexy-common-adapter</module>
         <module>flexy-java-ee</module>
@@ -59,10 +58,10 @@
         <module>flexy-hikaricp</module>
         <module>flexy-tomcatcp</module>
         <module>flexy-vibur</module>
+        <module>flexy-druid</module>
         <module>flexy-glassfish</module>
         <module>flexy-tomee</module>
         <module>flexy-tests</module>
-        <module>flexy-druid</module>
     </modules>
 
     <dependencies>
@@ -373,8 +372,8 @@
     </distributionManagement>
 
     <properties>
-        <jdk.version>6</jdk.version>
-        <jdk>${env.JAVA_HOME_6}</jdk>
+        <jdk.version>8</jdk.version>
+        <jdk>${env.JAVA_HOME_8}</jdk>
         <forkMode>once</forkMode>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -390,14 +389,14 @@
 
         <slf4j.version>1.7.6</slf4j.version>
         <logback.version>1.1.1</logback.version>
-        <codahale.metrics.version>3.1.0</codahale.metrics.version>
-        <dropwizard.metrics.version>4.0.0-SNAPSHOT</dropwizard.metrics.version>
+        <dropwizard3.metrics.version>3.2.6</dropwizard3.metrics.version>
+        <dropwizard.metrics.version>4.0.2</dropwizard.metrics.version>
 
-        <spring.version>3.2.2.RELEASE</spring.version>
+        <spring.version>4.3.13.RELEASE</spring.version>
         <aspectj.version>1.8.4</aspectj.version>
 
         <mockito.version>1.8.5</mockito.version>
-        <junit.version>4.8.1</junit.version>
+        <junit.version>4.12</junit.version>
         <hsqldb.version>2.2.8</hsqldb.version>
 
     </properties>

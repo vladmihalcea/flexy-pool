@@ -12,7 +12,7 @@ import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
  */
 public class CodahaleMetricsFactoryService implements MetricsFactoryService {
 
-    public static final String METRICS_CLASS_NAME = "com.codahale.metrics.Metric";
+    public static final String METRICS_CLASS_NAME = "com.codahale.metrics.JmxReporter";
 
     /**
      * Load CodahaleMetrics Factory if the Codahale Metrics is available at runtime

@@ -6,21 +6,21 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <code>DropwizardTimer</code> implements the {@link com.vladmihalcea.flexypool.metric.Timer} interface by
- * delegating calls to {@link io.dropwizard.metrics.Timer}
+ * delegating calls to {@link com.codahale.metrics.Timer}
  *
  * @author Vlad Mihalcea
  * @since 1.2.2
  */
 public class DropwizardTimer implements Timer {
 
-    private final io.dropwizard.metrics.Timer timer;
+    private final com.codahale.metrics.Timer timer;
 
     /**
-     * Create a {@link io.dropwizard.metrics.Timer} wrapper
+     * Create a {@link com.codahale.metrics.Timer} wrapper
      *
      * @param timer actual timer
      */
-    public DropwizardTimer(io.dropwizard.metrics.Timer timer) {
+    public DropwizardTimer(com.codahale.metrics.Timer timer) {
         this.timer = timer;
     }
 

@@ -100,7 +100,7 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
     public void testInvokeSetter() {
         TestObject testObject = new TestObject();
         ReflectionUtils.invokeSetter(testObject, "version", 12);
-        assertEquals(12, ReflectionUtils.getFieldValue(testObject, "version"));
+        assertEquals(12, (int) ReflectionUtils.getFieldValue(testObject, "version"));
     }
 
     @Override

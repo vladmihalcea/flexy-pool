@@ -4,21 +4,21 @@ import com.vladmihalcea.flexypool.metric.Histogram;
 
 /**
  * <code>DropwizardHistogram</code> implements the {@link com.vladmihalcea.flexypool.metric.Histogram} interface by
- * delegating calls to {@link io.dropwizard.metrics.Histogram}
+ * delegating calls to {@link com.codahale.metrics.Histogram}
  *
  * @author Vlad Mihalcea
  * @since 1.2.2
  */
 public class DropwizardHistogram implements Histogram {
 
-    private final io.dropwizard.metrics.Histogram histogram;
+    private final com.codahale.metrics.Histogram histogram;
 
     /**
-     * Create a {@link io.dropwizard.metrics.Histogram} wrapper
+     * Create a {@link com.codahale.metrics.Histogram} wrapper
      *
      * @param histogram actual histogram
      */
-    public DropwizardHistogram(io.dropwizard.metrics.Histogram histogram) {
+    public DropwizardHistogram(com.codahale.metrics.Histogram histogram) {
         this.histogram = histogram;
     }
 

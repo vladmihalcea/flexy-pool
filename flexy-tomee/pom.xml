@@ -101,9 +101,6 @@
     </profiles>
 
     <properties>
-        <jdk.version>7</jdk.version>
-        <jdk>${env.JAVA_HOME_7}</jdk>
-
         <tomee.version>1.7.1</tomee.version>
         <openejb.javaee.api>6.0-6</openejb.javaee.api>
         <hibernate.version>4.3.9.Final</hibernate.version>

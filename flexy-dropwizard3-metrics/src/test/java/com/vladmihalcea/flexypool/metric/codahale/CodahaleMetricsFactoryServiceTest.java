@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import javax.sql.DataSource;
 
+import static com.vladmihalcea.flexypool.metric.codahale.CodahaleMetricsFactoryService.METRICS_CLASS_NAME;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -36,7 +37,7 @@ public class CodahaleMetricsFactoryServiceTest {
             Thread.currentThread().setContextClassLoader(new ClassLoader() {
                 @Override
                 protected Class loadClass(String class_name, boolean resolve) throws ClassNotFoundException {
-                    if(class_name.equals("com.codahale.metrics.Metric")) {
+                    if(class_name.equals(METRICS_CLASS_NAME)) {
                         return null;
                     }
                     return super.loadClass(class_name, resolve);

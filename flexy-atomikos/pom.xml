@@ -25,20 +25,8 @@
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-codahale-metrics</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-dropwizard-metrics</artifactId>
             <version>2.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>${codahale.metrics.version}</version>
         </dependency>
 
         <dependency>
@@ -117,7 +105,7 @@
     </dependencies>
 
     <properties>
-        <atomikos.version>3.9.3</atomikos.version>
+        <atomikos.version>4.0.6</atomikos.version>
     </properties>
 
 </project>

@@ -1,5 +1,7 @@
 package com.vladmihalcea.flexypool.adaptor;
 
+import java.sql.SQLTimeoutException;
+
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import org.vibur.dbcp.ViburDBCPDataSource;
@@ -61,6 +63,7 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
      */
     @Override
     protected boolean isAcquireTimeoutException(Exception e) {
-        return e.getMessage() != null && e.getMessage().startsWith(ACQUIRE_TIMEOUT_MESSAGE);
+        return e instanceof SQLTimeoutException ||
+                (e.getMessage() != null && e.getMessage().startsWith(ACQUIRE_TIMEOUT_MESSAGE));
     }
 }

@@ -357,9 +357,15 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testCloseableDataSource() throws IOException {
     	DataSource ds = mock(DataSource.class, withSettings().extraInterfaces(java.io.Closeable.class));
-    	
-    	FlexyPoolDataSource<DataSource> fpds = new FlexyPoolDataSource<DataSource>(ds);
-    	fpds.close();
+
+        FlexyPoolDataSource<DataSource> fpds = null;
+        try {
+            fpds = new FlexyPoolDataSource<>( ds);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        fpds.close();
     	
     	verify((java.io.Closeable)ds, times(1)).close();
     	

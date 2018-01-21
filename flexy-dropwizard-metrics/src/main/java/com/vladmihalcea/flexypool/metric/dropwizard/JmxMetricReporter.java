@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.JmxReporter;
-import io.dropwizard.metrics.MetricRegistry;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.jmx.JmxReporter;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
 /**

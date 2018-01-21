@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.MetricRegistry;
+import com.codahale.metrics.MetricRegistry;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.junit.Before;
 import org.junit.Test;

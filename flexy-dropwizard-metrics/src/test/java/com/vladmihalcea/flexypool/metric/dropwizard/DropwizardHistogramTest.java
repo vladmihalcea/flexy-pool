@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import io.dropwizard.metrics.ExponentiallyDecayingReservoir;
+import com.codahale.metrics.ExponentiallyDecayingReservoir;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,13 +13,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class DropwizardHistogramTest {
 
-    private io.dropwizard.metrics.Histogram histogram;
+    private com.codahale.metrics.Histogram histogram;
 
     private DropwizardHistogram histogramWrapper;
 
     @Before
     public void before() {
-        histogram = new io.dropwizard.metrics.Histogram(new ExponentiallyDecayingReservoir());
+        histogram = new com.codahale.metrics.Histogram(new ExponentiallyDecayingReservoir());
         histogramWrapper = new DropwizardHistogram(histogram);
     }
 

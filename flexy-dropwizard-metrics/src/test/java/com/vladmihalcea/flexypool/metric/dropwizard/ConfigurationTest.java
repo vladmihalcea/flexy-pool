@@ -7,10 +7,10 @@ import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
-import io.dropwizard.metrics.ExponentiallyDecayingReservoir;
-import io.dropwizard.metrics.Metric;
-import io.dropwizard.metrics.MetricRegistry;
-import io.dropwizard.metrics.Reservoir;
+import com.codahale.metrics.ExponentiallyDecayingReservoir;
+import com.codahale.metrics.Metric;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Reservoir;
 import org.junit.Test;
 import org.mockito.Mockito;
 

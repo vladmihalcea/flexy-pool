@@ -1,18 +1,15 @@
 package com.vladmihalcea.flexypool.config;
 
+import java.util.concurrent.TimeUnit;
+
 import com.atomikos.jdbc.AbstractDataSourceBean;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.AtomikosPoolAdapter;
-import com.vladmihalcea.flexypool.connection.JdkConnectionProxyFactory;
-import com.vladmihalcea.flexypool.metric.codahale.CodahaleMetrics;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * FlexyDataSourceConfiguration - Configuration for flexypool data source
