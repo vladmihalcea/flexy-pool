@@ -58,6 +58,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 8. [Applying Queueing Theory to Dynamic Connection Pool Sizing with FlexyPool](https://blog.jooq.org/2016/11/02/applying-queueing-theory-to-dynamic-connection-pool-sizing-with-flexypool/)
 9. [Java Performance Tuning - November 2016](http://javaperformancetuning.com/news/news192.shtml)
 10. [Brett Wooldridge Shows What it Takes to Write the Fastest Java Connection Pool](https://blog.jooq.org/2017/02/21/jooq-tuesdays-brett-wooldridge-shows-what-it-takes-to-write-the-fastest-java-connection-pool/)
+11. [FlexyPool 2 has been released](https://vladmihalcea.com/flexypool-2-released/)
 
 ### Win a copy of my book! 
 
