@@ -45,6 +45,7 @@
 
     <modules>
         <module>flexy-pool-core</module>
+        <module>flexy-pool-core-java9</module>
         <module>flexy-dropwizard3-metrics</module>
         <module>flexy-dropwizard-metrics</module>
         <module>flexy-common-adapter</module>
