@@ -98,5 +98,6 @@ If you want a free copy of my book, [High-Performance Java Persistence](https://
 
 ### Requirements
 
-* Java 1.6 or above for all modules but the *flexy-dbcp2* which requires at least Java 1.7
+* Java 1.8 or above for all modules but the *flexy-pool-core-java9* which requires at least Java 1.8
+* Dropwizard Metrics 4
 * SLF4J
