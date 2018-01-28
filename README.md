@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](https://maven-badges.herokuapp.com/maven-central/com.vladmihalcea.flexy-pool/flexy-pool-parent)
 [![JavaDoc](http://javadoc.io/badge/com.vladmihalcea.flexy-pool/flexy-pool-core.svg)](http://javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core)
 
-[![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)
+<!---[![Build Status](https://travis-ci.org/vladmihalcea/flexy-pool.svg)](https://travis-ci.org/vladmihalcea/flexy-pool)--->
 [![Coverage Status](https://coveralls.io/repos/vladmihalcea/flexy-pool/badge.svg?branch=master)](https://coveralls.io/r/vladmihalcea/flexy-pool?branch=master)
 
 ### Introduction
