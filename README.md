@@ -50,7 +50,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 1. [The anatomy of Connection Pooling](http://vladmihalcea.com/the-anatomy-of-connection-pooling)
 2. [FlexyPool, reactive connection pooling](http://vladmihalcea.com/flexy-pool-reactive-connection-pooling)
-3. [Professional connection pool sizing](http://vladmihalcea.com/professional-connection-pool-sizing)
+3. [Connection pool sizing with Flexy Pool](http://vladmihalcea.com/connection-pool-sizing-with-flexy-pool)
 4. [The simple scalability equation](http://vladmihalcea.com/the-simple-scalability-equation)
 5. [How to monitor a Java EE DataSource](http://vladmihalcea.com/how-to-monitor-a-java-ee-datasource/)
 6. [How does FlexyPool support the Dropwizard Metrics package renaming](http://vladmihalcea.com/how-does-flexypool-support-the-dropwizard-metrics-package-renaming/)
