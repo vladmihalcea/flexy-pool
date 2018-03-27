@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](mihalcea.vlad@gmail.com)
+<!---[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)]()--->
 [![License](https://img.shields.io/github/license/vladmihalcea/flexy-pool.svg)](https://raw.githubusercontent.com/vladmihalcea/flexy-pool/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](https://maven-badges.herokuapp.com/maven-central/com.vladmihalcea.flexy-pool/flexy-pool-parent)
 [![JavaDoc](http://javadoc.io/badge/com.vladmihalcea.flexy-pool/flexy-pool-core.svg)](http://javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core)
