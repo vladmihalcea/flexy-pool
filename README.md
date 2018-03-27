@@ -46,7 +46,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 2. [User Guide](https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide)
 3. [Developer Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Developer-Guide)
 
-### Donations
+### Support the development of this project
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L7E5WLYEMHJTJ)
 
