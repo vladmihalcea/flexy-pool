@@ -1,6 +1,5 @@
 <img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
 
-<!---[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)]()--->
 [![License](https://img.shields.io/github/license/vladmihalcea/flexy-pool.svg)](https://raw.githubusercontent.com/vladmihalcea/flexy-pool/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](https://maven-badges.herokuapp.com/maven-central/com.vladmihalcea.flexy-pool/flexy-pool-parent)
 [![JavaDoc](http://javadoc.io/badge/com.vladmihalcea.flexy-pool/flexy-pool-core.svg)](http://javadoc.io/doc/com.vladmihalcea.flexy-pool/flexy-pool-core)
@@ -46,6 +45,10 @@ This is very handy since most connection pools offer a limited set of dynamic co
 1. [Installation Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Installation-Guide)
 2. [User Guide](https://github.com/vladmihalcea/flexy-pool/wiki/User-Guide)
 3. [Developer Guide](https://github.com/vladmihalcea/flexy-pool/wiki/Developer-Guide)
+
+### Donations
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=L7E5WLYEMHJTJ)
 
 ### In the Press
 
