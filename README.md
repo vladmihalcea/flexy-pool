@@ -62,11 +62,11 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### Win a copy of my book! 
 
-<a href="https://leanpub.com/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
+<a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
 <img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
 </a>
 
-If you want a free copy of my book, [High-Performance Java Persistence](https://leanpub.com/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool), you have to do the following:
+If you want a free copy of my book, [High-Performance Java Persistence](https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool), you have to do the following:
 
 1. Give FlexyPool a try
 2. Use it in production to configure the connection pool size
