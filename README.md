@@ -62,7 +62,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
 
 ### If you like it, you are going to love my book as well! 
 
-<a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=hibernatetypes">
+<a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
 <img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
 </a>
 
