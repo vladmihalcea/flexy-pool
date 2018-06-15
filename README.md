@@ -60,19 +60,11 @@ This is very handy since most connection pools offer a limited set of dynamic co
 10. [Brett Wooldridge Shows What it Takes to Write the Fastest Java Connection Pool](https://blog.jooq.org/2017/02/21/jooq-tuesdays-brett-wooldridge-shows-what-it-takes-to-write-the-fastest-java-connection-pool/)
 11. [FlexyPool 2 has been released](https://vladmihalcea.com/flexypool-2-released/)
 
-### Win a copy of my book! 
+### If you like it, you are going to love my book as well! 
 
-<a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
+<a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=hibernatetypes">
 <img src="https://vladmihalcea.files.wordpress.com/2015/11/hpjp_small.jpg" alt="High-Performance Java Persistence">
 </a>
-
-If you want a free copy of my book, [High-Performance Java Persistence](https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool), you have to do the following:
-
-1. Give FlexyPool a try
-2. Use it in production to configure the connection pool size
-3. Write a testimonial of your FlexyPool usage
-
-**For the moment, there are three testimonials, so the next two will win a free copy of my book.**
 
 ### Who uses FlexyPool
 
