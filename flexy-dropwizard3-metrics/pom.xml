@@ -3,13 +3,13 @@
     <parent>
         <groupId>com.vladmihalcea.flexy-pool</groupId>
         <artifactId>flexy-pool-parent</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flexy-dropwizard3-metrics</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>flexy-dropwizard3-metrics</name>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-pool-core</artifactId>
-            <version>2.0.1</version>
+            <version>2.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
