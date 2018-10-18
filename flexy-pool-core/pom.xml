@@ -37,7 +37,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>com.vladmihalcea.flexypool.core</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
