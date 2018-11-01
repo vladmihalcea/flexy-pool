@@ -56,7 +56,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.vladmihalcea.flexypool.dropwizard</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.vladmihalcea.flexypool.micrometer</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
