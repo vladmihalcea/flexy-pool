@@ -48,6 +48,7 @@
         <module>flexy-pool-core-java9</module>
         <module>flexy-dropwizard3-metrics</module>
         <module>flexy-dropwizard-metrics</module>
+        <module>flexy-micrometer-metrics</module>
         <module>flexy-common-adapter</module>
         <module>flexy-java-ee</module>
         <module>flexy-btm</module>
@@ -393,6 +394,7 @@
         <logback.version>1.1.1</logback.version>
         <dropwizard3.metrics.version>3.2.6</dropwizard3.metrics.version>
         <dropwizard.metrics.version>4.0.2</dropwizard.metrics.version>
+        <micrometer.version>1.1.0</micrometer.version>
 
         <spring.version>4.3.13.RELEASE</spring.version>
         <aspectj.version>1.8.4</aspectj.version>
