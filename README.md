@@ -92,5 +92,5 @@ This is very handy since most connection pools offer a limited set of dynamic co
 ### Requirements
 
 * Java 1.8 or above for all modules but the *flexy-pool-core-java9* which requires at least Java 1.9
-* Dropwizard Metrics 4
+* [Dropwizard Metrics 4](https://metrics.dropwizard.io/4.0.0/) or [Micrometer](https://micrometer.io/)
 * SLF4J
