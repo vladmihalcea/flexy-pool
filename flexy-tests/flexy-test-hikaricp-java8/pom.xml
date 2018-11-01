@@ -69,6 +69,12 @@
             <version>2.1.2-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vladmihalcea.flexy-pool</groupId>
+                    <artifactId>flexy-dropwizard-metrics</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
