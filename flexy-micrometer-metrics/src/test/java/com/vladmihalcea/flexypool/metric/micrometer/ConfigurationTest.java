@@ -6,6 +6,8 @@ import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.config.Configuration;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
+import com.vladmihalcea.flexypool.metric.MetricsFactory;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -39,7 +41,11 @@ public class ConfigurationTest {
                 .setJmxAutoStart(true)
                 .setJmxEnabled(true)
                 .setMetricLogReporterMillis(120)
-                .setMetricsFactory(configurationProperties -> new MicrometerMetrics(configurationProperties, meterRegistry))
+                .setMetricsFactory(new MetricsFactory() {
+                    @Override public Metrics newInstance(ConfigurationProperties configurationProperties) {
+                        return new MicrometerMetrics(configurationProperties, meterRegistry);
+                    }
+                })
                 .build();
         assertSame("unique", configuration.getUniqueName());
         assertSame(connectionProxyFactory, configuration.getConnectionProxyFactory());

@@ -22,8 +22,11 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
  */
 public class MicrometerMetrics extends AbstractMetrics {
     
-    public static final MetricsFactory FACTORY = configurationProperties ->
-        new MicrometerMetrics(configurationProperties, io.micrometer.core.instrument.Metrics.globalRegistry);
+    public static final MetricsFactory FACTORY = new MetricsFactory() {
+        @Override public Metrics newInstance(ConfigurationProperties configurationProperties) {
+            return new MicrometerMetrics(configurationProperties, io.micrometer.core.instrument.Metrics.globalRegistry);
+        }
+    };
     
     private final MeterRegistry metricRegistry;
 
