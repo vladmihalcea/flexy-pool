@@ -3,13 +3,13 @@
     <parent>
         <groupId>com.vladmihalcea.flexy-pool</groupId>
         <artifactId>flexy-tests</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flexy-test-hikaricp-java8</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>flexy-test-hikaricp-java8</name>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-hikaricp</artifactId>
-            <version>2.1.1</version>
+            <version>2.1.2-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.vladmihalcea.flexy-pool</groupId>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-micrometer-metrics</artifactId>
-            <version>2.1.1</version>
+            <version>2.1.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-common-adapter</artifactId>
-            <version>2.1.1</version>
+            <version>2.1.2-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
             <exclusions>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-hikaricp</artifactId>
-            <version>2.1.1</version>
+            <version>2.1.2-SNAPSHOT</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
