@@ -1,4 +1,5 @@
-<img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
+<a href="https://vladmihalcea.com/tutorials/flexypool/"><img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/FlexyPoolLogo.jpg" alt="Flexy Pool Logo" height="196">
+</a>
 
 [![License](https://img.shields.io/github/license/vladmihalcea/flexy-pool.svg)](https://raw.githubusercontent.com/vladmihalcea/flexy-pool/master/LICENSE)
 [![Maven Central](https://img.shields.io/maven-central/v/com.vladmihalcea.flexy-pool/flexy-pool-parent.svg)](https://maven-badges.herokuapp.com/maven-central/com.vladmihalcea.flexy-pool/flexy-pool-parent)
@@ -12,7 +13,9 @@
 The FlexyPool library adds metrics and flexible strategies to a given Connection Pool, allowing it to resize on demand.
 This is very handy since most connection pools offer a limited set of dynamic configuration strategies.
 
-![alt text](https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/architecture/FlexyPoolArchitecture.png  "Flexy Pool Architecture")
+<a href="https://vladmihalcea.com/tutorials/flexypool/">
+<img src="https://raw.githubusercontent.com/wiki/vladmihalcea/flexy-pool/image/architecture/FlexyPoolArchitecture.png" alt="Flexy Pool architecture" >
+</a>
 
 ### Features 
 
