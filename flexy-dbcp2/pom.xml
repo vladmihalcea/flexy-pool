@@ -106,7 +106,7 @@
     </profiles>
 
     <properties>
-        <dbcp2.version>2.2.0</dbcp2.version>
+        <dbcp2.version>2.6.0</dbcp2.version>
     </properties>
 
     <build>

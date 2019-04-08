@@ -90,7 +90,7 @@
     </dependencies>
 
     <properties>
-        <c3p0.version>0.9.5.2</c3p0.version>
+        <c3p0.version>0.9.5.4</c3p0.version>
     </properties>
 
     <build>

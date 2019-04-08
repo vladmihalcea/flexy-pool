@@ -84,7 +84,7 @@
     </dependencies>
 
     <properties>
-        <vibur.dbcp.version>21.2</vibur.dbcp.version>
+        <vibur.dbcp.version>22.2</vibur.dbcp.version>
     </properties>
 
     <build>

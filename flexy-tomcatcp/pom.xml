@@ -84,7 +84,7 @@
     </dependencies>
 
     <properties>
-        <tomcat.version>9.0.2</tomcat.version>
+        <tomcat.version>9.0.17</tomcat.version>
     </properties>
 
     <build>
