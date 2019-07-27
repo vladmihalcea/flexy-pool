@@ -76,11 +76,11 @@ If you want the fastest way to learn how to speed up a Java database application
 Or, if you prefer reading books, you are going to love my [High-Performance Java Persistence book](https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool) as well.
 
 <a href="https://vladmihalcea.com/books/high-performance-java-persistence?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
-<img src="https://i0.wp.com/vladmihalcea.com/wp-content/uploads/2018/01/flexypool_h200.jpg" alt="High-Performance Java Persistence book">
+<img src="https://i0.wp.com/vladmihalcea.com/wp-content/uploads/2018/01/HPJP_h200.jpg" alt="High-Performance Java Persistence book">
 </a>
 
 <a href="https://vladmihalcea.com/courses?utm_source=GitHub&utm_medium=banner&utm_campaign=flexypool">
-<img src="https://i0.wp.com/vladmihalcea.com/wp-content/uploads/2018/01/flexypool_Video_Vertical_h200.jpg" alt="High-Performance Java Persistence video course">
+<img src="https://i0.wp.com/vladmihalcea.com/wp-content/uploads/2018/01/HPJP_Video_Vertical_h200.jpg" alt="High-Performance Java Persistence video course">
 </a>
 
 ### Documentation 
