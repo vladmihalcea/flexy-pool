@@ -105,26 +105,65 @@ Or, if you prefer reading books, you are going to love my [High-Performance Java
 
 ### Who uses FlexyPool
 
-<a href="http://www.etuovi.com/"><img src="http://avain.etuovi.com/media/layout/images/etuovi-logo.gif"/></a> is the leading real estate portal in Finland.
-
-> New Etuovi.com has used FlexyPool in production since early 2014. 
-> The library has proven to be reliable and allows our infrastructure to handle temporary spikes much better. 
-> We use it everywhere in our stack, ranging from our frontends to the backend services.
->
-> -- <cite>Antti Koivisto, Software Architect, Etuovi.com</cite>
-
-<a href="http://www.mitchandmates.com/"><img src="http://www.mitchandmates.com/uploads/images/logo_mitchandmates.png" height="34" width="127"/></a> software company specializing in products and services for health care.
-
-> Mitch&Mates uses FlexyPool in all it's environments. It gives us the ability to measure performance and scalability, detect potential flaws and improve intensive loads.
-> Additionally, we compared several connection pool libraries which decided us to switch to another provider.
->
-> -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
-
-<a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg"/></a> is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.
-
-> We have tried FlexyPool in Scentbird, after one week of intensive testing we decided switch it to FlexyPool + HikariCP in production mode, and everything works very robust and fast, we so happy about that! Thank you for this library.
->
-> -- <cite>Andrey Rebrov, CTO, Scentbird</cite>
+<table>
+    <tr>
+        <td width="20%">
+            <a href="https://www.torodb.com/stampede/docs/1.0.0/metrics/"><img src="https://pbs.twimg.com/profile_images/704672668889587712/1wW0TKXR_400x400.jpg" width="150"/></a>
+        </td>
+        <td width="80%">
+            <p>ToroDB Stampede is a replication and mapping technology allowing you to mirror a MongoDB database in a SQL database.</p>
+            <blockquote cite="https://www.torodb.com/stampede/docs/1.0.0/metrics/">
+            ToroDB Stampede exposes multiple metrics using JMX, some of them are custom metrics and other are metrics offered by third party products like Flexy-pool.
+            </blockquote>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">
+            <a href="http://www.etuovi.com/"><img src="https://www.almamedia.fi/images/default-source/product-and-case-images/etuovi.com/etuovi_370x370_784788b851ca6195b8b0ff00009ee3c0.png" width="150"/></a>
+        </td>
+        <td width="80%">
+            <p>Etuovi is the leading real estate portal in Finland.</p>
+            <blockquote>
+            New Etuovi.com has used FlexyPool in production since early 2014. 
+            <br>
+            The library has proven to be reliable and allows our infrastructure to handle temporary spikes much better. 
+            We use it everywhere in our stack, ranging from our frontends to the backend services.
+            <br>
+            -- <cite>Antti Koivisto, Software Architect, Etuovi.com</cite>
+            </blockquote>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">
+            <a href="http://www.mitchandmates.com/"><img src="http://www.mitchandmates.com/uploads/images/logo_mitchandmates.png" height="34" width="150"/></a>
+        </td>
+        <td width="80%">
+            <p>Mitch&Mates is a software company specializing in products and services for health care.</p>
+            <blockquote>
+            Mitch&Mates uses FlexyPool in all it's environments. It gives us the ability to measure performance and scalability, detect potential flaws and improve intensive loads.
+            <br>
+            Additionally, we compared several connection pool libraries which decided us to switch to another provider.
+            <br>
+            -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
+            </blockquote>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">
+            <a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg" width="150"/></a>
+        </td>
+        <td width="80%">
+        <p>Scentbird is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.</p>
+        <blockquote>
+         We have tried FlexyPool in Scentbird, after one week of intensive testing we decided switch it to FlexyPool and HikariCP in production mode, and everything works very robust and fast, we so happy about that!
+         <br>
+         Thank you for this library.
+         <br>
+         -- <cite>Andrey Rebrov, CTO, Scentbird</cite>
+        </blockquote>
+        </td>
+    </tr>
+</table>
 
 ### Requirements
 
