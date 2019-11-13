@@ -1,7 +1,7 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.atomikos.jdbc.AbstractDataSourceBean;
-import com.atomikos.jdbc.AtomikosSQLException;
+import com.atomikos.jdbc.internal.AbstractDataSourceBean;
+import com.atomikos.jdbc.internal.AtomikosSQLException;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.metric.Metrics;
 
