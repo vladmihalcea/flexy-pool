@@ -9,4 +9,3 @@ target/
 *.epoch
 *.log
 .idea/
-/flexy-pool-core/nb-configuration.xml
