@@ -1,29 +1,35 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.atomikos.jdbc.AbstractDataSourceBean;
-import com.atomikos.jdbc.AtomikosSQLException;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
+import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.metric.Metrics;
+import com.vladmihalcea.flexypool.util.ReflectionUtils;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * <code>AtomikosPoolAdapter</code> extends {@link AbstractPoolAdapter} and it adapts the required API to
- * communicate with the {@link AbstractDataSourceBean Atomikos DataSourceBean}
+ * communicate with the Atomikos 5 or 4 {@code AbstractDataSourceBean}.
  *
  * @author Vlad Mihalcea
  * @since 1.2.1
  */
-public class AtomikosPoolAdapter extends AbstractPoolAdapter<AbstractDataSourceBean> {
+public class AtomikosPoolAdapter implements PoolAdapter<DataSource> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Connection pool exhausted - try increasing 'maxPoolSize' and/or 'borrowConnectionTimeout' on the DataSourceBean.";
+    private AbstractPoolAdapter poolAdapter;
+
+    private DataSource targetDataSource;
 
     /**
      * Singleton factory object reference
      */
-    public static final PoolAdapterFactory<AbstractDataSourceBean> FACTORY = new PoolAdapterFactory<AbstractDataSourceBean>() {
+    public static final PoolAdapterFactory<DataSource> FACTORY = new PoolAdapterFactory<DataSource>() {
 
         @Override
-        public PoolAdapter<AbstractDataSourceBean> newInstance(
-                ConfigurationProperties<AbstractDataSourceBean, Metrics, PoolAdapter<AbstractDataSourceBean>> configurationProperties) {
+        public PoolAdapter<DataSource> newInstance(
+                ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
             return new AtomikosPoolAdapter(configurationProperties);
         }
     };
@@ -31,8 +37,40 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AbstractDataSourceB
     /**
      * Init constructor
      */
-    public AtomikosPoolAdapter(ConfigurationProperties<AbstractDataSourceBean, Metrics, PoolAdapter<AbstractDataSourceBean>> configurationProperties) {
-        super(configurationProperties);
+    @SuppressWarnings("unchecked")
+    public AtomikosPoolAdapter(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
+        this.targetDataSource = configurationProperties.getTargetDataSource();
+
+        ConfigurationProperties atmomikosConfigurationProperties = configurationProperties;
+
+        Class atomikos5DataSourceClass = ReflectionUtils.getClassOrNull("com.atomikos.jdbc.internal.AbstractDataSourceBean");
+
+        if(atomikos5DataSourceClass != null && atomikos5DataSourceClass.isInstance(this.targetDataSource)) {
+            poolAdapter = new Atomikos5PoolAdapter(atmomikosConfigurationProperties);
+        } else {
+            Class atomikos4DataSourceClass = ReflectionUtils.getClassOrNull("com.atomikos.jdbc.AbstractDataSourceBean");
+            if (atomikos4DataSourceClass != null && atomikos4DataSourceClass.isInstance(this.targetDataSource)) {
+                poolAdapter = new Atomikos4PoolAdapter(atmomikosConfigurationProperties);
+            } else {
+                throw new UnsupportedOperationException("The provided DataSource [" + targetDataSource + "] is not an instance of the AbstractDataSourceBean class from either Atomikos 5 or 4");
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Connection getConnection(ConnectionRequestContext requestContext) throws SQLException {
+        return poolAdapter.getConnection(requestContext);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DataSource getTargetDataSource() {
+        return targetDataSource;
     }
 
     /**
@@ -40,7 +78,7 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AbstractDataSourceB
      */
     @Override
     public int getMaxPoolSize() {
-        return getTargetDataSource().getMaxPoolSize();
+        return poolAdapter.getMaxPoolSize();
     }
 
     /**
@@ -48,19 +86,6 @@ public class AtomikosPoolAdapter extends AbstractPoolAdapter<AbstractDataSourceB
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxPoolSize(maxPoolSize);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
-        if (e instanceof AtomikosSQLException) {
-            AtomikosSQLException atomikosSQLException = (AtomikosSQLException) e;
-            return atomikosSQLException.getMessage() != null &&
-                ACQUIRE_TIMEOUT_MESSAGE.equals(atomikosSQLException.getMessage());
-        }
-        return false;
+        poolAdapter.setMaxPoolSize(maxPoolSize);
     }
 }

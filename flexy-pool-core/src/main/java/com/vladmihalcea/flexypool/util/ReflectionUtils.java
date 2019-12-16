@@ -18,10 +18,42 @@ public final class ReflectionUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtils.class);
 
+    public static final String GETTER_PREFIX = "get";
+
     public static final String SETTER_PREFIX = "set";
 
     private ReflectionUtils() {
         throw new UnsupportedOperationException("ReflectionUtils is not instantiable!");
+    }
+
+    /**
+     * Get the Java {@link Class} associated with the given class name.
+     *
+     * @param className Class name.
+     * @param <T>       Class generic type
+     * @return class
+     */
+    public static <T> Class<T> getClass(String className) {
+        try {
+            return (Class<T>) Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw handleException(className, e);
+        }
+    }
+
+    /**
+     * Get the Java {@link Class} associated with the given class name or {@code null} of no class was found.
+     *
+     * @param className Class name.
+     * @param <T>       Class generic type
+     * @return class
+     */
+    public static <T> Class<T> getClassOrNull(String className) {
+        try {
+            return (Class<T>) Class.forName(className);
+        } catch (ClassNotFoundException e) {
+           return null;
+        }
     }
 
     /**
@@ -99,6 +131,20 @@ public final class ReflectionUtils {
     }
 
     /**
+     * Get getter method
+     *
+     * @param target        target object
+     * @param property      property
+     * @return setter method
+     */
+    public static Method getGetter(Object target, String property) {
+        String getterMethodName = GETTER_PREFIX + property.substring(0, 1).toUpperCase() + property.substring(1);
+        Method getter = getMethod(target, getterMethodName);
+        getter.setAccessible(true);
+        return getter;
+    }
+
+    /**
      * Get setter method
      *
      * @param target        target object
@@ -129,6 +175,23 @@ public final class ReflectionUtils {
             throw handleException(method.getName(), e);
         } catch (IllegalAccessException e) {
             throw handleException(method.getName(), e);
+        }
+    }
+
+    /**
+     * Invoke getter method with the given parameter
+     *
+     * @param target    target object
+     * @param property  property
+     */
+    public static <T> T invokeGetter(Object target, String property) {
+        Method getter = getGetter(target, property);
+        try {
+            return (T) getter.invoke(target);
+        } catch (IllegalAccessException e) {
+            throw handleException(getter.getName(), e);
+        } catch (InvocationTargetException e) {
+            throw handleException(getter.getName(), e);
         }
     }
 
@@ -196,5 +259,17 @@ public final class ReflectionUtils {
     private static ReflectionException handleException(String methodName, InvocationTargetException e) {
         LOGGER.error("Couldn't invoke method " + methodName, e);
         return new ReflectionException(e);
+    }
+
+    /**
+     * Handle {@link ClassNotFoundException} by logging it and rethrown it as a {@link IllegalArgumentException}
+     *
+     * @param className  class name
+     * @param e          exception
+     * @return wrapped exception
+     */
+    private static IllegalArgumentException handleException(String className, ClassNotFoundException e) {
+        LOGGER.error("Couldn't find class " + className, e);
+        return new IllegalArgumentException(e);
     }
 }

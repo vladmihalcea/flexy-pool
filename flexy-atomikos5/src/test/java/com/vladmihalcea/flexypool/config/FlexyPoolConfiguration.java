@@ -2,8 +2,9 @@ package com.vladmihalcea.flexypool.config;
 
 import java.util.concurrent.TimeUnit;
 
+import com.atomikos.jdbc.internal.AbstractDataSourceBean;
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
-import com.vladmihalcea.flexypool.adaptor.AtomikosPoolAdapter;
+import com.vladmihalcea.flexypool.adaptor.Atomikos5PoolAdapter;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +14,26 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 /**
- * FlexyDataSourceConfiguration - Configuration for flexypool data source
+ * FlexyDataSourceConfiguration - Configuration for FlexyPool data source
  *
  * @author Vlad Mihalcea
+ * @since 2.2.0
  */
 @org.springframework.context.annotation.Configuration
 public class FlexyPoolConfiguration {
 
     @Autowired
-    private DataSource poolingDataSource;
+    private AbstractDataSourceBean poolingDataSource;
 
     @Value("${flexy.pool.uniqueId}")
     private String uniqueId;
 
     @Bean
-    public Configuration<DataSource> configuration() {
-        return new Configuration.Builder<DataSource>(
+    public Configuration<AbstractDataSourceBean> configuration() {
+        return new Configuration.Builder<AbstractDataSourceBean>(
                 uniqueId,
                 poolingDataSource,
-                AtomikosPoolAdapter.FACTORY
+                Atomikos5PoolAdapter.Factory.INSTANCE
         )
         .setJmxEnabled(true)
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))
@@ -40,8 +42,8 @@ public class FlexyPoolConfiguration {
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FlexyPoolDataSource dataSource() {
-        Configuration<DataSource> configuration = configuration();
-        return new FlexyPoolDataSource<DataSource>(configuration,
+        Configuration<AbstractDataSourceBean> configuration = configuration();
+        return new FlexyPoolDataSource<AbstractDataSourceBean>(configuration,
                 new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(5),
                 new RetryConnectionAcquiringStrategy.Factory(2)
         );

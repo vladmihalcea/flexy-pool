@@ -8,12 +8,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flexy-atomikos</artifactId>
+    <artifactId>flexy-atomikos4</artifactId>
     <version>2.1.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>flexy-atomikos</name>
-    <description>The flexible pool Atomikos adapter</description>
+    <name>flexy-atomikos4</name>
+    <description>The flexible pool Atomikos 4 adapter</description>
 
     <dependencies>
 
@@ -26,18 +26,6 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-dropwizard-metrics</artifactId>
-            <version>2.1.3-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-atomikos5</artifactId>
-            <version>2.1.3-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.vladmihalcea.flexy-pool</groupId>
-            <artifactId>flexy-atomikos4</artifactId>
             <version>2.1.3-SNAPSHOT</version>
         </dependency>
 
@@ -117,7 +105,7 @@
     </dependencies>
 
     <properties>
-        <atomikos.version>5.0.6</atomikos.version>
+        <atomikos.version>4.0.6</atomikos.version>
     </properties>
 
     <build>
@@ -129,7 +117,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.vladmihalcea.flexypool.atomikos</Automatic-Module-Name>
+                            <Automatic-Module-Name>com.vladmihalcea.flexypool.atomikos4</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
