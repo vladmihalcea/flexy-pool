@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
-import javax.sql.DataSource;
-
 /**
  * FlexyDataSourceConfiguration - Configuration for FlexyPool data source
  *
@@ -33,7 +31,7 @@ public class FlexyPoolConfiguration {
         return new Configuration.Builder<AbstractDataSourceBean>(
                 uniqueId,
                 poolingDataSource,
-                Atomikos4PoolAdapter.Factory.INSTANCE
+                Atomikos4PoolAdapter.FACTORY
         )
         .setJmxEnabled(true)
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))

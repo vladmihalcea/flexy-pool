@@ -16,19 +16,17 @@ public class Atomikos5PoolAdapter extends AbstractPoolAdapter<AbstractDataSource
 
     public static final String ACQUIRE_TIMEOUT_MESSAGE = "Connection pool exhausted - try increasing 'maxPoolSize' and/or 'borrowConnectionTimeout' on the DataSourceBean.";
 
-    public static class Factory {
-        /**
-         * Singleton factory object reference
-         */
-        public static final PoolAdapterFactory<AbstractDataSourceBean> INSTANCE = new PoolAdapterFactory<AbstractDataSourceBean>() {
+    /**
+     * Singleton factory object reference
+     */
+    public static final PoolAdapterFactory<AbstractDataSourceBean> FACTORY = new PoolAdapterFactory<AbstractDataSourceBean>() {
 
-            @Override
-            public PoolAdapter<AbstractDataSourceBean> newInstance(
-                ConfigurationProperties<AbstractDataSourceBean, Metrics, PoolAdapter<AbstractDataSourceBean>> configurationProperties) {
-                return new Atomikos5PoolAdapter(configurationProperties);
-            }
-        };
-    }
+        @Override
+        public PoolAdapter<AbstractDataSourceBean> newInstance(
+            ConfigurationProperties<AbstractDataSourceBean, Metrics, PoolAdapter<AbstractDataSourceBean>> configurationProperties) {
+            return new Atomikos5PoolAdapter(configurationProperties);
+        }
+    };
 
     /**
      * Init constructor
