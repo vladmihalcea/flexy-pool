@@ -112,7 +112,7 @@
     </profiles>
 
     <properties>
-        <tomee.version>1.7.1</tomee.version>
+        <tomee.version>1.7.5</tomee.version>
         <openejb.javaee.api>6.0-6</openejb.javaee.api>
         <hibernate.version>4.3.9.Final</hibernate.version>
     </properties>

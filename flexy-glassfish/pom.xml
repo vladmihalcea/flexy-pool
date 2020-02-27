@@ -122,7 +122,7 @@
         <arquillian.version>1.0.3.Final</arquillian.version>
         <arquillian.junit.container.version>1.0.3.Final</arquillian.junit.container.version>
         <arquillian.glassfish.version>1.0.0.CR3</arquillian.glassfish.version>
-        <glassfish.embedded.version>3.1.2</glassfish.embedded.version>
+        <glassfish.embedded.version>4.1</glassfish.embedded.version>
     </properties>
 
     <build>
