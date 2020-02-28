@@ -126,23 +126,7 @@
         </dependency>
 
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>travis</id>
-            <activation>
-                <property>
-                    <name>env.TRAVIS</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <properties>
-                <jdk>${env.JAVA_HOME}</jdk>
-                <forkMode>always</forkMode>
-            </properties>
-        </profile>
-    </profiles>
-
+    
     <properties>
         <hikari.version>2.4.1</hikari.version>
         <spring.version>4.1.7.RELEASE</spring.version>

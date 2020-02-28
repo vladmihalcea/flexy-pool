@@ -95,22 +95,6 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>travis</id>
-            <activation>
-                <property>
-                    <name>env.TRAVIS</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <properties>
-                <jdk>${env.JAVA_HOME}</jdk>
-                <forkMode>always</forkMode>
-            </properties>
-        </profile>
-    </profiles>
-
     <properties>
         <tomee.version>1.7.5</tomee.version>
         <openejb.javaee.api>6.0-6</openejb.javaee.api>
