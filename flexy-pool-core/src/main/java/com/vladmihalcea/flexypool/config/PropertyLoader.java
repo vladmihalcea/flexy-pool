@@ -7,6 +7,7 @@ import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
 import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
+import com.vladmihalcea.flexypool.strategy.MetricNamingStrategy;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import com.vladmihalcea.flexypool.util.JndiUtils;
 import com.vladmihalcea.flexypool.util.LazyJndiResolver;
@@ -54,6 +55,7 @@ public class PropertyLoader {
         POOL_METRICS_REPORTER_LOG_MILLIS("flexy.pool.metrics.reporter.log.millis"),
         POOL_METRICS_REPORTER_JMX_ENABLE("flexy.pool.metrics.reporter.jmx.enable"),
         POOL_METRICS_REPORTER_JMX_AUTO_START("flexy.pool.metrics.reporter.jmx.auto.start"),
+        POOL_METRICS_NAMING_STRATEGY("flexy.pool.metrics.naming.strategy"),
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver"),
         POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver"),
         POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE("flexy.pool.time.threshold.connection.acquire"),
@@ -235,6 +237,15 @@ public class PropertyLoader {
      */
     public Boolean isJmxAutoStart() {
         return booleanProperty(PropertyKey.POOL_METRICS_REPORTER_JMX_AUTO_START);
+    }
+
+    /**
+     * Get the metric naming strategy
+     *
+     * @return metric naming strategy
+     */
+    public MetricNamingStrategy getMetricNamingStrategy() {
+        return instantiateClass(PropertyKey.POOL_METRICS_NAMING_STRATEGY);
     }
 
     /**
