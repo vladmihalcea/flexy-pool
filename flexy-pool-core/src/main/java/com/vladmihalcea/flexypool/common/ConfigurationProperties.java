@@ -2,6 +2,7 @@ package com.vladmihalcea.flexypool.common;
 
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.event.EventPublisher;
+import com.vladmihalcea.flexypool.strategy.MetricNamingStrategy;
 
 import javax.sql.DataSource;
 
@@ -23,6 +24,8 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
     private boolean jmxAutoStart;
 
     private long metricLogReporterMillis;
+
+    private MetricNamingStrategy metricNamingStrategy;
 
     private long connectionAcquireTimeThresholdMillis = Long.MAX_VALUE;
 
@@ -103,6 +106,24 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      */
     protected void setMetricLogReporterMillis(long metricLogReporterMillis) {
         this.metricLogReporterMillis = metricLogReporterMillis;
+    }
+
+    /**
+     * get metric naming strategy
+     *
+     * @return metric naming strategy
+     */
+    public MetricNamingStrategy getMetricNamingStrategy() {
+        return metricNamingStrategy;
+    }
+
+    /**
+     * Set metric naming strategy
+     *
+     * @param metricNamingStrategy metric naming strategy
+     */
+    public void setMetricNamingStrategy(MetricNamingStrategy metricNamingStrategy) {
+        this.metricNamingStrategy = metricNamingStrategy;
     }
 
     /**

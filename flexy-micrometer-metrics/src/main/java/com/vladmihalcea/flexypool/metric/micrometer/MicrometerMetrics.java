@@ -5,8 +5,13 @@ import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 
+import io.micrometer.core.instrument.ImmutableTag;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <code>MicrometerMetrics</code> extends the {@link AbstractMetrics} class and configures the Micrometer {@link MeterRegistry}.
@@ -15,8 +20,6 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
  * @since 2.1.0
  */
 public class MicrometerMetrics extends AbstractMetrics {
-    private static final String METRIC_PREFIX = "flexypool.";
-    private static final String POOLNAME_TAG = "poolname";
 
     public static final MetricsFactory FACTORY = new MetricsFactory() {
         @Override public Metrics newInstance(ConfigurationProperties configurationProperties) {
@@ -50,8 +53,8 @@ public class MicrometerMetrics extends AbstractMetrics {
      */
     @Override
     public Histogram histogram(String name) {
-        return new MicrometerHistogram(metricRegistry.summary("flexypool." + name,
-                "poolname", getConfigurationProperties().getUniqueName()));
+        return new MicrometerHistogram(metricRegistry.summary(
+                getConfigurationProperties().getMetricNamingStrategy().getMetricName(name), getPoolnameTag()));
     }
 
     /**
@@ -59,8 +62,14 @@ public class MicrometerMetrics extends AbstractMetrics {
      */
     @Override
     public Timer timer(String name) {
-        return new MicrometerTimer(metricRegistry.timer(METRIC_PREFIX + name,
-                POOLNAME_TAG, getConfigurationProperties().getUniqueName()));
+        return new MicrometerTimer(metricRegistry.timer(
+                getConfigurationProperties().getMetricNamingStrategy().getMetricName(name), getPoolnameTag()));
+    }
+
+    private List<Tag> getPoolnameTag() {
+        return getConfigurationProperties().getMetricNamingStrategy().usePoolUniqueName()
+                ? Collections.singletonList(new ImmutableTag("poolname", getConfigurationProperties().getUniqueName()))
+                : Collections.emptyList();
     }
 
     @Override

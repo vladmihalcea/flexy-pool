@@ -10,6 +10,8 @@ import com.vladmihalcea.flexypool.event.EventPublisher;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
+import com.vladmihalcea.flexypool.strategy.DefaultNamingStrategy;
+import com.vladmihalcea.flexypool.strategy.MetricNamingStrategy;
 
 import javax.sql.DataSource;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +41,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         private boolean jmxEnabled = true;
         private boolean jmxAutoStart = false;
         private long metricLogReporterMillis = DEFAULT_METRIC_LOG_REPORTER_MILLIS;
+        private MetricNamingStrategy metricNamingStrategy = new DefaultNamingStrategy();
         private EventListenerResolver eventListenerResolver;
         private long connectionAcquireTimeThresholdMillis = Long.MAX_VALUE;
         private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
@@ -112,6 +115,17 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
         }
 
         /**
+         * Strategy for metric naming
+         *
+         * @param metricNamingStrategy strategy for metric naming
+         * @return this {@link com.vladmihalcea.flexypool.config.Configuration.Builder}
+         */
+        public Builder<T> setMetricNamingUniqueName(MetricNamingStrategy metricNamingStrategy) {
+            this.metricNamingStrategy = metricNamingStrategy;
+            return this;
+        }
+
+        /**
          * Set the event listener resolver
          *
          * @param eventListenerResolver event listener resolver
@@ -159,6 +173,7 @@ public final class Configuration<T extends DataSource> extends ConfigurationProp
             configuration.setJmxEnabled(jmxEnabled);
             configuration.setJmxAutoStart(jmxAutoStart);
             configuration.setMetricLogReporterMillis(metricLogReporterMillis);
+            configuration.setMetricNamingStrategy(metricNamingStrategy);
             configuration.setConnectionAcquireTimeThresholdMillis(connectionAcquireTimeThresholdMillis);
             configuration.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
             if(metricsFactory == null) {
