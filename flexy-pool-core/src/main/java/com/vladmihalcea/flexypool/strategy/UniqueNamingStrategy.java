@@ -9,6 +9,8 @@ package com.vladmihalcea.flexypool.strategy;
  */
 public class UniqueNamingStrategy implements MetricNamingStrategy {
 
+    public static final UniqueNamingStrategy INSTANCE = new UniqueNamingStrategy();
+
     private static final String METRIC_PREFIX = "flexypool_";
 
     @Override

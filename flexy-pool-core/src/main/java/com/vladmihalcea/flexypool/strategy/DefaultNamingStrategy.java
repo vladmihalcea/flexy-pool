@@ -9,13 +9,5 @@ package com.vladmihalcea.flexypool.strategy;
  */
 public class DefaultNamingStrategy implements MetricNamingStrategy {
 
-    @Override
-    public String getMetricName(String name) {
-        return name;
-    }
-
-    @Override
-    public boolean useUniquePoolName() {
-        return false;
-    }
+    public static final DefaultNamingStrategy INSTANCE = new DefaultNamingStrategy();
 }

@@ -8,6 +8,7 @@ import com.vladmihalcea.flexypool.event.*;
 import com.vladmihalcea.flexypool.metric.MetricsFactoryResolver;
 import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
 import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
+import com.vladmihalcea.flexypool.strategy.UniqueNamingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,7 @@ public class FlexyPoolConfiguration {
         .setMetricsFactory(MetricsFactoryResolver.INSTANCE.resolve())
         .setConnectionProxyFactory(ConnectionDecoratorFactoryResolver.INSTANCE.resolve())
         .setMetricLogReporterMillis(TimeUnit.SECONDS.toMillis(5))
+        .setMetricNamingUniqueName(UniqueNamingStrategy.INSTANCE)
         .setJmxEnabled(true)
         .setJmxAutoStart(true)
         .setConnectionAcquireTimeThresholdMillis(50L)
