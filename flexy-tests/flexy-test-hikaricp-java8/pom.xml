@@ -130,7 +130,7 @@
     <properties>
         <hikari.version>2.4.1</hikari.version>
         <spring.version>4.1.7.RELEASE</spring.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
     </properties>
 
 </project>
