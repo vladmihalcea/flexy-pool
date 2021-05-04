@@ -132,21 +132,6 @@ Or, if you prefer reading books, you are going to love my [High-Performance Java
     </tr>
     <tr>
         <td width="20%">
-            <a href="http://www.mitchandmates.com/"><img src="http://www.mitchandmates.com/uploads/images/logo_mitchandmates.png" height="34" width="150"/></a>
-        </td>
-        <td width="80%">
-            <p>Mitch&Mates is a software company specializing in products and services for health care.</p>
-            <blockquote>
-            Mitch&Mates uses FlexyPool in all it's environments. It gives us the ability to measure performance and scalability, detect potential flaws and improve intensive loads.
-            <br>
-            Additionally, we compared several connection pool libraries which decided us to switch to another provider.
-            <br>
-            -- <cite>Bram Mommaerts, Software Engineer, Mitch&Mates NV</cite>
-            </blockquote>
-        </td>
-    </tr>
-    <tr>
-        <td width="20%">
             <a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg" width="150"/></a>
         </td>
         <td width="80%">
