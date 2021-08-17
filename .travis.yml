@@ -5,8 +5,12 @@ jdk:
 - oraclejdk9
 
 matrix:
+  fast_finish: true
   allow_failures:
     - jdk: oraclejdk9
 
 after_success:
   - mvn clean test jacoco:report coveralls:report
+cache:
+  directories:
+  - $HOME/.m2
