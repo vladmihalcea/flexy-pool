@@ -24,7 +24,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
  * [C3P0](http://www.mchange.com/projects/c3p0/)
  * [BoneCP](http://jolbox.com/)
- * [HikariCP](http://brettwooldridge.github.io/HikariCP/)
+ * [HikariCP](https://github.com/brettwooldridge/HikariCP)
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
  * [Vibur DBCP](http://www.vibur.org/)
  * [Druid](https://github.com/alibaba/druid/)
