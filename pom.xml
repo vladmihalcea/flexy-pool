@@ -229,6 +229,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                	<forkCount>1.5C</forkCount>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -255,6 +258,7 @@
                                 </property>
                             </systemProperties>
                             <argLine>-Xms2512m -Xmx2512m -XX:MaxPermSize=256m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -verbose:gc -Xloggc:${project.build.directory}/gc.log</argLine>
+                	<forkCount>1.5C</forkCount>
                         </configuration>
                     </plugin>
                 </plugins>
