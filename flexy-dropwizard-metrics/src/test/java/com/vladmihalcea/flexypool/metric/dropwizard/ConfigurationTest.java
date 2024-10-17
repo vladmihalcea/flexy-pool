@@ -37,24 +37,20 @@ public class ConfigurationTest {
         Metrics metrics = Mockito.mock(Metrics.class);
         PoolAdapter poolAdapter = Mockito.mock(PoolAdapter.class);
         when(poolAdapterFactory.newInstance(any(ConfigurationProperties.class))).thenReturn(poolAdapter);
-        FlexyPoolConfiguration<DataSource> configuration = new FlexyPoolConfiguration.Builder<DataSource>(
-                "unique", dataSource, poolAdapterFactory)
-                .setConnectionProxyFactory(connectionProxyFactory)
-                .setJmxAutoStart(true)
-                .setJmxEnabled(true)
-                .setMetricLogReporterMillis(120)
-                .setMetricsFactory(new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return new DropwizardMetrics(configurationProperties, metricRegistry, new ReservoirFactory() {
-                            @Override
-                            public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
-                                return new ExponentiallyDecayingReservoir();
-                            }
-                        });
-                    }
-                })
-                .build();
+        FlexyPoolConfiguration<DataSource> configuration = new FlexyPoolConfiguration
+            .Builder<>("unique", dataSource, poolAdapterFactory )
+            .setConnectionProxyFactory(connectionProxyFactory)
+            .setJmxAutoStart(true)
+            .setJmxEnabled(true)
+            .setMetricLogReporterMillis(120)
+            .setMetricsFactory(
+                configurationProperties -> new DropwizardMetrics(
+                    configurationProperties,
+                    metricRegistry,
+                    (metricClass, metricName) -> new ExponentiallyDecayingReservoir()
+                )
+            )
+            .build();
         assertSame("unique", configuration.getUniqueName());
         assertSame(connectionProxyFactory, configuration.getConnectionProxyFactory());
         assertTrue(configuration.isJmxAutoStart());
