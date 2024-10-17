@@ -3,13 +3,13 @@
     <parent>
         <groupId>com.vladmihalcea.flexy-pool</groupId>
         <artifactId>flexy-pool-parent</artifactId>
-        <version>2.2.4-SNAPSHOT</version>
+        <version>3.0.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>flexy-atomikos</artifactId>
-    <version>2.2.4-SNAPSHOT</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>flexy-atomikos</name>
@@ -20,25 +20,25 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-pool-core</artifactId>
-            <version>2.2.4-SNAPSHOT</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-dropwizard-metrics</artifactId>
-            <version>2.2.4-SNAPSHOT</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-atomikos5</artifactId>
-            <version>2.2.4-SNAPSHOT</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-atomikos4</artifactId>
-            <version>2.2.4-SNAPSHOT</version>
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.vladmihalcea.flexy-pool</groupId>
             <artifactId>flexy-common-adapter</artifactId>
-            <version>2.2.4-SNAPSHOT</version>
+            <version>3.0.0</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
