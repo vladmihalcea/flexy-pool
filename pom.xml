@@ -45,27 +45,19 @@
 
     <modules>
         <module>flexy-pool-core</module>
-        <module>flexy-pool-core-java9</module>
-        <module>flexy-dropwizard3-metrics</module>
         <module>flexy-dropwizard-metrics</module>
         <module>flexy-micrometer-metrics</module>
         <module>flexy-common-adapter</module>
-        <module>flexy-java-ee</module>
-        <module>flexy-btm</module>
         <module>flexy-atomikos5</module>
         <module>flexy-atomikos4</module>
         <module>flexy-atomikos</module>
         <module>flexy-dbcp</module>
         <module>flexy-dbcp2</module>
         <module>flexy-c3p0</module>
-        <module>flexy-bonecp</module>
         <module>flexy-hikaricp</module>
         <module>flexy-tomcatcp</module>
         <module>flexy-vibur</module>
         <module>flexy-druid</module>
-        <module>flexy-glassfish</module>
-        <module>flexy-tomee</module>
-        <module>flexy-tests</module>
     </modules>
 
     <dependencies>
@@ -347,7 +339,7 @@
     </distributionManagement>
 
     <properties>
-        <jdk.version>8</jdk.version>
+        <jdk.version>17</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <maven-toolchains-plugin.version>3.0.0</maven-toolchains-plugin.version>
@@ -362,17 +354,16 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
 
-        <slf4j.version>1.7.26</slf4j.version>
-        <logback.version>1.2.3</logback.version>
-        <dropwizard3.metrics.version>3.2.6</dropwizard3.metrics.version>
-        <dropwizard.metrics.version>4.0.5</dropwizard.metrics.version>
-        <micrometer.version>1.1.0</micrometer.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <logback.version>1.5.11</logback.version>
+        <dropwizard.metrics.version>4.2.28</dropwizard.metrics.version>
+        <micrometer.version>1.13.6</micrometer.version>
 
-        <spring.version>4.3.13.RELEASE</spring.version>
-        <aspectj.version>1.8.4</aspectj.version>
+        <spring.version>5.3.39</spring.version>
+        <aspectj.version>1.9.22.1</aspectj.version>
 
-        <mockito.version>1.8.5</mockito.version>
-        <junit.version>4.13.1</junit.version>
+        <mockito.version>5.14.2</mockito.version>
+        <junit.version>4.13.2</junit.version>
         <hsqldb.version>2.2.8</hsqldb.version>
 
     </properties>

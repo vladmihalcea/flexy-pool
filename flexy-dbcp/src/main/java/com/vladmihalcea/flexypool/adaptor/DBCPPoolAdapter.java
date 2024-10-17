@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
 
     /**
      * Singleton factory object reference
@@ -57,7 +57,7 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
-        return e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage());
+    protected boolean isTimeoutAcquisitionException(Exception e) {
+        return e.getMessage() != null && Pattern.matches( ACQUISITION_TIMEOUT_MESSAGE, e.getMessage());
     }
 }

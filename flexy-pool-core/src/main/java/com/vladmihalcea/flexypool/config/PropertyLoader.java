@@ -4,9 +4,9 @@ import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategy;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategyFactory;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionFactoryResolver;
 import com.vladmihalcea.flexypool.strategy.MetricNamingStrategy;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
 import com.vladmihalcea.flexypool.util.JndiUtils;
@@ -28,7 +28,7 @@ import java.util.Properties;
 
 /**
  * <code>PropertyLoader</code> - The Property Loader allows declarative configuration through the <code>flexy-pool.properties</code> file.
- * It loads the {@link Properties} configuration file and it's then used to create a {@link Configuration} object.
+ * It loads the {@link Properties} configuration file and it's then used to create a {@link FlexyPoolConfiguration} object.
  *
  * @author Vlad Mihalcea
  * @since 1.2
@@ -58,7 +58,7 @@ public class PropertyLoader {
         POOL_METRICS_NAMING_STRATEGY("flexy.pool.metrics.naming.strategy"),
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver"),
         POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver"),
-        POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE("flexy.pool.time.threshold.connection.acquire"),
+        POOL_TIME_THRESHOLD_CONNECTION_ACQUISITION( "flexy.pool.time.threshold.connection.acquisition"),
         POOL_TIME_THRESHOLD_CONNECTION_LEASE("flexy.pool.time.threshold.connection.lease"),;
 
         private final String key;
@@ -258,14 +258,14 @@ public class PropertyLoader {
     }
 
     /**
-     * Get the array of {@link ConnectionAcquiringStrategyFactory} for this {@link com.vladmihalcea.flexypool.FlexyPoolDataSource}
+     * Get the array of {@link ConnectionAcquisitionStrategyFactory} for this {@link com.vladmihalcea.flexypool.FlexyPoolDataSource}
      *
      * @param <T> DataSource generic type
-     * @return the array of {@link ConnectionAcquiringStrategyFactory}
+     * @return the array of {@link ConnectionAcquisitionStrategyFactory}
      */
     @SuppressWarnings("unchecked")
-    public <T extends DataSource> List<ConnectionAcquiringStrategyFactory<? extends ConnectionAcquiringStrategy, T>> getConnectionAcquiringStrategyFactories() {
-        ConnectionAcquiringStrategyFactoryResolver<T> connectionAcquiringStrategyFactoryResolver =
+    public <T extends DataSource> List<ConnectionAcquisitionStrategyFactory<? extends ConnectionAcquisitionStrategy, T>> getConnectionAcquiringStrategyFactories() {
+        ConnectionAcquisitionFactoryResolver<T> connectionAcquiringStrategyFactoryResolver =
                 instantiateClass(PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER);
         if (connectionAcquiringStrategyFactoryResolver != null) {
             return connectionAcquiringStrategyFactoryResolver.resolveFactories();
@@ -284,12 +284,12 @@ public class PropertyLoader {
     }
 
     /**
-     * Get the connection acquire time threshold millis
+     * Get the connection acquisition time threshold millis
      *
-     * @return connection acquire time threshold millis
+     * @return connection acquisition time threshold millis
      */
-    public Long getConnectionAcquireTimeThresholdMillis() {
-        return longProperty(PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE);
+    public Long getConnectionAcquisitionTimeThresholdMillis() {
+        return longProperty(PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUISITION );
     }
 
     /**

@@ -13,7 +13,7 @@ import com.vladmihalcea.flexypool.metric.Metrics;
  */
 public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "An attempt by a client to checkout a Connection has timed out.";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "An attempt by a client to checkout a Connection has timed out.";
 
     /**
      * Singleton factory object reference
@@ -55,7 +55,7 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
-        return e.getMessage() != null && ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage());
+    protected boolean isTimeoutAcquisitionException(Exception e) {
+        return e.getMessage() != null && ACQUISITION_TIMEOUT_MESSAGE.equals( e.getMessage());
     }
 }

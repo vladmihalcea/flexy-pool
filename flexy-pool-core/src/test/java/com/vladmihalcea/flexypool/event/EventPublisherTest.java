@@ -64,7 +64,7 @@ public class EventPublisherTest {
     @Test
     public void testPublishWithNoListeners() {
         EventPublisher eventPublisher = new EventPublisher();
-        eventPublisher.publish(new ConnectionAcquireTimeoutEvent("123"));
+        eventPublisher.publish(new ConnectionAcquisitionTimeoutEvent( "123"));
     }
 
     @Test

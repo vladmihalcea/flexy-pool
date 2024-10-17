@@ -52,7 +52,7 @@ public class DruidAdapter extends AbstractPoolAdapter<DruidDataSource> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
+    protected boolean isTimeoutAcquisitionException(Exception e) {
         return e.getClass() == GetConnectionTimeoutException.class
                 || e.getClass() == TransactionTimeoutException.class;
     }

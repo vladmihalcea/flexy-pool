@@ -19,7 +19,7 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
 
     public static final String SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME = SQLTransientConnectionException.class.getName();
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "Timeout of .*?ms encountered waiting for connection\\.";
 
     /**
      * Singleton factory object reference
@@ -61,9 +61,9 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
+    protected boolean isTimeoutAcquisitionException(Exception e) {
         return e instanceof SQLTimeoutException ||
             SQL_TRANSIENT_CONNECTION_EXCEPTION_CLASS_NAME.equals(e.getClass().getName()) ||
-            (e.getMessage() != null && Pattern.matches(ACQUIRE_TIMEOUT_MESSAGE, e.getMessage()));
+            (e.getMessage() != null && Pattern.matches( ACQUISITION_TIMEOUT_MESSAGE, e.getMessage()));
     }
 }

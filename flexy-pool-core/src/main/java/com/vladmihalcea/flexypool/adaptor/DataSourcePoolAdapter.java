@@ -63,7 +63,7 @@ public class DataSourcePoolAdapter extends AbstractPoolAdapter<DataSource> {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected boolean isAcquireTimeoutException(Exception e) {
+	protected boolean isTimeoutAcquisitionException(Exception e) {
 		return false;
 	}
 }
