@@ -117,7 +117,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquisitionStrategy<T extends
                     int maxPoolSize = poolAdapter.getMaxPoolSize();
                     if (maxPoolSize < maxOverflowPoolSize) {
                         if (!incrementPoolSize(expectingMaxSize)) {
-                            LOGGER.warn("Can't acquire connection, pool size has already overflown to its max size.");
+                            LOGGER.warn("Can't increase pool size because it has already overflown to its max size of {}", maxOverflowPoolSize);
                         }
                     } else {
                         LOGGER.info("Pool size has already overflown to its max size of {}", maxPoolSize);
@@ -126,7 +126,7 @@ public final class IncrementPoolOnTimeoutConnectionAcquisitionStrategy<T extends
                 return connection;
             } catch (ConnectionAcquisitionTimeoutException e) {
                 if (!incrementPoolSize(expectingMaxSize)) {
-                    LOGGER.warn("Can't acquire connection due to adaptor timeout, pool size has already overflown to its max size.");
+                    LOGGER.warn("Can't acquire connection due to adaptor timeout, pool size has already overflown to its max size of {}", maxOverflowPoolSize);
                     throw e;
                 }
             }
@@ -137,33 +137,34 @@ public final class IncrementPoolOnTimeoutConnectionAcquisitionStrategy<T extends
      * Attempt to increment the pool size. If the maxSize changes, it skips the incrementing process.
      *
      * @param expectingMaxSize expecting maximum pool size
-     * @return if it succeeded changing the pool size
+     * @return if the pool size got changed from the expected max size
      */
-    protected boolean incrementPoolSize(int expectingMaxSize) {
-
-        Integer maxSize = null;
+	private boolean incrementPoolSize(int expectingMaxSize) {
+        int maxSize;
         long currentOverflowPoolSize;
+        boolean poolSizeChanged = false;
         try {
             lock.lockInterruptibly();
             int currentMaxSize = poolAdapter.getMaxPoolSize();
-            boolean incrementMaxPoolSize = currentMaxSize < maxOverflowPoolSize;
             if (currentMaxSize > expectingMaxSize) {
-                LOGGER.info("Pool size changed by other thread, expected {} and actual value {}", expectingMaxSize, currentMaxSize);
-                return incrementMaxPoolSize;
+                LOGGER.info("Pool size was changed by other thread, expected a size of {}, but the actual value is {}", expectingMaxSize, currentMaxSize);
+                return true;
             }
-            if (!incrementMaxPoolSize) {
+            if (currentMaxSize < maxOverflowPoolSize) {
+                currentOverflowPoolSize = overflowPoolSize.incrementAndGet();
+                poolAdapter.setMaxPoolSize(++currentMaxSize);
+                poolSizeChanged = true;
+                maxSize = currentMaxSize;
+            } else {
                 return false;
             }
-            currentOverflowPoolSize = overflowPoolSize.incrementAndGet();
-            poolAdapter.setMaxPoolSize(++currentMaxSize);
-            maxSize = currentMaxSize;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return false;
+            return poolSizeChanged;
         } finally {
             lock.unlock();
         }
-        LOGGER.info("Pool size changed from previous value {} to {}", expectingMaxSize, maxSize);
+        LOGGER.info("Pool size changed from {} to {} connections", expectingMaxSize, maxSize);
         maxPoolSizeHistogram.update(maxSize);
         overflowPoolSizeHistogram.update(currentOverflowPoolSize);
         return true;
