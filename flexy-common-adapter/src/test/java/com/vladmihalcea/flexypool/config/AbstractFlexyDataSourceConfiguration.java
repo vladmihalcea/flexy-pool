@@ -20,7 +20,7 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
 
     public abstract FlexyPoolConfiguration configuration();
 
-    public int getMaxOverflowPoolSize() {
+    public int getMaxOvergrowPoolSize() {
         return 5;
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
     public FlexyPoolDataSource dataSource() {
         FlexyPoolConfiguration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
-                new IncrementPoolOnTimeoutConnectionAcquisitionStrategy.Factory( getMaxOverflowPoolSize()),
+                new IncrementPoolOnTimeoutConnectionAcquisitionStrategy.Factory( getMaxOvergrowPoolSize()),
                 new RetryConnectionAcquisitionStrategy.Factory( getRetryAttempts())
         );
     }

@@ -47,7 +47,7 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
     private Histogram maxPoolSizeHistogram;
 
     @Mock
-    private Histogram overflowPoolSizeHistogram;
+    private Histogram overgrowPoolSizeHistogram;
 
     private FlexyPoolConfiguration<DataSource> configuration;
 
@@ -56,25 +56,15 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        configuration = new FlexyPoolConfiguration.Builder<DataSource>(
-                getClass().getName(),
-                dataSource,
-                new PoolAdapterFactory<DataSource>() {
-                    @Override
-                    public PoolAdapter<DataSource> newInstance(ConfigurationProperties<DataSource, Metrics, PoolAdapter<DataSource>> configurationProperties) {
-                        return poolAdapter;
-                    }
-                }
-        )
-                .setMetricsFactory(new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return metrics;
-                    }
-                })
-                .build();
-        when(metrics.histogram( IncrementPoolOnTimeoutConnectionAcquisitionStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn( maxPoolSizeHistogram);
-        when(metrics.histogram( IncrementPoolOnTimeoutConnectionAcquisitionStrategy.OVERFLOW_POOL_SIZE_HISTOGRAM)).thenReturn( overflowPoolSizeHistogram);
+        configuration = new FlexyPoolConfiguration.Builder<>(
+				getClass().getName(),
+				dataSource,
+				configurationProperties -> poolAdapter)
+        .setMetricsFactory(configurationProperties -> metrics)
+        .build();
+        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquisitionStrategy.MAX_POOL_SIZE_HISTOGRAM)).thenReturn( maxPoolSizeHistogram);
+        when(metrics.histogram(IncrementPoolOnTimeoutConnectionAcquisitionStrategy.OVERGROW_POOL_SIZE_HISTOGRAM)).thenReturn(
+                overgrowPoolSizeHistogram );
         connectionRequestContext = new ConnectionRequestContext.Builder().build();
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
     }
@@ -87,7 +77,7 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(1);
-        verify(overflowPoolSizeHistogram, never()).update(anyLong());
+        verify( overgrowPoolSizeHistogram, never()).update( anyLong());
     }
 
     @Test
@@ -101,7 +91,7 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         verify(poolAdapter, times(1)).setMaxPoolSize(3);
         verify(maxPoolSizeHistogram, times(1)).update(2);
         verify(maxPoolSizeHistogram, times(1)).update(3);
-        verify(overflowPoolSizeHistogram, times(1)).update(1);
+        verify( overgrowPoolSizeHistogram, times( 1)).update( 1);
     }
 
     @Test
@@ -137,9 +127,9 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         verify(maxPoolSizeHistogram, times(1)).update(3);
         verify(maxPoolSizeHistogram, times(1)).update(4);
         verify(maxPoolSizeHistogram, times(1)).update(5);
-        verify(overflowPoolSizeHistogram, times(1)).update(1);
-        verify(overflowPoolSizeHistogram, times(1)).update(2);
-        verify(overflowPoolSizeHistogram, times(1)).update(3);
+        verify( overgrowPoolSizeHistogram, times( 1)).update( 1);
+        verify( overgrowPoolSizeHistogram, times( 1)).update( 2);
+        verify( overgrowPoolSizeHistogram, times( 1)).update( 3);
     }
 
     @Test
@@ -157,7 +147,7 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         verify(poolAdapter, times(1)).setMaxPoolSize(2);
         verify(maxPoolSizeHistogram, times(1)).update(1);
         verify(maxPoolSizeHistogram, times(1)).update(2);
-        verify(overflowPoolSizeHistogram, times(1)).update(1);
+        verify( overgrowPoolSizeHistogram, times( 1)).update( 1);
     }
 
     @Test
@@ -174,7 +164,7 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(5);
-        verify(overflowPoolSizeHistogram, never()).update(anyLong());
+        verify( overgrowPoolSizeHistogram, never()).update( anyLong());
     }
 
     @Test
@@ -192,6 +182,6 @@ public class IncrementPoolOnTimeoutConnectionAcquisitionStrategyTest {
         assertSame(connection, incrementPoolOnTimeoutConnectionAcquiringStrategy.getConnection(connectionRequestContext));
         verify(poolAdapter, never()).setMaxPoolSize(anyInt());
         verify(maxPoolSizeHistogram, times(1)).update(3);
-        verify(overflowPoolSizeHistogram, never()).update(anyLong());
+        verify( overgrowPoolSizeHistogram, never()).update( anyLong());
     }
 }

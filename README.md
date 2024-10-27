@@ -35,7 +35,7 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * connection lease time histogram
  * maximum pool size histogram
  * total connection acquisition time histogram
- * overflow pool size histogram
+ * overgrow pool size histogram
  * retries attempts histogram
  
 ### Are you struggling with application performance issues?
