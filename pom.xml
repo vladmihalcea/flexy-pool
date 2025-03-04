@@ -364,7 +364,7 @@
 
         <mockito.version>5.14.2</mockito.version>
         <junit.version>4.13.2</junit.version>
-        <hsqldb.version>2.2.8</hsqldb.version>
+        <hsqldb.version>2.7.4</hsqldb.version>
 
     </properties>
 
