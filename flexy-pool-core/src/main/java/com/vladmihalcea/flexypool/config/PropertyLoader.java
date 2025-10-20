@@ -59,7 +59,8 @@ public class PropertyLoader {
         POOL_STRATEGIES_FACTORY_RESOLVER("flexy.pool.strategies.factory.resolver"),
         POOL_EVENT_LISTENER_RESOLVER("flexy.pool.event.listener.resolver"),
         POOL_TIME_THRESHOLD_CONNECTION_ACQUISITION( "flexy.pool.time.threshold.connection.acquisition"),
-        POOL_TIME_THRESHOLD_CONNECTION_LEASE("flexy.pool.time.threshold.connection.lease"),;
+        POOL_TIME_THRESHOLD_CONNECTION_LEASE("flexy.pool.time.threshold.connection.lease"),
+        POOL_MAINTAIN_FIXED_SIZE_POOL("flexy.pool.maintain.fixed.size.pool");
 
         private final String key;
 
@@ -299,6 +300,11 @@ public class PropertyLoader {
      */
     public Long getConnectionLeaseTimeThresholdMillis() {
         return longProperty(PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE);
+    }
+
+
+    public Boolean isMaintainFixedSizePool() {
+        return booleanProperty(PropertyKey.POOL_MAINTAIN_FIXED_SIZE_POOL);
     }
 
     /**

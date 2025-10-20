@@ -116,6 +116,7 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             EventListenerResolver eventListenerResolver = propertyLoader.getEventListenerResolver();
             Long connectionAcquisitionTimeThresholdMillis = propertyLoader.getConnectionAcquisitionTimeThresholdMillis();
             Long connectionLeaseTimeThresholdMillis = propertyLoader.getConnectionLeaseTimeThresholdMillis();
+            Boolean maintainFixedSizePool = propertyLoader.isMaintainFixedSizePool();
 
             if (poolAdapterFactory == null) {
                 poolAdapterFactory = (PoolAdapterFactory<D>) DataSourcePoolAdapter.FACTORY;
@@ -147,6 +148,9 @@ public class FlexyPoolDataSource<T extends DataSource> implements DataSource, Li
             }
             if (connectionLeaseTimeThresholdMillis != null) {
                 configurationBuilder.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
+            }
+            if(maintainFixedSizePool != null) {
+                configurationBuilder.setMaintainFixedSizePool(maintainFixedSizePool);
             }
             return configurationBuilder.build();
         }

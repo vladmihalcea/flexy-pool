@@ -48,7 +48,11 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxTotal(maxPoolSize);
+        final BasicDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxTotal(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinIdle(maxPoolSize);
+        }
     }
 
     /**

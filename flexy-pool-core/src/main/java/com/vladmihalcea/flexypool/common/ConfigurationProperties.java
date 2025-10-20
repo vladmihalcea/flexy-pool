@@ -31,6 +31,8 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
 
+    private boolean maintainFixedSizePool = false;
+
     public ConfigurationProperties(String uniqueName, EventPublisher eventPublisher) {
         this.uniqueName = uniqueName;
         this.eventPublisher = eventPublisher;
@@ -162,6 +164,11 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
         this.connectionLeaseTimeThresholdMillis = connectionLeaseTimeThresholdMillis;
     }
 
+
+    public void setMaintainFixedSizePool(boolean maintainFixedSizePool) {
+        this.maintainFixedSizePool = maintainFixedSizePool;
+    }
+
     /**
      * Get the target data source
      *
@@ -189,4 +196,8 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      * @return connection proxy factory
      */
     public abstract ConnectionProxyFactory getConnectionProxyFactory();
+
+    public boolean isMaintainFixedSizePool() {
+        return maintainFixedSizePool;
+    }
 }

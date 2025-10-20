@@ -48,7 +48,11 @@ public class Atomikos4PoolAdapter extends AbstractPoolAdapter<AbstractDataSource
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxPoolSize(maxPoolSize);
+        final AbstractDataSourceBean targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxPoolSize(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinPoolSize(maxPoolSize);
+        }
     }
 
     /**
