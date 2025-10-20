@@ -45,6 +45,7 @@ public final class FlexyPoolConfiguration<T extends DataSource> extends Configur
         private EventListenerResolver eventListenerResolver;
         private long connectionAcquisitionTimeThresholdMillis = Long.MAX_VALUE;
         private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
+        private boolean maintainFixedSizePool = false;
 
         /**
          * Construct the builder with the mandatory associations.
@@ -162,6 +163,10 @@ public final class FlexyPoolConfiguration<T extends DataSource> extends Configur
             return this;
         }
 
+        public void setMaintainFixedSizePool(boolean maintainFixedSizePool) {
+            this.maintainFixedSizePool = maintainFixedSizePool;
+        }
+
         /**
          * Build the configuration object.
          *
@@ -176,6 +181,7 @@ public final class FlexyPoolConfiguration<T extends DataSource> extends Configur
             configuration.setMetricNamingStrategy(metricNamingStrategy);
             configuration.setConnectionAcquisitionTimeThresholdMillis( connectionAcquisitionTimeThresholdMillis );
             configuration.setConnectionLeaseTimeThresholdMillis(connectionLeaseTimeThresholdMillis);
+            configuration.setMaintainFixedSizePool(maintainFixedSizePool);
             if(metricsFactory == null) {
                 metricsFactory = MetricsFactoryResolver.INSTANCE.resolve();
             }
@@ -190,6 +196,7 @@ public final class FlexyPoolConfiguration<T extends DataSource> extends Configur
     private Metrics metrics;
     private PoolAdapter<T> poolAdapter;
     private ConnectionProxyFactory connectionProxyFactory;
+
 
     private FlexyPoolConfiguration(String uniqueName, T targetDataSource, EventPublisher eventPublisher) {
         super(uniqueName, eventPublisher);

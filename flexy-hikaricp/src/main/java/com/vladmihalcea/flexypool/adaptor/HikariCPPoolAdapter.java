@@ -54,7 +54,11 @@ public class HikariCPPoolAdapter extends AbstractPoolAdapter<HikariDataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaximumPoolSize(maxPoolSize);
+        final HikariDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaximumPoolSize(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinimumIdle(maxPoolSize);
+        }
     }
 
     /**

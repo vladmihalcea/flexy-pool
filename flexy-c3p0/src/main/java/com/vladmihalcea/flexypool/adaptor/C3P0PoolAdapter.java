@@ -48,7 +48,11 @@ public class C3P0PoolAdapter extends AbstractPoolAdapter<ComboPooledDataSource> 
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxPoolSize(maxPoolSize);
+        final ComboPooledDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxPoolSize(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinPoolSize(maxPoolSize);
+        }
     }
 
     /**

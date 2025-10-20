@@ -106,4 +106,8 @@ public abstract class AbstractPoolAdapter<T extends DataSource> implements PoolA
      * @return the exception is due to a connection acquisition failure
      */
     protected abstract boolean isTimeoutAcquisitionException(Exception e);
+
+    protected ConfigurationProperties<T, Metrics, PoolAdapter<T>> getConfigurationProperties() {
+        return configurationProperties;
+    }
 }

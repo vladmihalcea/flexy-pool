@@ -50,7 +50,11 @@ public class DBCPPoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxActive(maxPoolSize);
+        final BasicDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxActive(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinIdle(maxPoolSize);
+        }
     }
 
     /**

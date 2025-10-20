@@ -45,7 +45,11 @@ public class DruidAdapter extends AbstractPoolAdapter<DruidDataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxActive(maxPoolSize);
+        final DruidDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxActive(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinIdle(maxPoolSize);
+        }
     }
 
     /**

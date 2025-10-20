@@ -47,7 +47,11 @@ public class TomcatCPPoolAdapter extends AbstractPoolAdapter<DataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxActive(maxPoolSize);
+        final DataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxActive(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinIdle(maxPoolSize);
+        }
     }
 
     /**
