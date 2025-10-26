@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import javax.sql.DataSource;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -32,7 +32,7 @@ public class ConfigurationTest {
         PoolAdapter poolAdapter = Mockito.mock(PoolAdapter.class);
         when(metricsFactory.newInstance(any(ConfigurationProperties.class))).thenReturn(metrics);
         when(poolAdapterFactory.newInstance(any(ConfigurationProperties.class))).thenReturn(poolAdapter);
-        Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
+        FlexyPoolConfiguration<DataSource> configuration = new FlexyPoolConfiguration.Builder<DataSource>(
             "unique", dataSource, poolAdapterFactory)
         .setConnectionProxyFactory(connectionProxyFactory)
         .setJmxAutoStart(true)

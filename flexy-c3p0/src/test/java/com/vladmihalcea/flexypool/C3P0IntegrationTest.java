@@ -24,13 +24,13 @@ public class C3P0IntegrationTest extends AbstractPoolAdapterIntegrationTest {
     protected void verifyLeasedConnections(List<Connection> leasedConnections) {
         //ComboPooledDataSource#setMaxPoolSize calls resetPoolManager( false );
         //This will end up recreating the data source, so the old connections are not managed anymore
-        //Because we have 2 overflows (from 3 to 4 and from 4 to 5) we will end up with
+        //Because we have 2 overgrows (from 3 to 4 and from 4 to 5) we will end up with
         //12 connections = 3(initial max) + 4(initial max + 1 over flow) + 5(initial max + 2 over flow)
 
         //ComboPooledDataSource doesn't initializes eagerly, so we can get a timeout right from teh first call, because
         //the first connection request might have to wait for the pool to be initialised
         //This will end up recreating the data source from the first call.
-        //Because we have 2 overflows (from 3 to 4 and from 4 to 5) we will end up with
+        //Because we have 2 overgrows (from 3 to 4 and from 4 to 5) we will end up with
         //9 connections = 0(initial call) + 4(initial max + 1 over flow) + 5(initial max + 2 over flow)
         int leasedConnectionCount = leasedConnections.size();
         if( !(leasedConnectionCount == 12 || leasedConnectionCount == 9) ) {

@@ -1,6 +1,6 @@
 package com.vladmihalcea.flexypool.adaptor;
 
-import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.FlexyPoolConfiguration;
 import org.junit.Test;
 
 import javax.sql.DataSource;
@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 public class DataSourcePoolAdapterTest extends AbstractPoolAdapterTest {
 
     @Override
-    protected AbstractPoolAdapter<DataSource> newPoolAdapter(Configuration<DataSource> configuration) {
+    protected AbstractPoolAdapter<DataSource> newPoolAdapter(FlexyPoolConfiguration<DataSource> configuration) {
         return new DataSourcePoolAdapter(configuration);
     }
 

@@ -1,10 +1,10 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.FlexyPoolConfiguration;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
-import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
+import com.vladmihalcea.flexypool.event.ConnectionAcquisitionTimeoutEvent;
 import com.vladmihalcea.flexypool.event.Event;
 import com.vladmihalcea.flexypool.event.EventListener;
 import com.vladmihalcea.flexypool.event.EventListenerResolver;
@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -39,16 +37,16 @@ public class AbstractPoolAdapterTest {
 
     }
 
-    public static class ConnectionTimedOutExceptionEventListener extends EventListener<ConnectionAcquireTimeoutEvent> {
+    public static class ConnectionTimedOutExceptionEventListener extends EventListener<ConnectionAcquisitionTimeoutEvent> {
 
-        private ConnectionAcquireTimeoutEvent event;
+        private ConnectionAcquisitionTimeoutEvent event;
 
         public ConnectionTimedOutExceptionEventListener() {
-            super(ConnectionAcquireTimeoutEvent.class);
+            super( ConnectionAcquisitionTimeoutEvent.class);
         }
 
         @Override
-        public void on(ConnectionAcquireTimeoutEvent event) {
+        public void on(ConnectionAcquisitionTimeoutEvent event) {
             this.event = event;
         }
     }
@@ -70,7 +68,7 @@ public class AbstractPoolAdapterTest {
         }
 
         @Override
-        protected boolean isAcquireTimeoutException(Exception e) {
+        protected boolean isTimeoutAcquisitionException(Exception e) {
             return e instanceof ConnectionTimedOutException;
         }
     }
@@ -94,11 +92,9 @@ public class AbstractPoolAdapterTest {
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUIRE_MILLIS)).thenReturn(timer);
+        when(metrics.timer(AbstractPoolAdapter.CONNECTION_ACQUISITION_MILLIS )).thenReturn( timer);
 
-
-
-        Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
+        FlexyPoolConfiguration<DataSource> configuration = new FlexyPoolConfiguration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
                 new PoolAdapterFactory<DataSource>() {
@@ -175,14 +171,14 @@ public class AbstractPoolAdapterTest {
         } catch (SQLException e) {
             verify(timer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
             if (supportsTimeoutExceptionTranslation()) {
-                ConnectionAcquireTimeoutEvent connectionAcquireTimeoutEvent = eventListener.event;
-                assertNotNull(connectionAcquireTimeoutEvent);
-                assertEquals(getClass().getName(), connectionAcquireTimeoutEvent.getUniqueName());
+                ConnectionAcquisitionTimeoutEvent connectionAcquisitionTimeoutEvent = eventListener.event;
+                assertNotNull(connectionAcquisitionTimeoutEvent);
+                assertEquals(getClass().getName(), connectionAcquisitionTimeoutEvent.getUniqueName());
             }
         }
     }
 
-    protected AbstractPoolAdapter<DataSource> newPoolAdapter(Configuration<DataSource> configuration) {
+    protected AbstractPoolAdapter<DataSource> newPoolAdapter(FlexyPoolConfiguration<DataSource> configuration) {
         return new TestPoolAdapter(configuration);
     }
 

@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.metric.dropwizard;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.FlexyPoolConfiguration;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
@@ -17,7 +17,7 @@ import org.mockito.Mockito;
 import javax.sql.DataSource;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -37,24 +37,20 @@ public class ConfigurationTest {
         Metrics metrics = Mockito.mock(Metrics.class);
         PoolAdapter poolAdapter = Mockito.mock(PoolAdapter.class);
         when(poolAdapterFactory.newInstance(any(ConfigurationProperties.class))).thenReturn(poolAdapter);
-        Configuration<DataSource> configuration = new Configuration.Builder<DataSource>(
-                "unique", dataSource, poolAdapterFactory)
-                .setConnectionProxyFactory(connectionProxyFactory)
-                .setJmxAutoStart(true)
-                .setJmxEnabled(true)
-                .setMetricLogReporterMillis(120)
-                .setMetricsFactory(new MetricsFactory() {
-                    @Override
-                    public Metrics newInstance(ConfigurationProperties configurationProperties) {
-                        return new DropwizardMetrics(configurationProperties, metricRegistry, new ReservoirFactory() {
-                            @Override
-                            public Reservoir newInstance(Class<? extends Metric> metricClass, String metricName) {
-                                return new ExponentiallyDecayingReservoir();
-                            }
-                        });
-                    }
-                })
-                .build();
+        FlexyPoolConfiguration<DataSource> configuration = new FlexyPoolConfiguration
+            .Builder<>("unique", dataSource, poolAdapterFactory )
+            .setConnectionProxyFactory(connectionProxyFactory)
+            .setJmxAutoStart(true)
+            .setJmxEnabled(true)
+            .setMetricLogReporterMillis(120)
+            .setMetricsFactory(
+                configurationProperties -> new DropwizardMetrics(
+                    configurationProperties,
+                    metricRegistry,
+                    (metricClass, metricName) -> new ExponentiallyDecayingReservoir()
+                )
+            )
+            .build();
         assertSame("unique", configuration.getUniqueName());
         assertSame(connectionProxyFactory, configuration.getConnectionProxyFactory());
         assertTrue(configuration.isJmxAutoStart());

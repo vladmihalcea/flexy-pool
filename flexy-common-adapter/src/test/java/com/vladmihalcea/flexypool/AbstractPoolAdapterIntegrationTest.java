@@ -1,18 +1,23 @@
 package com.vladmihalcea.flexypool;
 
-import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Resource;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vladmihalcea.flexypool.exception.ConnectionAcquisitionException;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * AbstractPoolAdapterIntegrationTest - Abstract Pool Adapter Integration Test
@@ -23,7 +28,7 @@ public abstract class AbstractPoolAdapterIntegrationTest {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractPoolAdapterIntegrationTest.class);
 
-    @Resource
+    @Autowired
     private FlexyPoolDataSource dataSource;
 
     public DataSource getDataSource() {
@@ -45,7 +50,7 @@ public abstract class AbstractPoolAdapterIntegrationTest {
                 }
             }
         } catch (SQLException e) {
-            assertTrue(e instanceof CantAcquireConnectionException);
+            assertTrue(e instanceof ConnectionAcquisitionException );
             verifyLeasedConnections(leasedConnections);
         } finally {
             closeConnection(leasedConnections);

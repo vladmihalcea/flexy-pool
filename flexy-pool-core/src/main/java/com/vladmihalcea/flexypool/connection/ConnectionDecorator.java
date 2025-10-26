@@ -471,4 +471,53 @@ public class ConnectionDecorator implements Connection {
     public int getNetworkTimeout() throws SQLException {
         return getTarget().getNetworkTimeout();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void beginRequest() throws SQLException {
+        getTarget().beginRequest();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endRequest() throws SQLException {
+        getTarget().endRequest();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean setShardingKeyIfValid(ShardingKey shardingKey, ShardingKey superShardingKey, int timeout)
+            throws SQLException {
+        return getTarget().setShardingKeyIfValid(shardingKey, superShardingKey, timeout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean setShardingKeyIfValid(ShardingKey shardingKey, int timeout) throws SQLException {
+        return getTarget().setShardingKeyIfValid(shardingKey, timeout);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setShardingKey(ShardingKey shardingKey, ShardingKey superShardingKey) throws SQLException {
+        getTarget().setShardingKey(shardingKey, superShardingKey);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setShardingKey(ShardingKey shardingKey) throws SQLException {
+        getTarget().setShardingKey(shardingKey);
+    }
 }

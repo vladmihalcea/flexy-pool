@@ -2,8 +2,8 @@ package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.FlexyPoolDataSource;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
-import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquiringStrategy;
-import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquiringStrategy;
+import com.vladmihalcea.flexypool.strategy.IncrementPoolOnTimeoutConnectionAcquisitionStrategy;
+import com.vladmihalcea.flexypool.strategy.RetryConnectionAcquisitionStrategy;
 import org.springframework.context.annotation.Bean;
 
 import javax.sql.DataSource;
@@ -18,9 +18,9 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
 
     public abstract T getPoolingDataSource();
 
-    public abstract Configuration configuration();
+    public abstract FlexyPoolConfiguration configuration();
 
-    public int getMaxOverflowPoolSize() {
+    public int getMaxOvergrowPoolSize() {
         return 5;
     }
 
@@ -28,8 +28,8 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
         return 2;
     }
 
-    protected Configuration configuration(PoolAdapterFactory<T> poolAdapter) {
-        return new Configuration.Builder<T>(
+    protected FlexyPoolConfiguration configuration(PoolAdapterFactory<T> poolAdapter) {
+        return new FlexyPoolConfiguration.Builder<T>(
                 UUID.randomUUID().toString(),
                 getPoolingDataSource(),
                 poolAdapter
@@ -38,10 +38,10 @@ public abstract class AbstractFlexyDataSourceConfiguration<T extends DataSource>
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public FlexyPoolDataSource dataSource() {
-        Configuration configuration = configuration();
+        FlexyPoolConfiguration configuration = configuration();
         return new FlexyPoolDataSource(configuration,
-                new IncrementPoolOnTimeoutConnectionAcquiringStrategy.Factory(getMaxOverflowPoolSize()),
-                new RetryConnectionAcquiringStrategy.Factory(getRetryAttempts())
+                new IncrementPoolOnTimeoutConnectionAcquisitionStrategy.Factory( getMaxOvergrowPoolSize()),
+                new RetryConnectionAcquisitionStrategy.Factory( getRetryAttempts())
         );
     }
 }

@@ -14,7 +14,7 @@ import com.vladmihalcea.flexypool.metric.Metrics;
  */
 public class Atomikos5PoolAdapter extends AbstractPoolAdapter<AbstractDataSourceBean> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Connection pool exhausted - try increasing 'maxPoolSize' and/or 'borrowConnectionTimeout' on the DataSourceBean.";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "Connection pool exhausted - try increasing 'maxPoolSize' and/or 'borrowConnectionTimeout' on the DataSourceBean.";
 
     /**
      * Singleton factory object reference
@@ -48,17 +48,21 @@ public class Atomikos5PoolAdapter extends AbstractPoolAdapter<AbstractDataSource
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxPoolSize(maxPoolSize);
+        final AbstractDataSourceBean targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxPoolSize(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinPoolSize(maxPoolSize);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
+    protected boolean isTimeoutAcquisitionException(Exception e) {
         if (e instanceof AtomikosSQLException) {
             return e.getMessage() != null &&
-                ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage());
+                ACQUISITION_TIMEOUT_MESSAGE.equals( e.getMessage());
         }
         return false;
     }

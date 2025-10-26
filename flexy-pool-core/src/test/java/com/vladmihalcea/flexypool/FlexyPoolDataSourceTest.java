@@ -2,18 +2,18 @@ package com.vladmihalcea.flexypool;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
-import com.vladmihalcea.flexypool.config.Configuration;
+import com.vladmihalcea.flexypool.config.FlexyPoolConfiguration;
 import com.vladmihalcea.flexypool.config.PropertyLoader;
 import com.vladmihalcea.flexypool.connection.ConnectionRequestContext;
 import com.vladmihalcea.flexypool.connection.Credentials;
-import com.vladmihalcea.flexypool.exception.AcquireTimeoutException;
-import com.vladmihalcea.flexypool.exception.CantAcquireConnectionException;
+import com.vladmihalcea.flexypool.exception.ConnectionAcquisitionTimeoutException;
+import com.vladmihalcea.flexypool.exception.ConnectionAcquisitionException;
 import com.vladmihalcea.flexypool.metric.Histogram;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.metric.Timer;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategy;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategyFactory;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
@@ -39,7 +39,6 @@ import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -50,7 +49,7 @@ import static org.mockito.Mockito.*;
 public class FlexyPoolDataSourceTest {
 
     @Mock
-    private ConnectionAcquiringStrategy connectionAcquiringStrategy;
+    private ConnectionAcquisitionStrategy connectionAcquiringStrategy;
 
     @Mock
     private PoolAdapter<DataSource> poolAdapter;
@@ -65,7 +64,7 @@ public class FlexyPoolDataSourceTest {
     private Metrics metrics;
 
     @Mock
-    private Timer overallConnectionAcquireTimer;
+    private Timer overallConnectionAcquisitionTimer;
 
     @Mock
     private Histogram concurrentConnectionCountHistogram;
@@ -76,14 +75,14 @@ public class FlexyPoolDataSourceTest {
     @Mock
     private Timer connectionLeaseMillisTimer;
 
-    private Configuration<DataSource> configuration;
+    private FlexyPoolConfiguration<DataSource> configuration;
 
     private FlexyPoolDataSource<DataSource> flexyPoolDataSource;
 
     @Before
     public void before() {
         MockitoAnnotations.initMocks(this);
-        configuration = new Configuration.Builder<DataSource>(
+        configuration = new FlexyPoolConfiguration.Builder<DataSource>(
                 getClass().getName(),
                 dataSource,
                 new PoolAdapterFactory<DataSource>() {
@@ -100,14 +99,15 @@ public class FlexyPoolDataSourceTest {
                     }
                 })
                 .build();
-        when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUIRE_MILLIS)).thenReturn(overallConnectionAcquireTimer);
+        when(metrics.timer(FlexyPoolDataSource.OVERALL_CONNECTION_ACQUISITION_MILLIS )).thenReturn(
+                overallConnectionAcquisitionTimer );
         when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTIONS_HISTOGRAM)).thenReturn(concurrentConnectionCountHistogram);
         when(metrics.histogram(FlexyPoolDataSource.CONCURRENT_CONNECTION_REQUESTS_HISTOGRAM)).thenReturn(concurrentConnectionRequestCountHistogram);
         when(metrics.timer(FlexyPoolDataSource.CONNECTION_LEASE_MILLIS)).thenReturn(connectionLeaseMillisTimer);
         when(poolAdapter.getTargetDataSource()).thenReturn(dataSource);
-        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
             }
         });
@@ -124,7 +124,7 @@ public class FlexyPoolDataSourceTest {
         flexyPoolDataSource.getConnection().getMetaData();
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -139,7 +139,7 @@ public class FlexyPoolDataSourceTest {
         flexyPoolDataSource.getConnection().getMetaData();
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -156,7 +156,7 @@ public class FlexyPoolDataSourceTest {
         Credentials credentials = connectionRequestContextArgumentCaptor.getValue().getCredentials();
         assertEquals("username", credentials.getUsername());
         assertEquals("password", credentials.getPassword());
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -164,21 +164,22 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testGetConnectionFromTheLastStrategy() throws SQLException {
 
-        final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
+        final ConnectionAcquisitionStrategy otherConnectionAcquiringStrategy = Mockito.mock(
+				ConnectionAcquisitionStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
             }
-        }, new ConnectionAcquiringStrategyFactory() {
+        }, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return otherConnectionAcquiringStrategy;
             }
         }
         );
 
-        when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class))).thenThrow(new AcquireTimeoutException(new SQLException()));
+        when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class))).thenThrow(new ConnectionAcquisitionTimeoutException( new SQLException()));
         ArgumentCaptor<ConnectionRequestContext> connectionRequestContextArgumentCaptor
                 = ArgumentCaptor.forClass(ConnectionRequestContext.class);
         when(otherConnectionAcquiringStrategy.getConnection(connectionRequestContextArgumentCaptor.capture()))
@@ -187,7 +188,7 @@ public class FlexyPoolDataSourceTest {
         flexyPoolDataSource.getConnection().getMetaData();
         verify(connection, times(1)).getMetaData();
         assertNull(connectionRequestContextArgumentCaptor.getValue().getCredentials());
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -195,22 +196,23 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testGetConnectionWhenStrategyThrowsException() throws SQLException {
 
-        final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
+        final ConnectionAcquisitionStrategy otherConnectionAcquiringStrategy = Mockito.mock(
+				ConnectionAcquisitionStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
             }
-        }, new ConnectionAcquiringStrategyFactory() {
+        }, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return otherConnectionAcquiringStrategy;
             }
         }
         );
 
         when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
-                .thenThrow(new AcquireTimeoutException(new SQLException()));
+                .thenThrow(new ConnectionAcquisitionTimeoutException( new SQLException()));
         when(otherConnectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
                 .thenThrow(new SQLException());
         try {
@@ -219,7 +221,7 @@ public class FlexyPoolDataSourceTest {
         } catch (SQLException expected) {
 
         }
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -227,31 +229,32 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testGetConnectionWhenNoStrategyCanAcquireConnection() throws SQLException {
 
-        final ConnectionAcquiringStrategy otherConnectionAcquiringStrategy = Mockito.mock(ConnectionAcquiringStrategy.class);
-        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquiringStrategyFactory() {
+        final ConnectionAcquisitionStrategy otherConnectionAcquiringStrategy = Mockito.mock(
+				ConnectionAcquisitionStrategy.class);
+        this.flexyPoolDataSource = new FlexyPoolDataSource<DataSource>(configuration, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return connectionAcquiringStrategy;
             }
-        }, new ConnectionAcquiringStrategyFactory() {
+        }, new ConnectionAcquisitionStrategyFactory() {
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return otherConnectionAcquiringStrategy;
             }
         }
         );
 
         when(connectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
-                .thenThrow(new AcquireTimeoutException(new SQLException()));
+                .thenThrow(new ConnectionAcquisitionTimeoutException( new SQLException()));
         when(otherConnectionAcquiringStrategy.getConnection(any(ConnectionRequestContext.class)))
-                .thenThrow(new AcquireTimeoutException(new SQLException()));
+                .thenThrow(new ConnectionAcquisitionTimeoutException( new SQLException()));
         try {
             flexyPoolDataSource.getConnection();
-            fail("Should throw CantAcquireConnectionException!");
-        } catch (CantAcquireConnectionException expected) {
+            fail("Should throw ConnectionAcquisitionException!");
+        } catch (ConnectionAcquisitionException expected) {
 
         }
-        verify(overallConnectionAcquireTimer, times(1)).update(anyLong(), eq(TimeUnit.MILLISECONDS));
+        verify( overallConnectionAcquisitionTimer, times( 1)).update( anyLong(), eq( TimeUnit.MILLISECONDS));
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(1);
         verify(concurrentConnectionRequestCountHistogram, times(1)).update(0);
     }
@@ -337,7 +340,7 @@ public class FlexyPoolDataSourceTest {
         Properties properties = new Properties();
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_UNIQUE_NAME.getKey(), "jdbc/DS");
         properties.put(PropertyLoader.PropertyKey.DATA_SOURCE_CLASS_NAME.getKey(), MockDataSource.class.getName());
-        properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE.getKey(), "-1");
+        properties.put( PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUISITION.getKey(), "-1");
         properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE.getKey(), "-1");
         PropertiesTestUtils.setProperties(properties);
         FlexyPoolDataSource<DataSource> flexyPoolDataSource = new FlexyPoolDataSource<DataSource>();

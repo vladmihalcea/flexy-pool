@@ -15,7 +15,7 @@ import org.vibur.dbcp.ViburDBCPDataSource;
  */
 public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSource> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Couldn't obtain SQL connection from pool";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "Couldn't obtain SQL connection from pool";
 
     /**
      * Singleton factory object reference
@@ -63,8 +63,8 @@ public class ViburDBCPPoolAdapter extends AbstractPoolAdapter<ViburDBCPDataSourc
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
+    protected boolean isTimeoutAcquisitionException(Exception e) {
         return e instanceof SQLTimeoutException ||
-                (e.getMessage() != null && e.getMessage().startsWith(ACQUIRE_TIMEOUT_MESSAGE));
+                (e.getMessage() != null && e.getMessage().startsWith( ACQUISITION_TIMEOUT_MESSAGE ));
     }
 }

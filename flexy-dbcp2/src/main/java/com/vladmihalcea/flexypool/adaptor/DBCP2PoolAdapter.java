@@ -13,7 +13,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
  */
 public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
 
-    public static final String ACQUIRE_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
+    public static final String ACQUISITION_TIMEOUT_MESSAGE = "Cannot get a connection, pool error Timeout waiting for idle object";
 
     /**
      * Singleton factory object reference
@@ -48,14 +48,18 @@ public class DBCP2PoolAdapter extends AbstractPoolAdapter<BasicDataSource> {
      */
     @Override
     public void setMaxPoolSize(int maxPoolSize) {
-        getTargetDataSource().setMaxTotal(maxPoolSize);
+        final BasicDataSource targetDataSource = getTargetDataSource();
+        targetDataSource.setMaxTotal(maxPoolSize);
+        if (getConfigurationProperties().isMaintainFixedSizePool()) {
+            targetDataSource.setMinIdle(maxPoolSize);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected boolean isAcquireTimeoutException(Exception e) {
-        return e.getMessage() != null && ACQUIRE_TIMEOUT_MESSAGE.equals(e.getMessage());
+    protected boolean isTimeoutAcquisitionException(Exception e) {
+        return e.getMessage() != null && ACQUISITION_TIMEOUT_MESSAGE.equals( e.getMessage());
     }
 }

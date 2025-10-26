@@ -4,15 +4,15 @@ import com.vladmihalcea.flexypool.adaptor.PoolAdapter;
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
 import com.vladmihalcea.flexypool.connection.ConnectionCallback;
 import com.vladmihalcea.flexypool.connection.ConnectionProxyFactory;
-import com.vladmihalcea.flexypool.event.ConnectionAcquireTimeoutEvent;
+import com.vladmihalcea.flexypool.event.ConnectionAcquisitionTimeoutEvent;
 import com.vladmihalcea.flexypool.event.Event;
 import com.vladmihalcea.flexypool.event.EventListener;
 import com.vladmihalcea.flexypool.event.EventListenerResolver;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategy;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactory;
-import com.vladmihalcea.flexypool.strategy.ConnectionAcquiringStrategyFactoryResolver;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategy;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionStrategyFactory;
+import com.vladmihalcea.flexypool.strategy.ConnectionAcquisitionFactoryResolver;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
@@ -150,7 +150,7 @@ public class PropertyLoaderTest {
             properties.put(PropertyLoader.PropertyKey.POOL_CONNECTION_PROXY_FACTORY.getKey(), MockConnectionProxyFactory.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_STRATEGIES_FACTORY_RESOLVER.getKey(), MockConnectionAcquiringStrategyFactoryResolver.class.getName());
             properties.put(PropertyLoader.PropertyKey.POOL_EVENT_LISTENER_RESOLVER.getKey(), MockEventListenerResolver.class.getName());
-            properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUIRE.getKey(), "120");
+            properties.put( PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_ACQUISITION.getKey(), "120");
             properties.put(PropertyLoader.PropertyKey.POOL_TIME_THRESHOLD_CONNECTION_LEASE.getKey(), "240");
             PropertiesTestUtils.setProperties(properties);
             PropertyLoader propertyLoader = new PropertyLoader();
@@ -169,7 +169,7 @@ public class PropertyLoaderTest {
             assertNotNull(propertyLoader.getPoolAdapterFactory());
             assertEquals(1, propertyLoader.getConnectionAcquiringStrategyFactories().size());
             assertEquals(MockEventListenerResolver.MockEventListener.class, propertyLoader.getEventListenerResolver().resolveListeners().get(0).getClass());
-            assertEquals(Long.valueOf(120), propertyLoader.getConnectionAcquireTimeThresholdMillis());
+            assertEquals(Long.valueOf(120), propertyLoader.getConnectionAcquisitionTimeThresholdMillis());
             assertEquals(Long.valueOf(240), propertyLoader.getConnectionLeaseTimeThresholdMillis());
         } catch (IOException e) {
             fail("Can't save/load properties");
@@ -247,19 +247,19 @@ public class PropertyLoaderTest {
         }
     }
 
-    public static class MockConnectionAcquiringStrategyFactoryResolver implements ConnectionAcquiringStrategyFactoryResolver {
+    public static class MockConnectionAcquiringStrategyFactoryResolver implements ConnectionAcquisitionFactoryResolver {
 
-        private static class MockConnectionAcquiringStrategyFactory implements ConnectionAcquiringStrategyFactory {
+        private static class MockConnectionAcquiringStrategyFactory implements ConnectionAcquisitionStrategyFactory {
 
             @Override
-            public ConnectionAcquiringStrategy newInstance(ConfigurationProperties configurationProperties) {
+            public ConnectionAcquisitionStrategy newInstance(ConfigurationProperties configurationProperties) {
                 return null;
             }
         }
 
         @Override
-        public List<ConnectionAcquiringStrategyFactory> resolveFactories() {
-            List<ConnectionAcquiringStrategyFactory> factories = new ArrayList<ConnectionAcquiringStrategyFactory>();
+        public List<ConnectionAcquisitionStrategyFactory> resolveFactories() {
+            List<ConnectionAcquisitionStrategyFactory> factories = new ArrayList<ConnectionAcquisitionStrategyFactory>();
             factories.add(new MockConnectionAcquiringStrategyFactory());
             return factories;
         }
@@ -267,14 +267,14 @@ public class PropertyLoaderTest {
 
     public static class MockEventListenerResolver implements EventListenerResolver {
 
-        private static class MockEventListener extends EventListener<ConnectionAcquireTimeoutEvent> {
+        private static class MockEventListener extends EventListener<ConnectionAcquisitionTimeoutEvent> {
 
             protected MockEventListener() {
-                super(ConnectionAcquireTimeoutEvent.class);
+                super( ConnectionAcquisitionTimeoutEvent.class);
             }
 
             @Override
-            public void on(ConnectionAcquireTimeoutEvent event) {
+            public void on(ConnectionAcquisitionTimeoutEvent event) {
 
             }
         }

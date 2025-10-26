@@ -23,21 +23,19 @@ This is very handy since most connection pools offer a limited set of dynamic co
  * [Apache DBCP](http://commons.apache.org/proper/commons-dbcp/)
  * [Apache DBCP2](http://commons.apache.org/proper/commons-dbcp/)
  * [C3P0](http://www.mchange.com/projects/c3p0/)
- * [BoneCP](http://jolbox.com/)
  * [HikariCP](https://github.com/brettwooldridge/HikariCP)
  * [Tomcat CP](http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html)
  * [Vibur DBCP](http://www.vibur.org/)
  * [Druid](https://github.com/alibaba/druid/)
- * [Bitronix Transaction Manager](https://github.com/bitronix/btm)
  * [Atomikos TransactionsEssentials](http://www.atomikos.com/Main/TransactionsEssentials)
 * statistics support
  * concurrent connections histogram
  * concurrent connection requests histogram
- * data source connection acquiring time histogram
+ * data source connection acquisition time histogram
  * connection lease time histogram
  * maximum pool size histogram
- * total connection acquiring time histogram
- * overflow pool size histogram
+ * total connection acquisition time histogram
+ * overgrow pool size histogram
  * retries attempts histogram
  
 ### Are you struggling with application performance issues?
@@ -132,7 +130,7 @@ Or, if you prefer reading books, you are going to love my [High-Performance Java
     </tr>
     <tr>
         <td width="20%">
-            <a href="https://www.scentbird.com/"><img src="http://cdn.scentbird.com/github-logo-no-shadow.svg" width="150"/></a>
+            <a href="https://www.scentbird.com/"><img src="https://cdn.scentbird.com/github-logo-no-shadow.svg" width="150"/></a>
         </td>
         <td width="80%">
         <p>Scentbird is a website that allows its subscribers to try hundreds of designer fragrances at very affordable prices.</p>
@@ -149,6 +147,6 @@ Or, if you prefer reading books, you are going to love my [High-Performance Java
 
 ### Requirements
 
-* Java 1.8 or above for all modules but the *flexy-pool-core-java9* which requires at least Java 1.9
-* [Dropwizard Metrics 4](https://metrics.dropwizard.io/4.0.0/) or [Micrometer](https://micrometer.io/)
+* Java 17 or above
+* [Dropwizard Metrics](https://metrics.dropwizard.io/4.0.0/) or [Micrometer](https://micrometer.io/)
 * SLF4J

@@ -27,9 +27,11 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
 
     private MetricNamingStrategy metricNamingStrategy;
 
-    private long connectionAcquireTimeThresholdMillis = Long.MAX_VALUE;
+    private long connectionAcquisitionTimeThresholdMillis = Long.MAX_VALUE;
 
     private long connectionLeaseTimeThresholdMillis = Long.MAX_VALUE;
+
+    private boolean maintainFixedSizePool = false;
 
     public ConfigurationProperties(String uniqueName, EventPublisher eventPublisher) {
         this.uniqueName = uniqueName;
@@ -127,21 +129,21 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
     }
 
     /**
-     * Get the connection acquire time threshold millis
+     * Get the connection acquisition time threshold millis
      *
-     * @return connection acquire time threshold millis
+     * @return connection acquisition time threshold millis
      */
-    public long getConnectionAcquireTimeThresholdMillis() {
-        return connectionAcquireTimeThresholdMillis;
+    public long getConnectionAcquisitionTimeThresholdMillis() {
+        return connectionAcquisitionTimeThresholdMillis;
     }
 
     /**
-     * Set the connection acquire time threshold millis
+     * Set the connection acquisition time threshold millis
      *
-     * @param connectionAcquireTimeThresholdMillis connection acquire time threshold millis
+     * @param connectionAcquisitionTimeThresholdMillis connection acquisition time threshold millis
      */
-    public void setConnectionAcquireTimeThresholdMillis(long connectionAcquireTimeThresholdMillis) {
-        this.connectionAcquireTimeThresholdMillis = connectionAcquireTimeThresholdMillis;
+    public void setConnectionAcquisitionTimeThresholdMillis(long connectionAcquisitionTimeThresholdMillis) {
+        this.connectionAcquisitionTimeThresholdMillis = connectionAcquisitionTimeThresholdMillis;
     }
 
     /**
@@ -160,6 +162,11 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      */
     public void setConnectionLeaseTimeThresholdMillis(long connectionLeaseTimeThresholdMillis) {
         this.connectionLeaseTimeThresholdMillis = connectionLeaseTimeThresholdMillis;
+    }
+
+
+    public void setMaintainFixedSizePool(boolean maintainFixedSizePool) {
+        this.maintainFixedSizePool = maintainFixedSizePool;
     }
 
     /**
@@ -189,4 +196,8 @@ public abstract class ConfigurationProperties<T extends DataSource, M, P> {
      * @return connection proxy factory
      */
     public abstract ConnectionProxyFactory getConnectionProxyFactory();
+
+    public boolean isMaintainFixedSizePool() {
+        return maintainFixedSizePool;
+    }
 }

@@ -3,7 +3,7 @@ package com.vladmihalcea.flexypool.metric;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import org.mockito.Mockito;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 /**
