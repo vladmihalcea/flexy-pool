@@ -1,7 +1,5 @@
 package com.vladmihalcea.flexypool.connection;
 
-import com.vladmihalcea.flexypool.util.ReflectionUtils;
-
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -519,5 +517,21 @@ public class ConnectionDecorator implements Connection {
     @Override
     public void setShardingKey(ShardingKey shardingKey) throws SQLException {
         getTarget().setShardingKey(shardingKey);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if(obj instanceof ConnectionDecorator decorator) {
+            return getTarget().equals(decorator.getTarget());
+        }
+        return getTarget().equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getTarget().hashCode();
     }
 }
