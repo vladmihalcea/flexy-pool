@@ -23,7 +23,7 @@ public final class MetricsFactoryResolver {
      *
      * @return MetricsFactory
      */
-    public MetricsFactory resolve() {
+    public synchronized MetricsFactory resolve() {
         for (MetricsFactoryService metricsFactoryService : serviceLoader) {
             MetricsFactory metricsFactory = metricsFactoryService.load();
             if (metricsFactory != null) {
