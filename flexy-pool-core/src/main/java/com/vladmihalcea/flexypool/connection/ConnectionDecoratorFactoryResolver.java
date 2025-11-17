@@ -29,7 +29,7 @@ public final class ConnectionDecoratorFactoryResolver {
      *
      * @return ConnectionDecoratorFactory
      */
-    public ConnectionDecoratorFactory resolve() {
+    public synchronized ConnectionDecoratorFactory resolve() {
         int loadingIndex = Integer.MIN_VALUE;
         ConnectionDecoratorFactory connectionDecoratorFactory = null;
         Iterator<ConnectionDecoratorFactoryService> connectionDecoratorFactoryServiceIterator = serviceLoader.iterator();
