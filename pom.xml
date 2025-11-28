@@ -10,7 +10,7 @@
 
     <groupId>com.vladmihalcea.flexy-pool</groupId>
     <artifactId>flexy-pool-parent</artifactId>
-    <version>3.1.1</version>
+    <version>3.1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>FlexyPool</name>
@@ -40,7 +40,7 @@
         <developerConnection>scm:git:git@github.com:vladmihalcea/flexy-pool.git</developerConnection>
         <url>scm:git:git@github.com:vladmihalcea/flexy-pool.git</url>
         <connection>scm:git:git@github.com:vladmihalcea/flexy-pool.git</connection>
-      <tag>flexy-pool-parent-3.1.1</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <modules>
