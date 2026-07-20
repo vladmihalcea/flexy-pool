@@ -1,7 +1,8 @@
 package com.vladmihalcea.flexypool.adaptor;
 
 import com.vladmihalcea.flexypool.config.FlexyPoolConfiguration;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
 
@@ -17,14 +18,14 @@ public class DataSourcePoolAdapterTest extends AbstractPoolAdapterTest {
         return new DataSourcePoolAdapter(configuration);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testGetMaxPoolSize() {
-        getPoolAdapter().getMaxPoolSize();
+        org.junit.jupiter.api.Assertions.assertThrows(UnsupportedOperationException.class, () -> getPoolAdapter().getMaxPoolSize());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testSetMaxPoolSize() {
-        getPoolAdapter().setMaxPoolSize(10);
+        org.junit.jupiter.api.Assertions.assertThrows(UnsupportedOperationException.class, () -> getPoolAdapter().setMaxPoolSize(10));
     }
 
     protected boolean supportsTimeoutExceptionTranslation() {

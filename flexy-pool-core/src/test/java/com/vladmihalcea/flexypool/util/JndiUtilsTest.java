@@ -1,15 +1,16 @@
 package com.vladmihalcea.flexypool.util;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * JndiUtilsTest - JndiUtils Test
@@ -20,12 +21,12 @@ public class JndiUtilsTest extends AbstractUtilsTest<JndiUtils> {
 
     private SimpleNamingContextBuilder namingContext;
 
-    @Before
+    @BeforeEach
     public void init() throws NamingException {
         namingContext = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
     }
 
-    @After
+    @org.junit.jupiter.api.AfterEach
     public void destroy() throws NamingException {
         namingContext.clear();
     }

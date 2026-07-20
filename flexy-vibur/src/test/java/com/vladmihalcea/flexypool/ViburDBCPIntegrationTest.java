@@ -3,19 +3,20 @@ package com.vladmihalcea.flexypool;
 import com.vladmihalcea.flexypool.adaptor.ViburDBCPPoolAdapter;
 import com.vladmihalcea.flexypool.metric.Metrics;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.vibur.dbcp.ViburDBCPDataSource;
 
 import java.sql.Connection;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Vlad Mihalcea
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ViburDBCPIntegrationTest extends AbstractPoolAdapterIntegrationTest {

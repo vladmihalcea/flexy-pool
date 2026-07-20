@@ -7,13 +7,14 @@ import com.vladmihalcea.flexypool.metric.Timer;
 import com.vladmihalcea.flexypool.util.ReflectionUtils;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Reservoir;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 /**
@@ -35,7 +36,7 @@ public class DropwizardMetricsTest {
     @Mock
     private Reservoir reservoir;
 
-    @Before
+    @BeforeEach
     public void before() {
         MockitoAnnotations.initMocks(this);
     }

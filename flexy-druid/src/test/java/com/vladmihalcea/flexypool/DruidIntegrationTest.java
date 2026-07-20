@@ -1,16 +1,16 @@
 package com.vladmihalcea.flexypool;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * DruidIntegrationTest - DruidDataSource Integration Test
  *
  * @author Weapon Lin
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class DruidIntegrationTest extends AbstractPoolAdapterIntegrationTest {

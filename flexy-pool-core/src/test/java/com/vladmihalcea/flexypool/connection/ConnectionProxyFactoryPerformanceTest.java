@@ -4,7 +4,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.Timer;
 import com.vladmihalcea.flexypool.util.TestUtils;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,22 +2,23 @@ package com.vladmihalcea.flexypool.metric.micrometer;
 
 import com.vladmihalcea.flexypool.metric.MetricsFactory;
 import com.vladmihalcea.flexypool.util.ClassLoaderUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import static com.vladmihalcea.flexypool.metric.micrometer.MicrometerMetricsFactoryService.METRICS_CLASS_NAME;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  * MicrometerMetricsFactoryServiceTest - MicrometerMetricsFactoryService Test
  *
  * @author Vlad Mihalcea
  */
-public class MicrometerMetricsFactoryServiceTest {
+class MicrometerMetricsFactoryServiceTest {
 
     @Test
-    public void testLoadSuccess() {
+    void testLoadSuccess() {
         MetricsFactory metricsFactory = new MicrometerMetricsFactoryService().load();
         assertNotNull(metricsFactory);
         assertSame(MicrometerMetrics.FACTORY, metricsFactory);

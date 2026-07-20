@@ -17,8 +17,9 @@ import com.vladmihalcea.flexypool.common.ConfigurationProperties;
 import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * PropertyLoaderTest - PropertyLoader Test
@@ -38,7 +39,7 @@ import static org.junit.Assert.*;
  */
 public class PropertyLoaderTest {
 
-    @Before
+    @BeforeEach
     public void init() {
         PropertiesTestUtils.init();
     }

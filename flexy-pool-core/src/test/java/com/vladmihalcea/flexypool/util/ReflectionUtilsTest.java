@@ -1,11 +1,12 @@
 package com.vladmihalcea.flexypool.util;
 
 import com.vladmihalcea.flexypool.exception.ReflectionException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ReflectionUtilsTest - ReflectionUtils Test
@@ -21,9 +22,9 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
         assertEquals(1, ((Number) ReflectionUtils.getFieldValue(testObject, "version")).intValue());
     }
 
-    @Test(expected = ReflectionException.class)
+    @Test
     public void testGetFieldValueThrowsReflectionException() {
-        ReflectionUtils.getFieldValue(new TestObject(), "unknown");
+        assertThrows(ReflectionException.class, () -> ReflectionUtils.getFieldValue(new TestObject(), "unknown"));
     }
 
     @Test
@@ -33,12 +34,12 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
         ReflectionUtils.setFieldValue(testObject, "name", "testObjectNameChanged");
         assertEquals("testObjectNameChanged", ReflectionUtils.getFieldValue(testObject, "name"));
         ReflectionUtils.setFieldValue(testObject, "name", null);
-        assertEquals(null, ReflectionUtils.getFieldValue(testObject, "name"));
+        assertNull(ReflectionUtils.getFieldValue(testObject, "name"));
     }
 
-    @Test(expected = ReflectionException.class)
+    @Test
     public void testSetFieldValueThrowsReflectionException() {
-        ReflectionUtils.setFieldValue(new TestObject(), "unknown", "value");
+        assertThrows(ReflectionException.class, () -> ReflectionUtils.setFieldValue(new TestObject(), "unknown", "value"));
     }
 
     @Test
@@ -46,9 +47,9 @@ public class ReflectionUtilsTest extends AbstractUtilsTest<ReflectionUtils> {
         assertNotNull(ReflectionUtils.getMethod(new TestObject(), "getName"));
     }
 
-    @Test(expected = ReflectionException.class)
+    @Test
     public void testGetMethodThrowsReflectionException() {
-        ReflectionUtils.getMethod(new TestObject(), "unknown");
+        assertThrows(ReflectionException.class, () -> ReflectionUtils.getMethod(new TestObject(), "unknown"));
     }
 
     @Test

@@ -1,11 +1,12 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * DropwizardTimerTest - DropwizardTimer Test
@@ -18,7 +19,7 @@ public class DropwizardTimerTest {
 
     private DropwizardTimer timerWrapper;
 
-    @Before
+    @BeforeEach
     public void before() {
         timer = new com.codahale.metrics.Timer();
         timerWrapper = new DropwizardTimer(timer);

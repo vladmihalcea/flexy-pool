@@ -1,9 +1,9 @@
 package com.vladmihalcea.flexypool;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * AtomikosIntegrationTest - Atomikos Integration Test
@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Vlad Mihalcea
  * @since 2.2.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "classpath:spring/applicationContext-test.xml")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AtomikosIntegrationTest extends AbstractPoolAdapterIntegrationTest {

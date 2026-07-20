@@ -19,9 +19,9 @@ import com.vladmihalcea.flexypool.util.JndiTestUtils;
 import com.vladmihalcea.flexypool.util.MockDataSource;
 import com.vladmihalcea.flexypool.util.PropertiesTestUtils;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -37,8 +37,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -79,7 +78,7 @@ public class FlexyPoolDataSourceTest {
 
     private FlexyPoolDataSource<DataSource> flexyPoolDataSource;
 
-    @Before
+    @BeforeEach
     public void before() {
         MockitoAnnotations.initMocks(this);
         configuration = new FlexyPoolConfiguration.Builder<DataSource>(
@@ -353,7 +352,7 @@ public class FlexyPoolDataSourceTest {
     @Test
     public void testNonCloseableDataSource() throws IOException {
     	// test that we do not fail even when targetDataSource is not closeable
-    	assertThat(dataSource, CoreMatchers.not(instanceOf(java.io.Closeable.class)));
+        assertFalse(dataSource instanceof java.io.Closeable);
     	flexyPoolDataSource.close();
     }
     
