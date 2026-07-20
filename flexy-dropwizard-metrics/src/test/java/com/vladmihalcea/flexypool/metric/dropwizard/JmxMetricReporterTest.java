@@ -2,8 +2,9 @@ package com.vladmihalcea.flexypool.metric.dropwizard;
 
 import com.codahale.metrics.MetricRegistry;
 import com.vladmihalcea.flexypool.common.ConfigurationProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -24,7 +25,7 @@ public class JmxMetricReporterTest {
 
     private JmxMetricReporter jmxMetricReporter;
 
-    @Before
+    @BeforeEach
     public void before() {
         MockitoAnnotations.initMocks(this);
         jmxMetricReporter = new JmxMetricReporter();

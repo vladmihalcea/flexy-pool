@@ -1,9 +1,10 @@
 package com.vladmihalcea.flexypool.metric.micrometer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * MicrometerHistogramTest - MicrometerHistogram Test
@@ -16,7 +17,7 @@ public class MicrometerHistogramTest {
 
     private MicrometerHistogram histogramWrapper;
 
-    @Before
+    @BeforeEach
     public void before() {
         summary = new io.micrometer.core.instrument.simple.SimpleMeterRegistry().summary("test");
         histogramWrapper = new MicrometerHistogram(summary);

@@ -1,7 +1,8 @@
 package com.vladmihalcea.flexypool.util;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;import org.junit.jupiter.api.Test;
+
 import org.mockito.Mockito;
 
 import javax.naming.NameNotFoundException;
@@ -9,7 +10,7 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -21,7 +22,7 @@ public class LazyJndiResolverTest extends AbstractUtilsTest<LazyJndiResolver> {
 
     private JndiTestUtils jndiTestUtils;
 
-    @Before
+    @BeforeEach
     public void init() {
         jndiTestUtils = new JndiTestUtils();
     }

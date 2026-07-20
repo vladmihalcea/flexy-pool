@@ -28,7 +28,7 @@ public class FlexyPoolBeanConfiguration {
 
     @Bean
     public FlexyPoolConfiguration<DataSource> configuration() {
-        return new FlexyPoolConfiguration.Builder<DataSource>(
+        return new FlexyPoolConfiguration.Builder<>(
                 uniqueId,
                 poolingDataSource,
                 AtomikosPoolAdapter.FACTORY

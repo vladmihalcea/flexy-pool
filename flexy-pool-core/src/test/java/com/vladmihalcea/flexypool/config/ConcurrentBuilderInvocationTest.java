@@ -1,7 +1,8 @@
 package com.vladmihalcea.flexypool.config;
 
 import com.vladmihalcea.flexypool.adaptor.PoolAdapterFactory;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import javax.sql.DataSource;
@@ -13,9 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class ConcurrentBuilderInvocationTest {
+class ConcurrentBuilderInvocationTest {
 
     @Test
     public void testBuilder() throws InterruptedException, ExecutionException {

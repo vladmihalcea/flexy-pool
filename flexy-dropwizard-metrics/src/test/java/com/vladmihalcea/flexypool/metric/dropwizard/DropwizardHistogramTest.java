@@ -1,10 +1,11 @@
 package com.vladmihalcea.flexypool.metric.dropwizard;
 
 import com.codahale.metrics.ExponentiallyDecayingReservoir;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * DropwizardHistogramTest - DropwizardHistogram Test
@@ -17,7 +18,7 @@ public class DropwizardHistogramTest {
 
     private DropwizardHistogram histogramWrapper;
 
-    @Before
+    @BeforeEach
     public void before() {
         histogram = new com.codahale.metrics.Histogram(new ExponentiallyDecayingReservoir());
         histogramWrapper = new DropwizardHistogram(histogram);

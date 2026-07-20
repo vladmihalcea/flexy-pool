@@ -1,6 +1,7 @@
 package com.vladmihalcea.flexypool.connection;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
@@ -10,7 +11,7 @@ import static org.mockito.Mockito.*;
  *
  * @author Vlad Mihalcea
  */
-public class ConnectionCallbackTest {
+class ConnectionCallbackTest {
 
     @Test
     public void testAcquire() {

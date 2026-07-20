@@ -1,11 +1,12 @@
 package com.vladmihalcea.flexypool.metric.micrometer;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach; 
+import org.junit.jupiter.api.Test;
+
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * MicrometerTimerTest - MicrometerTimer Test
@@ -18,7 +19,7 @@ public class MicrometerTimerTest {
 
     private MicrometerTimer timerWrapper;
 
-    @Before
+    @BeforeEach
     public void before() {
         timer = new io.micrometer.core.instrument.simple.SimpleMeterRegistry().timer("test");
         timerWrapper = new MicrometerTimer(timer);
