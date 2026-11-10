@@ -58,6 +58,7 @@
         <module>flexy-tomcatcp</module>
         <module>flexy-vibur</module>
         <module>flexy-druid</module>
+        <module>flexy-agroal</module>
     </modules>
 
     <dependencies>
